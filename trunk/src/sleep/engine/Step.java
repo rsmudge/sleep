@@ -22,31 +22,6 @@ import sleep.interfaces.*;
 import java.io.Serializable;
 import sleep.runtime.*;
 
-/** 
-The root of all atomic steps.
-
-<pre>
-   SLEEP - Simple Language for Environment Extension Purposes
- .-------------------.
- | sleep.engine.Step |________________________________________________________
- |                                                                            |
-   Author: Raphael Mudge (rsmudge@mtu.edu)
-           http://www.hick.org/~raffi/
-
-   Description: This class is the root of all atomic steps.  Atomic steps are
-       the individual entities that scripts are broken down into. 
-
-   Documentation:
-
-   Changelog:
-
-   * This software is distributed under the artistic license, see license.txt
-     for more information. *
-
- |____________________________________________________________________________| 
-</pre> */
-
-
 public class Step implements Serializable
 {
    /** the script line number that this step was generated from */
