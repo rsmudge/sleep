@@ -1,27 +1,20 @@
 /* 
-   SLEEP - Simple Language for Environment Extension Purposes 
- .--------------------------.
- | sleep.parser.TokenParser |_________________________________________________
- |                                                                            |
-   Author: Raphael Mudge (rsmudge@mtu.edu)
-           http://www.csl.mtu.edu/~rsmudge/
- 
-   Description: parser for the SLEEP language.  Returns a sleep.engine.Block
-     object suitable for being passed to the interpreter for execution.  Hell
-     if you were really creative you could serialize the Block object so you
-     don't have to reparse the script each time you load SLEEP.
-
-   Documentation: To see the entire concrete syntax of the SLEEP language
-     handled by this parser view the file docs/bnf.txt.
-
-   Changes:
-
-   * This software is distributed under the artistic license, see license.txt
-     for more information. *
-   
- |____________________________________________________________________________|
+ * Copyright (C) 2002-2012 Raphael Mudge (rsmudge@gmail.com)
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-
 package sleep.parser;
 
 import java.util.*;
