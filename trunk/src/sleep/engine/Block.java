@@ -1,25 +1,20 @@
-/*
-   SLEEP - Simple Language for Environment Extension Purposes
- .---------------------.
- | sleep.engine.Block  |______________________________________________________
- |                                                                            |
-   Author: Raphael Mudge (rsmudge@mtu.edu)
-           http://www.hick.org/~raffi/
- 
-   Description: This Block class is meant to serve as a container for a Block
-     of parsed and ready to run SLEEP code.  Its main responsibilities are to:
-     1. store parsed code
-     2. know how to run the stored parsed code
-     3. return a value when the executing code says to. 
-
-   Documentation: 
- 
-   * This software is distributed under the artistic license, see license.txt
-     for more information. *
- 
- |____________________________________________________________________________|
+/* 
+ * Copyright (C) 2002-2012 Raphael Mudge (rsmudge@gmail.com)
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-
 package sleep.engine;
 
 import java.util.*;

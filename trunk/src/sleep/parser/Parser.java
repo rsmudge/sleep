@@ -1,46 +1,20 @@
-/*
-   SLEEP - Simple Language for Environment Extension Purposes
- .---------------------.
- | sleep.engine.Parser |______________________________________________________
- |                                                                            |
-   Author: Raphael Mudge (rsmudge@mtu.edu)
-           http://www.csl.mtu.edu/~rsmudge/
-
-   Description: parser for the SLEEP language.  Returns a sleep.engine.Block
-     object suitable for being passed to the interpreter for execution.  Hell
-     if you were really creative you could serialize the Block object so you
-     don't have to reparse the script each time you load SLEEP.
-
-   Documentation: To see the entire concrete syntax of the SLEEP language
-     handled by this parser view the file docs/bnf.txt.
-
-   Changes:
-     1.03.2004
-     - threw out the old code and redid this bad boy.  *uNF*
-
-    11.15.2002
-     - moved a number of static functions to the ParserUtilities class
-     - factored out token parser functions into TokenParser class
-     - cleaned up lots of code
-     - factored out Token Class
-     - did some code cleanup
-
-     9.08.2002
-     - rewrote and refactored the Parser, dividing the responsibilities
-       between a LexicalAnalyzer and a series of Checkers.  What a nightmare.
-
-     4.20.2002
-     - added better debugging support.
-
-     4.15.2002
-     - added support for parsing native floats.
-
-   * This software is distributed under the artistic license, see license.txt
-     for more information. *
-
- |____________________________________________________________________________|
+/* 
+ * Copyright (C) 2002-2012 Raphael Mudge (rsmudge@gmail.com)
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-
 package sleep.parser;
 
 import java.util.*;
