@@ -1,0 +1,38 @@
+
+<project name="sleep" default="all" basedir=".">
+  <property name="project.src"   location="src/" />
+  <property name="project.build" location="bin" />
+
+  <target name="all" depends="init, compile, jar" />
+
+  <target name="init">
+    <tstamp />
+    <mkdir dir="${project.build}" />
+  </target>
+
+  <target name="compile" depends="init" description="compile the source " >
+    <javac srcdir="${project.src}/"
+           destdir="${project.build}"
+           nowarn="yes"
+           depend="yes"
+           debug="false"
+           optimize="yes"
+    >
+    <!-- what came first, the chicken or the egg? -->
+    <classpath path="../sleep.jar" />
+    </javac>
+  </target>
+
+  <target name="jar" depends="compile">
+     <jar destfile="sleep-engine.jar"
+          basedir="bin"
+          includes="**/*.class">
+        <!-- Ant 1.7.0 service tag is broken, it creates a "service" directory not "services" -->
+<!--        <service type="javax.script.ScriptEngineFactory" provider="com.sun.script.sleep.SleepScriptEngineFactory" />  -->
+      </jar>
+  </target>
+
+  <target name="clean" description="clean up" >
+    <delete dir="${project.build}"/>
+  </target>
+</project>

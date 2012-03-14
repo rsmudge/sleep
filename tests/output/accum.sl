@@ -1,0 +1,10 @@
+Accumulate: a: 4 b: 42
+Accumulate: a: 5 b: 44
+Accumulate: a: 6 b: 46
+Accumulate: a: 7 b: 48
+Accumulate: a: 8 b: 50
+Accumulate: a: 9 b: 52
+Accumulate: a: 10 b: 54
+Accumulate: a: 11 b: 56
+Accumulate: a: 12 b: 58
+Accumulate: a: 13 b: 60

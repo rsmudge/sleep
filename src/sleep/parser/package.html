@@ -1,0 +1,102 @@
+<body>
+The parser package.  Nothing really here for people integrating sleep into there application.  If you want to know how this
+package works then read on:
+
+<h1>Parser Pipeline Architecture</h1>
+
+<br>Define "code"
+<br>------
+<p>Your code is input as one large string containing all of the code in the sleep file to be
+parsed.   We'll call this code, the "code".</p>
+
+<pre>
+          code 
+           |
+           |   -- (String)
+           |
+          \|/
+.---> StringIterator
+|          |
+|          |   -- (StringIterator), contains a way to iterate through each char and grab an
+|          |       associated line number, also contains some other nice functions
+|         \|/
+|     LexicalAnalyzer
+|          |
+|          |   -- (TokenList), static methods that return a TokenList which is a structure holding
+|          |      some tokens (a token is a String and a line number coupled together).  Comments are
+|          |      also stripped out here and handed back to the Parser object itself.
+|          |
+|         \|/
+|     TokenParser
+|          |
+|          |   -- (LinkedList of Statement objects), outputs a linked list of statement objects primarily.
+|          |      A statement is little more than a TokenList with a type associated with it.  TokenParser
+|          |      takes the TokenList from the lexical analyzer and assigns types to a stream of tokens. 
+|          |
+|         \|/
+`--  CodeGenerator
+           |
+           |   -- (Block), Code Generator takes the Statements output by the TokenParser looks at the type
+           |      and generates the appropriate atomic steps for that type.
+          \|/
+*Voila a runnable Block object*
+</pre>
+
+<p>The parser is a hand-coded recursive descent (aka top down) parser.  I thought about using a parser
+generator but opted against it as this parser is now in its 3rd or 4th overhaul and well it works and the
+other data structures that go along with it work as well.  So we're stuck with the hand coded stuff.</p>
+
+<p>A kind of editorialized description of how this works:</p>
+
+<p>Overall here is what I do.  I take a raw stream of characters (StringIterator) and turn that raw stream of
+characters into tokens.  Tokens are kind of like units of the program that stand alone and should not be
+picked apart (at least not yet).  </p>
+
+<p>Tokens in general are things like quoted string literals, blocks of code, and just plain single words.  The
+stream is put into tokens so later on the tokens can be identified and analyzed looking for certain patterns
+to say "ah, I have a word if, followed by something in parenthesis, followed by something enclosed in { }'s..
+it must be an if statement.   </p>
+
+<p>Once a first pass has occured, the tokens are fed into the TokenParser.  The Token Parser uses a series of
+what are called "checkers".  Checkers are functions that determine if a series of n tokens fall within a
+certain pattern or not.   For example a checker for an if statement would take 3 tokens as its parameters,
+it would then look at the first token to see if it is the keyword "if", it would then analyze the second
+token and see if it is an expression enclosed in parentheses, finally it would look at the third token
+and determine if it is a block of code enclosed in { }'s.  If these three things hold true then these
+3 tokens comprise one statement, a statement that is labeled as an IF statement.  </p>
+
+<p>All the tokens are analyzed in this manner.  Once this is done then they are fed into the code generator.
+The code generator loops through all of the statements and looks at the type of each statement.</p>
+
+<p>From this type the code generator does a straight generation of the atomic steps that the interpreter executes.
+Although by this point the code hasn't all been 100% processed yet.  In our if statement example the
+second token and third token which contain the predicate statement and the block of code need to be analyzed.
+So these items are then turned into a StringIterator, which is turned into tokens, which is parsed by the
+token parser, which is then fed into the code generator.  Once all this has happened the code generator
+goes back to processing its statements.</p>
+
+<p>So that is how the parser works.  </p>
+
+<p>Why did I do it this way?  I was taking a lisp class a couple of years ago.  Our main assignment for the
+term consisted of implementing a lisp-like language in lisp.  We had a series of checkers that looked
+at the form of each statement and based upon that performed whatever action the statement was supposed
+to perform.  Writing this lisp like language in lisp was incredibly easy as the structure of the program
+was so easy to pick at, it was just a list after all.   My lisp may be rusty so excuse me if this all
+seems jacked up:</p>
+
+<pre>(def 'program (if (equals 3 3) (print 'good)))</pre>
+
+<p>For my if statement checker I just had to look at the first parameter (equals 'if (first program)), and 
+make sure the second and third parameters are parameters (and (listp? (second program)) (listp? (third program)))</p>
+
+<p>One day I was sitting in class kind of bored and realized that if I had an easy way to analyze the 
+structure of a program at a high level then I could easy write a language with some more c-like syntax
+using this methodology.  So I sat to work and wrote my scripting language sleep in a weekend.  None
+of these ideas I used are original or new or anything.  Just fun.  This is by far one of my favorite
+programming adventures ever.   </p>
+
+<p>Dr. John Lowther did an excellent job teaching the programming languages class at Michigan Tech.  
+Dr. Lowther had an incredible amount of enthusiasm and a fun approach to teaching CS students about 
+programming languages (make them implement one... good idea!).   Anyways his teaching style made the 
+topic click very well and this project is a product of that knowledge gained. </p>
+</body>

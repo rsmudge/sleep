@@ -1,0 +1,84 @@
+<body>
+<h1>Integrating the Sleep Console</h1>
+
+<p>The sleep console is an interactive console for loading and unloading sleep scripts.  An example TextConsole is provided with 
+sleep.  However for the sake of your application you can give the sleep console any interface you'd like.  This is done by 
+creating an implementation of sleep.console.ConsoleProxy.  This ConsoleProxy just lets you define how input and output happens.  
+You then create an instance of ConsoleImplementation, pass it all of the relevant objects of your script environment, and set 
+the console proxy to your implementation.  The end result is a fully working sleep console with your applications interface.</p>
+
+<p><font color="red"><b>Note:</b> implementing the sleep console into your application is not a requirement.</font></p>
+
+<h1>Console Reference</h1>
+
+<pre>
+ ------- -------------------- ---------   ---------------  ------- ---------
+The Sleep Console
+-  ------------- -------- -   ---------------- --       -    -     -     - - -
+
+The Sleep console is just a quick and dirty interface for interacting with
+the sleep library.  Sleep includes API's for integrating the console with 
+your application.   Personally I just use the console for debugging the 
+language.  
+
+ ------- -------------------- ---------   ---------------  ------- ---------
+To Launch the Sleep Console
+-  ------------- -------- -   ---------------- --       -    -     -     - - -
+
+[raffi@beardsley ~/sleep/bin]$ java -jar sleep.jar
+
+To launch a script from the command line:
+
+java -jar sleep.jar load filename.sl
+
+The console class sleep.console.TextConsole is a small class for using the 
+console as a command line application.  If you want an example of 
+integrating the console into your application read the source code for the 
+TextConsole.
+
+ ------- -------------------- ---------   ---------------  ------- ---------
+Console Commands
+-  ------------- -------- -   ---------------- --       -    -     -     - - -
+
+Enter Command> bload <filename.sl>
+   A benchmark loading command.  See how long it takes to load a script.
+
+Enter Command> clear
+   Clears the shared environment and clears the default variables. 
+
+Enter Command> env
+   Dumps the script environment to the console.  A good way of seeing
+   what has actually been loaded into the shared environment.
+
+Enter Command> help
+   Lists some quick and dirty help.  Mainly just a list of the commands 
+   available to you.
+
+Enter Command> load [filename.sl]
+   Load a script via the sleep console.  If you specify a filename the
+   file will be loaded.  If not the console will ask you to input the
+   code snippet line by line.
+
+Enter Command> quit
+   Quits the sleep console.
+
+Enter Command> run
+   If a script was entered in manually via the "load" command.  Then
+   this command will actually execute that most recently loaded script.
+ 
+Enter Command> serialize <filename.sl>
+   Loads the specified file.  Then compiles it and dumps the runnable
+   block as a serialized file.  Runnable blocks can be serialized and
+   distributed as a way of shipping a binary only version of sleep
+   scripts.  
+
+Enter Command> unload <filename.sl>
+   Unloads the script filename.sl
+
+Enter Command> tree
+   Dumps an abstract syntax tree of the most recently loaded script. 
+   If you want to see how sleep is parsing scripts this command will
+   do it.
+
+</pre>
+</body>

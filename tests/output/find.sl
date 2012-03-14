@@ -1,0 +1,7 @@
+'this '
+'is '
+'some '
+'string, '
+'phear   '
+'it '
+'dude'

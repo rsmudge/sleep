@@ -1,0 +1,1530 @@
+2.1-release (30 Apr 09) [update 4]
+===========
+- Sleep semaphores use notifyAll() instead of notify() to wake up threads.
+  Was experiencing deadlock on a multicore box due to the single woken 
+  thread waiting on something else and no other threads being awoken.
+- fork() now copies script environment from parent env and creates fresh 
+  copies of all named closures.  This prevents unsynchronized saved state and
+  closure scope variables from leaking into the forked environment.  
+- overloaded in operator to check if a key is in a %hash in a read only way.
+  i.e. "x" in %hash.  Why does this matter?  Read-only operations on hashes
+  are thread safe.  %hash["unknownKey"] is a write operation when "unknownKey"
+  is not in the hash.  This is because Sleep adds "unknownKey" to the hash
+  with a value of $null.  In a multithreaded context this will corrupt you.
+- added a sum(@a|&iter, ...) function to sum the products of all specified
+  arrays or iterators:  (@a[0] * @b[0] * ...) + (@a[1] * @b[1] * ...) + ...
+- added -isupper and -islower to check the case of a string. 
+- putAll(@a, @b) now puts all elements of @b onto @a.
+- extended values(%hash, [@|&iter]) to accept an array or iterator of keys to
+  pull from the specified hash.  i.e. values(%hash, @("key1", "key2", ...))
+- values(...) makes copies of the scalar containers taken from the hash
+
+2.1-release (25 Sept 08) [update 3]
+===========
+- fixed a problem with setField not accessing fields declared in a parent
+  class for an object.
+- [$obj field] can now get protected members declared within the parent of
+  $obj.  This does not extend to protected members declared up the class 
+  hierarchy.
+- added exponent operator as an assignment op i.e. $x **= 2; 
+- fixed a bug with cast preventing the creation of empty arrays.
+- ordered hash now makes a copy of value returned by miss policy.  This
+  prevents a situation where all members of a hash share reference to same
+  default value (and are thus changeable in place).
+- ohash now longer serializes miss and removal policies.  be warned when
+  you deserialize these hashes you'll want to readd the policy functions
+
+  [previous behavior resulted in a null error and corrupted the Sleep
+  stack, so if this affected you, you already knew and weren't happy with
+  with it].
+- proxy instances now have a more detailed string representation.  also the
+  string description of a proxy instance no longer calls the underlying
+  closure requesting toString.
+- rewrote <=> to return solely 1, 0, or -1 depending on how values compare.
+  this replaces the old method which subtracted the left value from the right
+  one.  avoids issues with overflowed bits this way.
+
+2.1-release  (7 Aug 08) [update 2.5]
+===========
+- made a sanity check with inline function execution to keep jIRCii
+  compatability
+- fixed &sublist only front elements of read-only arrays. (another
+  find from the jIRCii scripting community)
+
+2.1-release  (5 Aug 08) [update 2]
+===========
+- modified import from to add jar file to system classpath.  This
+  uses a reflection hack but it now means you can add multiple jars
+  and they can find resources from eachother, all at runtime.
+
+  This hack came from Ralph Becker's Classpath extension for Sleep.  
+- Sleep 2.1 default implementation no longer manages cleanup of
+  subroutines from unloaded scripts.  The old mechanism for this
+  was complex and resulted in an unnecessary memory leak in 
+  shared environments with no awareness of this feature.  jIRCii
+  depends on this behavior and so I am moving the code for this
+  to the jIRCii source tree (where it manages similar cleanup
+  for events, aliases, and other things).
+- include(...) now sets $__INCLUDE__ to the file included.  
+  use this to allow modules to find resources that are located
+  relative to themselves.
+- hacked <=> to compare doubles with a BigDecimal, gets around
+  processor floating point issues when comparing doubles
+- foreach on a hash now skips over keys with $null values
+  (a $null value is removed at the first convienence from a
+  Sleep hash--usually by keys() or values() functions)
+- Fixed bug causing -exists "" to return true..  turns out
+  toSleepFile evaluated "" to the current working directory
+- Sleep functions (map, reduce, filter, etc.) that support 
+  iterating over a closure or array and foreach loops can now
+  iterate over Java iterators.  
+- fixed a bug with taintAll causing a class cast exception with
+  hash scalars
+- foreach now reports undeclared key/value variables when strict
+  mode is enabled.
+- &local, &this, and &global now throw an exception if a malformed
+  variable name is passed to them.  
+
+2.1-release  (1 Jul 08) [update 1]
+===========
+- splice() no longer corrupts sublists.
+- values(%hash) now omits $null values.  
+- sped up scope functions: &local, &global, and &this by cacheing 
+  the regex pattern used to split up the var names
+- added a compile time check for %(a => ... b => ...) errors
+  [notice the missing comma between the key/value pairs]
+
+2.1-release  (16 Jun 08)
+===========
+- SleepUtils#runCode(SleepClosure, ...) now accepts a null value
+  for the ScriptInstance parameter.
+- eliminated unnecessary frame creation within the Index operator
+- added a check to cleanup the current frame when a bad index 
+  error occurs.
+
+2.1-beta 27  (30 May 08)
+===========
+- Virtual machine errors (stack overflow, out of memory) etc.
+  are now caught within the interpreter and used to coerce
+  a printout of the location of each Sleep stack frame.
+- SleepClosure now implements the Runnable interface.
+- fixed a null pointer exception for assertions triggered
+  with no preceeding statements.
+- created a java.util.List compatible data structure to back
+  Sleep arrays.  this data structure is similar to LinkedList
+  except it creates sublists with more desired performance
+  characteristics
+- added better error messages for ConcurrentModificationException's
+  thrown by Java
+- foreach loops now break if a ConcurrentModificationException
+  is thrown.
+- reimplemented regex pattern and hasmatch state cacheing to 
+  prevent memory leaks.  Sleep will cache 128 patterns globally 
+  and up to 16 hasmatch contexts per closure.  Remember that 
+  hasmatch will remove its state after returning false.  These
+  measures are in place to help prevent runaway uses of 
+  hasmatch from eating all of the memory.
+- bad index errors (IndexOutOfBoundsException) are now more
+  descriptive in some cases.
+- sublists are now serializable
+- function("blah") will now throw an error if argument does not
+  begin with &
+- empty functions now retain proper line number information 
+  (compiler introduces a NOP into the body of an empty function)
+- reworked how Sleep handles &function literals--the compiler
+  transforms these into a call against function('&function')--
+  this has the benefit of providing more debug info in a trace
+  and simplifying bridges that expect to receive a function as
+  a parameter.
+- BridgeUtilities.getIterator() throws an exception if the 
+  value on the stack is not an iterator.
+- BridgeUtilities.getFunction() throws an exception if the  
+  value on the stack is not a closure.
+- Backtick expressions now use an IOObject to read in process
+  output. 
+- improved JSR223 support:
+  -- ENGINE_SCOPE bindings are now supported and marshalled in
+     as local variables
+  -- $__SCRIPT__ and @ARGV are now available to Sleep scripts
+     executed with jrunscript.
+  -- better handling of \r, \n, and \r\n in eval()
+- sleep lexer now ignores "\r" as whitespace
+
+2.1-beta 26  (15 May 08)
+===========
+- removed extra key string conversion within ordered hashes.  
+  may offer a performance speedup in some cases.
+- changed default capacity of ordered hashes to 11 (previous
+  value was 16 which is bad for random distribution of values)
+- TaintUtils.taintAll now handles KeyValuePair objects
+- added TaintUtils.taint(Stack) as another shortcut for bridge
+  writers / integrators.
+- BACKWARDS COMPAT WARNING: updated &indexOf and &lindexOf to
+  return $null when no match is found.  This is a change from
+  their original return value of -1.  $null is == to 0.  However
+  this does enable a cleaner means for iterating with indexOf.
+
+  $index = -1;
+  while $index (indexOf($string, "token", $index + 1))
+  {
+     # ...
+  }
+  # do something with substr($string, $start + 1) 
+
+- added &find("string", "regex", n) which returns the index of
+  the substring matching the specified regex beginning at n.
+  &matched() works to retrieve the matched groups from the
+  substring.
+- conducted a 3am cleanup of the RegexBridge--you know what 
+  that means.
+- updated array implementation to use a LinkedList in lieu of
+  a Stack.  This offers better performance characteristics for
+  most array operations.  The only real losing operation is
+  random access which now has a worst case of O(n)
+- inline functions now restore anonymous arguments and @_ prior
+  to returning control to the parent function.
+- renamed &subarray to &sublist(@array, n, m).  Updates to the
+  returned &sublist will affect the parent list.
+- updated &splice to use new ScalarArray sublist API... this
+  new implementation scales better
+- &clear now clears each element from the array rather than
+  creating a new array and returning it.
+- added &concat(@a, @b, ...) to concatenate multiple arrays
+- split('pattern', 'text', [limit]) now accepts a limit 
+  parameter to allow partial splits of text.
+- added function inline({ .. }) to invoke the specified block
+  inline
+- added JSR223/javax.script API support.  sleep.jar is now a 
+  service provider for this API.  See jsr223/readme-jsr223.txt
+  for more information.
+- Reworked the ScriptLoader compiled code cache.  It works mostly
+  as before except now an unloaded script will not delete the 
+  entire cache.  This was put in place to account for &include'd
+  scripts.  Now &include validates its last modified timestamp
+  with the ScriptLoader prior to (re)loading.  
+- fixed bug in SleepUtils.getArgumentStack(Map)
+- added a hasChanged() method to ScriptInstance to help apps
+  determine if a script (or any script it has included) has
+  changed.
+   
+2.1-beta 25  (8 May 08) [will this beta process ever end?]
+===========
+- added &chdir() to change the current working directory of the
+  active script instance.  This value is inherited by fork().  
+  All I/O and File System bridge functions that manipulate files 
+  (including exec) utilize the current working directory.  Use 
+  &cwd() to obtain the current working directory value.
+- &readb($handle, -1) will attempt to read all bytes from the 
+  specified handle.  
+- I/O functions are now smarter about checking their arguments.
+- replaced test.pl regression tester with a Sleep version.
+  The Sleep version is much faster and it is forgiving of 
+  address and installation path differences.  
+- implemented taint wrappers for the Map->Hash and Collection to
+  Array wrappers obtain with SleepUtils.  The TaintUtils.taintAll
+  method is intelligent enough to employ these against wrapped
+  data structures when necessary.
+- changed implementation of foreach to more efficiently iterate
+  over hashes.  remove() w/i a foreach loop now works with hashes.
+- removed sleeplang.html from the repository and added a .url
+  file pointing to the Sleep Manual.  When the manual is complete
+  I will create a .pdf and distribute it with the Sleep source.
+- &warn no longer shows as a function call in debug traces
+- fixed line number skew with the else if and else blocks of 
+  if statements.
+
+2.1-beta 24  (30 Apr 08)
+===========
+- refactored Parser/CodeGenerator to use a factory pattern for
+  generating atomic steps. 
+- changed implementation of PLiteral to precalculate all values
+  onto the current frame... the atomic step itself joins the
+  frame values together.  No change from scripter perspective.
+- removed the %BACKQUOTE% and Evaluation bridge.  The backquote
+  behavior can still be overriden using a Function object
+  keyed to __EXEC__.
+- added taint mode similar to Perl.  taint mode allows bridges
+  to flag scalars as having come from an external source.  All
+  scalars touching said scalar are considered tainted until
+  &detaint is called on the tainted scalar.  Certain functions
+  will check for the presence of tainted variables and refuse
+  to process if a tainted value is present.  Examples include:
+  exec, `...`, eval, expr, compile_closure, and any HOES call.
+  Bridges may optionally check for this taint mode on their
+  inputs.  i.e. Slumber is a good candidate for this.
+
+  This mechanism can help you build a more secure app by
+  forcing you to sanitize external values before using them
+  in dangerous contexts.
+
+  This property is enabled with -Dsleep.debug=true on the 
+  command line.
+
+  Bridge writers--see sleep.taint.TaintUtils for information on
+  how to add taint checking to your app.  The mechanism is
+  very easy and just involves calling a function on your
+  Function, Operator object that will wrap it based on where 
+  it falls.
+
+  Scripters use &taint($scalar) to explicitly taint a value and
+  &untaint($scalar) to untaint a value.  And -istainted to 
+  check if a scalar is tainted or not.
+- added debug level 128 for tracing the spread of tainted values
+- SleepUtils.describe does better cycle detection allowing Sleep
+  to better print circular data structures.  %n and @n refer to 
+  the n'th data structure starting from the outermost working
+  in to the inner most.
+
+2.1-beta 23  (23 Apr 08)
+===========
+- removed a Java 1.5 API call in CodeGenerator (thanks to 
+  Ralph Becker for catching this one).
+- API CHANGE: Loadable interface methods now have a return 
+  type of void instead of boolean.  This is an API wart I
+  couldn't live with any longer.  
+- added command line option -p/--profile to collect and print
+  profiler statistics for the specified script.  
+- added command line option -t/--time to print out the total
+  running time of the specified script
+- ordered hash miss policy now receives the passed in key
+  as-is prior to the string conversion.
+- Sleep now parses command line arguments in a more flexible
+  manner allowing different orders/combinations of switches.
+- sleep.classpath value accepts either a ; or : as the path
+  separator.
+- moved the %RANDOM% object to the ScriptInstance metadata 
+  with key __RANDOM__ (used to store random number seed)
+- SleepUtils.describe(...) makes some attempt to detect
+  cycles (i.e. data structures that reference themselves)
+  when printing out the data.  An ellipse is used to indicate
+  the data structure references itself.
+
+2.1-beta 22  (17 Apr 08)
+===========
+- added a new API to SleepUtils to generate a variable stack 
+  from a java.util.Map.
+- I/O bridge now reports a better error when a I/O handle is 
+  expected as an argument but not received.
+- added -Dsleep.assert property to enable/disable assertion
+  statements.  
+- updated SleepClosure#callClosure to use the current preferred
+  function calling methods.  This enables closure calls from
+  map, reduce, search, etc. to be traced and to count against
+  the profiler statistics
+- SleepUtils.runCode(Block, ...) now creates (and assumes the 
+  responsibility for destroying) a local scope if none currently
+  exists.
+- extended the ordered hash (&ohash) concept to allow the
+  implementation of a cache with a Sleep hash interface:
+
+  -- &ohash orders keys in insertion order (no surprise here)
+  -- added &ohasha to create a hash with keys kept in access order
+  -- added setRemovalPolicy(%hash, &closure) to set a closure that
+     determines wether the last element of the specified hash
+     should be removed or not.  Arguments to the closure are:
+     $1 = the hash, $2 = the key, and $3 = the value.
+  -- added setMissPolicy(%hash, &closure) to a set closure that
+     determines what value to use when a hash access misses.
+     The closure is called with $1 = the hash and $2 = the key
+
+  These features should enable better management of massive data 
+  structures within Sleep.  Someone *cough*Marty*cough* will
+  benefit greatly from this.
+- sleep.runtime.ScalarHash implementations are now responsible 
+  for creating their own toString representation.  This is 
+  necessary as some hash implementations (i.e. &ohasha) are
+  sensitive to access order.  Added a helper function to assist
+  with creating a String representation from a java.util.Set of
+  java.util.Map$Entry.  SleepUtils.describeEntries(String, Set)
+- profiler now reflects time spent in current function sans
+  child function calls.  avoids numbers getting out of whack
+  due to recursion.
+- created a new means for storing script metadata information.
+  the java.util.Map obtained by ScriptInstance.getMetadata()
+  is stored in the global variables for a script and it is 
+  passed on to child forks.   The script "environment" where
+  functions and such are stored should not be used for 
+  keeping state.
+
+  This breaks backwards compatability if you install a new
+  Sleep console as %console% or if you manipulate script
+  statistics directly by accessing %statistics%
+
+  To set the Sleep console use the static method in
+  sleep.bridges.io.IOObject#setConsole(ScriptEnvironment, IOObject)
+
+2.1-beta 21  (28 Mar 08)
+===========
+- assignment loops now record proper line number information for
+  error reporting purposes.
+- added a ? command to evaluate predicates in the Sleep console.
+- index operator can now be applied to backtick expressions
+- collapsed implementation of &skip and &consume; they now refer 
+  to the same function.
+- added &readAsObject and &writeAsObject to read/write serialized
+  Java objects (in lieu of sleep.runtime.Scalar objects)
+- updated &copy to also copy scalars and hashes.
+- added &pushl and &popl for creating and removing local scope, 
+  arguments to these functions are used to pass data between the
+  current and resulting local scope.
+- fork now passes copies of its arguments into the forked scope.
+  this is in line with how lambda, let, etc.. work.  pass a data
+  structure (such as an array or hash) to have updateable shared
+  values.
+- round function can now round to a desired number of places.
+- replace function can now handle empty arguments, it will use
+  empty strings in their place.
+- added &warn to send a message to the script warning watcher 
+  installed within the script environment... 
+- true and false arguments are now optional in iff expressions:
+  iff(3 == 3) = 1
+  iff(3 != 3) = $null
+- &push can now push multiple arguments
+- added &scalar($object) to force object through the Sleep scalar 
+  conversion process.  
+- continuations now save multiple levels of local scope if 
+  necessary (this makes pushl/popl safe for yield/callcc)
+- inline functions will only mangle @_ if unnamed values are
+  passed.  Use $var => ... to pass a named value.
+- toplevel sleep scripts are now executed as a closure... this
+  allows callcc to work from the top level.
+- fixed a memory leak caused by stack pollution within loops.  
+- callcc can now be used within fork to take control of the fork
+  and eventually return a value (retrievable via &wait)
+- fixed a callcc corner case that could lead to an infinite loop
+  in the interpreter
+- refactored the SleepUtils.runCode(...) methods to use the
+  standard Sleep mechanism for evaluating functions.
+
+2.1-beta 20  (12 Nov 07)
+===========
+- fix debug mode 24 error handling inconsistency bug.
+- $null passed as a Java string now evaluates to null and not ""
+- sleep arrays now allow $null elements when converting to Java
+  arrays.
+- updated fork() to use script name AND line number information
+  for thread description.  will aid debugging.
+- updated read-only array, hash wrappers to display a warning 
+  when a script attempts a modifying operation
+- updated array, hash wrappers to marshall wrapped types into
+  Sleep types as appropriate.
+
+2.1-beta 19  (24 Oct 07)
+===========
+- sleep interpreter now performs better stack hygeine to prevent 
+  exceptions and errors from corrupting the stack inadvertently.
+- $null now deserializes as its singleton value.  this fixes a lot of
+  potential pitfalls for scripts that rely heavily on serializing and
+  deserializing Sleep functions.  
+- closure context metadata (regex matcher and iterator for foreach 
+  loops) is no longer serialized with the closure...  beware of this.
+- added &ohash(...) to initialize a Sleep hash that keeps track of
+  key insertion order.  requested by Marty.
+- updated the sleep listen(...) and connect(...) functions to accept a
+  number of key/value options.  options include:
+     linger  => the value of SO_LINGER (how long (ms) the socket waits 
+               for a TCP reset before actually closing.
+     lport   => the local port to bind to
+     laddr   => the local address to bind to
+     backlog => the number of connections to queue while waiting for
+                a subsequent call of listen(...) to accept a 
+                connection.
+
+    for example, to listen on port 8888 of 192.168.1.1 while allowing
+    only 1 connection:
+ 
+    $handle = listen(8888, laddr => "192.168.1.1", backlog => 1)
+   
+    listen will only honor the extra parameters the first time the 
+    port is intialized.  the extra params will have no effect on 
+    subsequent calls to listen.  to fix this call closef(port) to
+    unbind the specified port.
+- added inline functions.  these are more like poor mans macros than 
+  anything else.  an inline function is executed inline with the 
+  current function, it shares all scope information and any attempt 
+  to return/yield/callcc values will affect the parent directly. 
+
+  inline return12 { return 12; }
+
+  inline functions themselves always give back $null in an expression. 
+  using an inline function within an expression is not recommended.
+
+  callcc/yield behavior within an expression will break things.
+- major refactor of Sleep's logic flow for managing function calls, debug 
+  options, etc.. to one file.  please report any bugs 
+- added callcc to Sleep.  callcc packages up the current function (as 
+  with yield) and then it calls the specified function with the packaged
+  current function as an argument.  combine this with the new inline 
+  functions feature and there is all kinds of fun to be had.
+
+2.1-beta 18  (5 Jul 07)
+===========
+- added scalar references: \$x is equivalent to $x => $x.  this sugar
+  was added for the common case of passing a key/value pair to copy a
+  scalar into the local/this environment of a function.
+- added a srand(long) function for seeding the Sleep random number
+  generator.   %RANDOM% in the script environment contains the random
+  number generator reference.
+- Sleep now evaluates text within a back ticks as an expression to
+  execute.  The expression returns an array with the output printed by
+  the executed command.  Execution errors and non-zero process termination
+  value are available via checkError()
+- Scalar hashes can now be passed to Java methods expecting an Object
+  value (if desired)
+- character arrays returned by Java calls will now be converted to a 
+  Sleep string
+- Sleep strings will now be recognized as valid matches for Java methods
+  requesting a byte[] or char[] parameter.
+- Sleep scalars returned by Java calls will be returned as is.
+- improved performance (x3) of Sleeps internal functions to convert a 
+  String to a non-mangled byte array. 
+- &remove now returns data structure data was removed from
+- extended &add to accept a hash and multiple key/value pairs for
+  adding stuff to an existing hash.
+- Sleep's set operations removeAll, retainAll, and addAll now work based
+  on scalar identity in lieu of string representation
+- Added "in" operator to check if a scalar with same identity is contained 
+  within an iteratable data structure (generator function / array)
+- Added =~ for comparing two scalars by identity (scalar that reference
+  something are identical if their references match, other scalars are
+  identical if their string reps match).
+- fixed a bug causing import to crash parser when no package was specified
+- Sleep parser now checks if a class exists when it is imported
+
+2.1-beta 17  (17 Jun 07)
+===========
+- reduced number of Class.forName calls made when parsing scripts...
+  should help those using Sleep in Java applets ;) 
+  [p.s. sorry I wasn't able to take care of this sooner]
+- added a new type of literal for resolving a Java class i.e.:
+  ^java.util.LinkedList resolves to java.util.LinkedList.class
+  ^Map$Entry would resolve to java.util.Map$Entry.class  etc..
+- added a new predicate 'isa' for determining if an object is a 
+  instance of a specific class i.e.:  "string" isa ^String
+- added a better error message for class cast exceptions caught w/i
+  the interpreter.
+- added a $__SCRIPT__ variable to indicate the name of the executed
+  script when running a Sleep script from the command line.
+- added a typeOf($scalar) function to retrieve the class backing the
+  specified scalars value.  
+- added the ability to specify a failure message with an assert i.e.:
+  assert <predicate> : <message>; 
+- setField can now accept a class literal as its first argument for
+  updating a static field
+- &use can now accept a class literal as its first argument (safer
+  than specifying bridge as a string as class literals are resolved 
+  at compile time)
+- updated &cast and &casti to allow a class literal to be specified
+  as the type to cast to.  
+- added a lindexOf function to obtain the last index of a substring
+- sleep console now shares one pool of imported packages for evaluations
+- added newInstance(^Class|@, &closure) for creating a proxy instance
+  of a Java object backed by the specified interfaces
+- try/catch is no longer dependent on putting the caught value into
+  the global scope.
+- returning within a try block no longer breaks Sleep's exception
+  mechanism.
+- &exit can now be used within a try/catch block
+
+2.1-beta 16  (11 Jun 07)
+===========
+- passing a value that can not be used as a key/value pair when a kvp 
+  is expected now results in an error message.   valid kvp's include:
+  expressions of (key => value) and strings with the form "key=value"
+- added getIOHandle(InputStream, OutputStream) to SleepUtilities class
+- registered cmp operator to prevent parser confusing it with a function
+- hashes/arrays can now be passed as named parameters to closures
+- &size now works with hashes
+- the '.' command in the console interact mode will now repeat the last
+  code sequence if no new code has been specified.
+- fixed a bug with &let, &lambda: when a ($this => ...) is specified
+  all subsequent variable placements will be put into the shared this
+  scope.
+- &compile_closure now shares its implementation with &let, &lambda 
+  allowing it to function as they do for settings vars, passing $this 
+  scope, etc..
+- &join, &flatten functions now accept either a sleep array or generator
+  function.
+- &readObject no longer throws an EOFException.
+- added another debug mode: DEBUG_TRACE_LOGIC (64); use this to trace
+  the results of all predicate evaluations
+- cleaned up the code in BasicNumbers a bit to reduce the file size
+- cleaned up the implementation of &remove(%|@, ...), the function now
+  removes based on values (and not keys); comparisons are made as follows
+  hashes, arrays, and object scalars are compared by reference, everything
+  else is checked by string value.
+- fixed improper uses of (<Scalar>n).getValue() throughout the Sleep codebase.
+  this function builds discardable string representations of hashes/arrays.
+  sometimes this behavior is desired, usually its not.  these changes will
+  increase performance when using arrays/hashes extensively. 
+- &removeAt can now remove elements from arrays or hashes, multiple keys
+  can be specified as well.  the function no longer returns a value.
+
+2.1-beta 15  (25 Apr 07)
+===========
+- fixed a potential problem that could arise when one attempts to 
+  query which file is currently executing and no file is executing.
+- made the ProxyInterface class in sleep.engine public.  For those of you
+  looking to embed Sleep,  a Sleep closure backed instance of a  Java 
+  interface may be the way to go.  Using the ProxyInterface class you
+  can create these closure backed instances and you get all of the built-in
+  function call tracing, profiling, error checking, etc. for free.
+- the outer most frame of execution for running a Sleep script now enjoys
+  the same thread safety/synrchronization that the rest of the Sleep
+  functionality adheres to.
+- exit() function now allows an optional string parameter which will be 
+  reported to the user as a runtime warning (usually an indicator of why
+  the script chose to exit?)
+- added an assert command.  assert takes a predicate expression as a 
+  parameter.  if the predicate expression does not evaluate to true then
+  the currently running script will exit with the message "assertion
+  failed".
+- HOES expressions with no arguments following the : will report a 
+  syntax error (originally this error was crashing the parser)
+- Proxy instantiations of Java classes are now synchronized in the same
+  way as the rest of Sleep's interpreter and source information is now
+  installed to show calls on these classes as coming from <Java>
+- fixed a bug that disallowed importing multiple packages from a single
+  external jar file.  
+- unloading a script through ScriptLoader now causes the entire block
+  cache to be cleared.  This will ensure that external files loaded
+  with include() will be purged from the cache as well.
+- fixed a bug with iswm and using \ as a character literal in the match
+  pattern, use \\ to specifiy a literal \
+- altered HOES argument resolution for Sleep hashes and arrays; no longer
+  will either of these types match to a method requiring a generic Object
+  as an argument.  Collection/List/Object[]/ScalarArray for Sleep arrays
+  and Map/ScalarHash for Sleep hashes.
+- updated cast/casti with a new pattern character, 'o' which will create
+  a java.lang.Object based on the specified scalar.
+- reworked conversion of array scalars to native Java arrays and enhanced
+  error messages.  In general Sleep will try its best to convert all of
+  the array elements to the same type (type determined by first elements).
+  Use cast(@array, "t") to cast the array to the type you really desire.
+
+2.1-beta 14  (24 Mar 07)
+===========
+- added splice(@array, @insertme, position, n) for modifying an array.  
+  works a lot like replaceAt, i.e. up to n elements at the specified
+  position are removed and the elements of @insertme are put in their
+  place.  @array is modified in place.
+- array functions now normalize negative parameters as offsets from the
+  total length of the array.  updated functions include:
+  &add, &removeAt, &search, and &subarray.
+- added a check to ensure regex pattern cache is flushed every so often.
+- tracing/profiling now records Java calls on closures passed as psuedo
+  objects.
+- the import/from syntax now allows the jar filename to be quoted with 
+  double or single quotes to specify a path with spaces.
+- fixed a bug with normalized parameters (for both arrays and strings)
+
+2.1-beta 13  (18 Mar 07)
+===========
+- trace debug option now reports the parameters for a HOES call even if an
+  exception is thrown.
+- psuedo objects now make an attempt to convert the returned scalar to the
+  java type expected by the method.  (oops, oversight on my part :))
+- Sleep's flag error function now accepts and returns an Object value. This
+  has big implications as checkError($error) can now return the original
+  error causing Object (i.e. a descendent of Throwable) that can be 
+  manipulated with HOES.  But oh wait... there is more...
+- added a try/catch blocks to Sleep.  try/catch blocks are used to catch
+  exceptions thrown by sleep scripts and the sleep interpreter.  the
+  syntax is:
+
+  try { ... } catch $varname { ... }
+
+  try try/catch system works as you would expect, if an exception is thrown
+  Sleep will jump to the top level try and execute the corresponding catch
+  block filling in $varname with the exception that was thrown.
+- added a getStackTrace() method that returns an array of the sleep stack
+  trace caused by the latest exception.
+- added a throw keyword that works quite similiarly to return except it
+  throws a message (or exception).  Any arbitrary scalar can be used with
+  throw.
+- added a new debug option (DEBUG_THROW_WARNINGS) to force anything flagged 
+  for retrieval via checkError(...) to be thrown as an exception within Sleep.  
+  The number is 34.  This is put in place to prevent breaking backwards
+  compatability with older scripts that rely on the checkError() scheme. 
+  With this option scripters can choose to use try/catch blocks for all run
+  of the mill error handling.  (see how it all fits together now?)
+- added an &exit() function to force Sleep to stop processing within the
+  current script environment.
+- updated sleep library to force functions to pass exceptions for consumption
+  by checkError() in lieu of strings.  This means the error messages are
+  somewhat less descriptive but on the other hand you can fully inspect them
+  for whatever additional details you want.
+- fixed a bug preventing use of increment/decrement ops in expression context
+- fixed a bug causing @_ to return the same size value no matter how many
+  modifications had been made to the array (thanks to Ralph Becker for 
+  finding this one).
+- made a small (possibly negligible) performance optimization to Sleep's
+  scalar value transfer code.
+- fixed frame leaks that can occur when a Java exception interrupts the 
+  calling of a function.
+- added yet another option to help with debugging: watch('$x $y $z')
+  this function will ensure a warning is fired every time the scalar
+  container held by the specified variables receives a new value.
+
+2.1-beta 12  (11 Mar 07)
+===========
+- fixed yet another flurry of line number skew issues.  argh, make it stop!
+- renamed &unlambda to &let, this name makes much more sense
+- added APIs to the script loader class to compile a script without the
+  overhead related to loading the script.  This is useful when a script is
+  going to be run in the environment of another script.
+- improved tracking of source file information for blocks of code.  error
+  messages and closure string representations will now accurately represent
+  the code's origin information.
+- added an &include function for including code from other sleep scripts.
+  included code is included as if it is part of the current source file.
+  include(["/path-to/jar-file.jar"], "directory/filename.sl");
+- SValue atomic step now returns a copy of the scalar literal and not a
+  reference to the scalar.  This prevents constants from being "changed"
+  on accident.
+- Added a -e|--eval and -x|--expr command line options to sleep.jar; these
+  options allow whole scripts/expressions to be specified on the command 
+  line for evaluation.
+- Updated &indexOf to accept an optional start parameter.
+- Updated numerous string functions to allow negative indice parameters.
+  &left, &right, &mid, &replaceAt, &strrep, &charAt, &substr, &indexOf
+- added a check to &readb to see if the handle is closed prior to attempting
+  a read.  If the handle is closed $null is returned.
+- fixed bugs in &readb that come about when reading in the last chunk of 
+  data that is usually smaller than the total buffer size.  
+- added a new I/O handle type: the buffer.  this can be used to construct
+  and manipulate very large strings of data in memory.  use &allocate()
+  to allocate a writeable buffer.  the first time &closef is called the
+  buffer will flip to a readable buffer.  the second time all the resources
+  will be cleared.
+- pack/unpack/bwrite/bread can now parse sleep scalars with the 'o' format
+- added another form of &exec that allows the command/arguments to be
+  specified as an array.  useful for including arguments with spaces in
+  them.
+- rewrote parsed literal parser and atomic step to fix several bugs
+  ... strings ending with a $ will no longer see the $ stripped off
+  ... \\\" is now \" as expected
+- added a &byteAt function which works like &charAt except it returns an int
+
+2.1-beta 11  (3 Dec 06)
+===========
+- multi-line parsed literals now make a more sincere effort to track which 
+  line number a variable was encountered at.
+- fixed a bug with multi-line parsed literals where a variable followed 
+  immediately by a tab or newline was not being "terminated"
+- fixed a bug with && and & followed by a HOES expression being mistaken 
+  for a function reference token.
+- added &unlambda function that works exactly like &lambda except it does
+  not create a new closure (rather it manipulates the this scope of the
+  passed in closure and returns the passed in closure).
+- added a profiler to sleep...  I know, you should be scared.  Use the
+  DEBUG_TRACE_CALLS (8) or DEBUG_TRACE_PROFILE_ONLY (24) debug options to
+  enable it.  Profiler statistics are available in the ScriptInstance class
+  with the getProfilerStatistics method.  Scripts can access their profiler
+  statistics with the &profile() function which returns an array.  
+- fixed a line number skew issue with multi-line tokens passed as parameters
+  to a function/expression.  
+- fixed a line number skew issue when approximating the line numbers where
+  a closure originated.
+- added a -a/--ast command line option to dump the abstract syntax tree
+  for the specified script.  
+- fixed a coroutine bug where consecutive yields happening within a nested
+  block were not properly saving the nested context.
+
+2.1-beta 10 (20 Nov 06)
+===========
+- added sizeof("data format") to return the size (in bytes) of the
+  data structure represented by the specified format string. 
+- attempting an invalid usage of the index op now fires a runtime
+  warning notifying the scripter of what happened.
+- added \x and \u escapes for parsed literal strings... \x## allows a
+  char to be specified and \u#### allows a unicode char to be specified.
+  # is expected to be a valid hex character.
+- updated println, readln, read, readAll, and printAll to be unicode
+  aware, the platform encoding is used by default.
+- added &setEncoding($handle, "charset name") to set the encoding to use
+  with the specified handle.
+- added &readc($handle) for reading a single character from an I/O handle.
+- parser no longer assumes a bareword in a expression is a function handle
+  reference.  should stop some frustrating errors :)
+- fixed a silly bug with tuple assignment where hash right hand side was
+  being converted to a string before being assigned to the individual
+  elements.
+- added assignment ops i.e. +=, -=, *=, /=, &=, |=, ^=, <<=, >>=, and .=
+  using these ops will assign the result of the op applied to the assignment 
+  value and the right hand side.  this works as expected with normal
+  and tuple assignment.
+- using a tuple assignment op has a special case: expand array
+  a single array value specified within a tuple will be expanded as if each 
+  of its elements were specified within the expression i.e.:
+  (@a) += @(3, 4, 5); is equivalent to: (@a[0], @a[1], @[2]) += @(3, 4, 5)
+- fixed &consume($handle, n, [size]) to now consume up to n bytes with a 
+  buffer of the specified size.  this will consume a handle without 
+  keeping the whole thing in memory (useful for calculating md5 digests
+  of files and other fun things).
+
+2.1-beta 9  (6 Nov 06)
+===========
+- made sleep data structures and sleepclosure all serializable.
+- added &readObject([$handle]) and &writeObject([$handle], $object) to
+  read/write scalars to a handle.   if you think about what is possible
+  with closures/coroutines and friends then you are thinking right.  this
+  should scare you.
+- fixed a nasty nasty (x 1000) performance issue with hashes and arrays of
+  any significant size.  A null check in the Index operator was inadvertently
+  converting the entire data structure to a string each time an index op
+  occured.  thanks to Marty for making me aware of this one.
+- added &consume($handle, n bytes) to read and discard up to n bytes from the 
+  specified handle.  (differs from skip which just seeks ahead and discards
+  n bytes).
+- IO errors in read/write functions now uniformly close the read/write 
+  portions of the IO handle.
+- remove &getFilePath as the function essentially did nothing but return
+  the value passed to it (I was a little over-ambitious when bridging
+  java.io.File awhile back).
+- ls() with no parameters now returns the listing of files/dirs in the
+  current directory.
+- fixed a bug with 'x' crashing the sleep console when the expression 
+  had a syntax error.
+- added a -c/--check option to the sleep interpreter to specify the script
+  should be parsed and checked for syntax errors but not run.
+- &add now behaves as documented, if no index is specified then the value
+  is added to the beginning of the array (and not the end as in push).
+- HOES method resolution now matches 1 character sleep strings as Java 
+  characters.
+- the index operator now normalizes negative array indices i.e. @array[-1]
+  will return the last element of @array.
+- added more descriptive error messages for out of bounds exceptions and
+  null pointer exceptions.
+- fork() now inherits parent scripts debug settings and error watchers,
+  before if an error happened in a fork it would be silently ignored. doh!
+- &use is now much more aggressive with its error reporting.  if the class
+  is not found or if the specified jar file is not found a runtime warning
+  is fired.
+
+2.1-beta 8  (29 Oct 06)
+===========
+- when packing an unsigned integer the argument is now interpreted as a long
+  (and cast to an int) rather than an int (since an unsigned integer can be
+  "bigger" than a normal java integer).  
+- fixed a parser ambiguity with hash literals i.e. %(...) and arithmetic
+  consisting of ... % (...).  both now work as they should.
+- fixed assignment loops creating an extra non-needed stack frame
+- added a sanity check to the assignment step, checks for a "corrupted"
+  assignment stack, most commonly caused by forgetting to terminate the 
+  assigned expression with a semicolon.
+- added BridgeUtilities.extractNamedParameters(Stack args) to extract all
+  named parameters from a stack of arguments.
+- changed string representation of closures to represent: 
+  &closureX:N-M where X represents the instantiation number (i.e. closure 3)
+  and N-M represents the line range where the closure was declared
+- updated &invoke to accept the following named parameters:
+  parameter => %() - accepts a hashmap of $scalars to send as named parameters
+  $this => &closure - accepts a closure to use as $this when executing the
+     function.  essentially forces the called function to share environments
+     with &closure for the duration of the execution.
+  message => "some string" - the message value to send to the called function
+- updated the sleep console with an ehanced 'help' command and a command 'debug'
+  to set the debug level of a script.
+- one can now specify a $this => &closure with &lambda to force the new closure
+  to use the closure scope/environment of the specified &closure
+- added a &putAll(%hash, &/@, [&/@]) to populate the passed in hash from the
+  passed in iterator(s).
+- updated &exec to allow specification of a starting directory and environment:
+  $handle = &exec("command args", [%environment], ["starting directory/"]);
+- readb now returns a $null if the read failed to return any data
+
+2.1-beta 7  (15 Oct 06)
+===========
+- index operator can now be applied to closures to reference the "this" scope
+  of the closure i.e.
+
+  $closure = lambda({ println("I am: " . $name); }, $name => "Burt");
+  $closure['$name'] = "Joe";
+  [$closure];
+
+  Output: "I am Joe"
+- added -isfunction predicate to check if a scalar contains a function or not
+- added &invoke(&function, @args, [message]) to invoke a function with @args
+  passed as individual arguments.
+- updated &setField to accept key/value pair arguments where the key specifies
+  the field to update and the argument the value, any number of args can be
+  specified.  this breaks to behavor set in 2.1-b6
+- added a -h/--help command line option (:
+- specifying a - on the sleep command line reads the script from STDIN
+
+2.1-beta 6  (1 Oct 06)
+===========
+- added named parameters for Sleep closures.  When a $key => value argument is
+  passed to a sleep closure the value will be installed into the local scope of
+  the function as variable $key.  This breaks the old behavior which was to 
+  convert the key/value pair into a string i.e. $key=value
+- improved function call traceing to detect when a function call failed and to
+  indicate that such an event occured.
+- coroutines are now allowed to call themselves in a recursive manner
+- when yield is called, the local variable state is preserved until the 
+  coroutine is called again (only when the coroutine is reset, i.e. exited w/o
+  a yield is the local variable state dropped).
+- added an error check for attempts to pack odd length hex strings
+- parser now throws an error if a jar file specified with import * from: is not
+  found.
+- added a &setField(class|$object, "field", value) function for setting the 
+  value of a field in a Java class or object.
+- added &setf('&function', { closure }) for setting a named closure (i.e. a 
+  subroutine).
+- closure this scope is now associated directly with the closure itself and not
+  just its script environment.  the implication of this is passing a closure
+  to a fork will carry the closure this scope with it as well (and also the
+  local scope in the case of a partially executed coroutine).
+- added semaphore synchronization primitive to the sleep language:
+
+  # initialize a semaphore
+  $semaphore = semaphore([initial count]);
+
+  # acquire the semaphore
+  acquire($semaphore);
+
+  # release the semaphore
+  release($semaphore);
+
+2.1-beta 5  (17 Sept 06)
+===========
+- fixed a bug with import [path] from: [jar] not working when a package.class
+  combination was specified.
+- fixed a bug where HOES was not recognizing sleep arrays as a valid argument
+  for methods/constructs expecting multidimensional arrays.
+- HOES mapping scalars to Java arguments is now a little bit stricter and more 
+  accurate.
+- added &casti(value, "t") to cast the specified value into a Java primitive type.
+- altered the semtantics for how Java Object values are converted to Sleep
+  scalar number values.  Essentially the Object is converted to a string and the
+  string is parsed with the following meaning:
+  <not a number> = 0
+  "true"         = 1
+  "false"        = 0
+  ""             = 0
+  <a number>     = <a number>
+
+  The old semantics (object hashcode) were worthless so I doubt there will be 
+  many complaints.
+- added checksumming capability to sleep, the function has the following forms:
+
+  $summer   = checksum($handle, "[[>]CRC32"|"[>]Adler32");
+  $sumvalue = checksum($summer); # when I/O on $handle is complete
+  or:
+  $sumvalue = checksum("string of data", ["CRC32"|"Adler32"])
+
+  The CRC32 and Adler32 algorithms are supported.  With an I/O handle specifying
+  a > before the algorithm name indicates that written data should be checksummed.
+- added digest capability to sleep, the function is similar to checksum except
+  the function name is &digest.  The MD5 and SHA-1 algorithms are supported.
+  This function returns a string of bytes (can be converted to hex using 
+  unpack("H*", $digest_data)[0]).
+- added H/h to the binary format templates to allow byte data to be converted
+  to/from hex characters.  The H puts the high nybble first and the h puts the
+  low nybble first.
+- fixed a bug with &pack destroying the binary string thanks to Java's lack
+  of unsigned types.
+- When a Java byte array is returned by a HOES call, a sleep byte string will 
+  be created from this value.
+- fixed a deadlock issue with fork/wait with close being called on fork while
+  in the middle of a read.
+- sleep I/O now uses the IOObject stored in the environment under %console% as
+  the source for stdin/stdout (this is set to System.in and System.out by 
+  default).
+
+2.1-beta 4  (11 Sept 06)
+===========
+- added a literal form for arrays and hashes:
+  @("a", "b", "c", "d", "e", @("f", "g", "h", "i"), "j", "k")
+  %(a => "apple", b => "batman", c => "cow")
+- fixed a bug in the Sleep parser transforming long/int literals
+  into ObjectValues rather than LongValue/IntValue.
+- string form of arrays and hashes (when converted to a string) is now 
+  consistent with the sleep literal form
+- added another debug level (8) for function call tracing.  while this
+  flag is set all function calls with their arguments and return value
+  will be displayed to the user as a runtime warning.  Enable with:
+  debug(debug() & 8);
+- HOES will now allow sleep data structures (arrays and hashes) to be passed
+  as java.util.List and java.util.Map data structures (via an expensive
+  conversion process).  This conversion only applies one way i.e. a Java List
+  or Java Map can not be used as a Sleep array or hash.
+- added the ability to import classes from external jar files into sleep:
+  import org.jdom.* from: jdom.jar;
+  
+  Sleep also has a concept of a Sleep classpath, definable with sleep.classpath
+  or through the static methods in sleep.parser.ParserConfig.
+- updated the use() function to use the sleep classpath to search for the
+  specified jar file.
+- fixed lambda({}, $x => $y) sharing scalar container references (caused a 
+  change to $x inside of the closure to affect the value of $y)
+
+2.1-beta 3  (18 Aug 06)
+===========
+- added an optional timeout parameter for the socket connect function i.e.:
+  $socket = connect("host", port, [timeout in milliseconds]) 
+  default is 60 seconds.
+- modified listen to create a server socket and bind to the specified port, 
+  each call to listen is a call to accept a connection on the specified port.
+  to stop listening on the specified port use closef(port number) instead of 
+  $handle.
+- added a function global to declare a series of variables into the global 
+  scope
+- added a require strict debug flag, this flag causes a runtime warning to
+  be fired whenever a script uses a variable without delcaring it using
+  global, local, or this.
+- added &debug(mode) allows scripters to programatically set the debug flags
+  for their script..  debug with no arguments returns the current debug flags
+
+  levels are:
+  1 - show errors: dump all critical script errors as runtime warnings, this
+      should never be turned off.
+  2 - show warnings: dump all non-critical script exceptions as runtime 
+      warnings.  These can be checked for programatically with &checkError
+  4 - require strict: dump all first time uses of non-declared variables as
+      runtime warnings.  
+
+  any of these flags can be OR'd together i.e.:
+
+  debug(1 | 4); # show all errors and uses of non-declared variables
+- when passed an array parameter, &rand will return a random element of the
+  array.
+- eliminated the use of a busy loop to wait for a timeout within the &wait
+  function
+- &wait when called on a process will now wait for that process to exit
+  and return the exit value of the process.
+- added a new function to BridgeUtilities to extract an "iterator" from the
+  argument stack, this iterator will be generated if the argument is an array
+  or generator function.  This allows certain functions to accept an array
+  or generator function interchangeably.
+- updated several functions in the sleep utility library to use this new
+  iterator extractor mechanism:
+  &map, &filter, &copy, &reverse, &reduce, &printAll, &addAll
+- fixed a bug where several bridge utility functions were inadvertently 
+  causing arrays/hashes to share scalar references with passed in data. 
+  &add, &addAll, &array, &filter, &map, &subarray, and &map.
+
+2.1-beta 2  (5 Aug 06)
+===========
+- added a few more FP-style functions to Sleep:
+  &reduce(&closure, @array)
+  &search(@array, &closure, [index])
+  &filter(@array, &closure)
+- added &replaceAt("original", "new", index, [chars to delete]);
+- added &mid("string", index, n chars) to extract a substring equivalent to 
+  &substr("string", index, index + n chars) 
+- exposed the IO Process, File, and Socket using a new method added to 
+  IOObject: getSource().  This will allow scripters to query the IO source 
+  using HOES if there is some API Sleep does not bridge. (i.e. exit value of a
+  process)
+- added an API to SleepUtils for building an IO handle scalar from a Java 
+  InputStream/OutputStream
+- added a debug flag to each script instance.  the options consist of:
+
+  DEBUG_SHOW_ERRORS = 1 - this is the typical behavior that causes a runtime 
+     warning to be fired whenever an uncaught exception occurs within a bridge.
+  DEBUG_SHOW_WARNINGS = 2 - fires a runtime warning any time an error
+     is flagged using flagError() in the script environment.  runtime warnings
+     are typically errors a scripter is meant to check for with 
+     checkError($error).  
+  DEBUG_NONE = 0 - disables all firing of runtime warnings (not recommended)
+
+  Sleep scripts on the command line can run with different debug levels using:
+  java -Dsleep.debug=3 -jar sleep.jar filename.sl
+- foreach can now iterate over closures..  if a closure is passed to foreach 
+  then the closure will be called continuously until a $null is returned.
+- added a few functions for performing set type operations on @arrays
+  @ removeAll(@a, @b) - modifies @a with the difference of @a - @b
+  @ addAll(@a, @b) - modifies @a with the union of @a + @b
+  @ retainAll(@a, @b) - modifies @a to contain the intersection of @a and @b
+- added methods to SleepUtils to generate a java.util.Map from a Sleep Hash 
+  scalar and to generate a java.util.List from a Sleep Array.
+- readln in Sleep I/O now returns the empty scalar at the end of the stream
+- sleep I/O streams now autoflush on all writes.  this should solve many
+  frustrations that the I/O pipeline has occasionally caused scripters.
+- added &available($handle) to determine the number of available bytes for a 
+  given stream.  also an option is &available($handle, "substring") to 
+  determine if the specified "substring" is contained in the data available to
+  be read.
+- added an extended version of the while loop that continuously evaluates an 
+  expression, assigns it to a variable, and executes a block of code so long as
+  the specified variable is not null.  example:
+
+  $handle = openf("somefile.txt");
+  while $data (readln($handle))
+  {
+     println("Read: $data");
+  } 
+- added formatErrors() and printErrors(OutputStream out) functions to the
+  YourCodeSucksException class.   should make reporting parser errors less of
+  a burden when embedding sleep into applications.
+
+2.1-beta 1  (16 Jun 06)
+===========
+- fixed the clean target in the sleep build.xml file
+- added a continue keyword for flow control of while/for/foreach
+  loops.  My arm hath been twisted.
+- rewrote the interpreter to use stack frames instead of a single
+  environment stack for all temporary calculations...  this could 
+  create bugs and needs lots and lots of testing.
+- fixed bug related to using a function call within an array/hash 
+  index
+- added coroutines to the sleep language, this consists of a yield
+  keyword (works like return that exits a closure at that point.  
+  Next time said closure is called execution resumes at the point
+  where you last yielded from.
+- did massive reworking of the sleep interpreter to allow for
+  coroutines (this had some benefits as well including the ability
+  for bridge writers to track bridge data by script context).
+- oops, fixed broken ^ operator (bridge was written wrong, thanks
+  to Ralph Becker for catching this one).
+- remove() with no parameters will remove the current array element
+  in a foreach loop (this only works on arrays, not hashes).
+- fixed bugs with iswm algorithm when wildcard pattern is longer 
+  than the text it is being compared against.
+- updated isMatch/hasMatch/matched to use the new context meta
+  data feature to keep tracker of matchers (the old way was not
+  thread safe)
+- for loop initialization and increment terms can now be empty
+- added SleepUtils.getScalar(x) for Java shorts and floats
+- opted to distribute documentation as HTML instead of PDF...
+
+2.0-release
+===========
+- added a -version, -v, --version command line switch to see what
+  Sleep version you're using :)
+- HOES now automatically converts a 1-dimensional Sleep array into
+  a Java array for argument matching (of any Object/non-primitive
+  type).  This is a potential area of improvement for the future
+  if there is enough demand for it...
+
+  Auto casting is also done for int arrays, double arrays, and float
+  arrays.  The first element of the array determines the overarching
+  type.  More sophisticated casting should be done using the cast
+  function (detailed later in this changelog)
+- added function &flatten(@array) for flattening a multidimensional
+  array into a 1-dimensional array.
+- HOES now recognizes a desired short argument and can build a value
+  for it...  (the Java primitive type short)
+- when an error occurs sleep will now immediately jump out of the
+  currently executing block.
+- added a &cast(@var, 't', ...) which casts @var into a native java
+  array with a type t (b = byte, c = char, i = int, etc..).  
+  Any arguments specified represent the dimensions of the array i.e.
+  &cast(@var, 'l', 2, 3) casts @var into a 2x3 array of Java longs.
+- &sort now throws an IllegalArgumentException if not enough args
+  are specified (I've been bitten by accidentally using &sort when
+  I really wanted &sorta and friends...)
+- added the ability for fork(&closure, ...) to take an initial set
+  of values to pass to the forked script environment.  this feature
+  comes with a heavy warning, see the docs for more details
+
+2.0-b11
+=======
+- fixed a fringe case with the Z unpack character
+- cleaned up definitions of pack for z/Z/u/U
+- made backslash in single quoted strings behave properly:
+  \' is a single quotes; \\ is a \; \ otherwise has no meaning
+
+  I hate changes that break compatability with old scripts (especially
+  ones I wrote) but the old behavior was a bug, not a feature...
+- fixed $1.$2 not working correctly.  the . operator is the only 
+  built-in operator that can do without white space...
+- replace() function now takes a 4th parameter for the max number of
+  occurences to replace...
+- added a hasmatch predicate similar to ismatch, notable differences:
+  ismatch matches the entire string against the pattern
+
+  hasmatch looks for a matching substring, each subsequent call to
+  hasmatch will look for the next substring until no matches are
+  left to be found (in which case it resets itself after returning
+  false).   hasmatch is essentially the same as the g option in
+  Perl's regex stuff...
+- updated the matches() function to work a lot like hasmatch where
+  it will look for substrings and return all groupings for all
+  matching substrings...  
+- added a transliteration function &tr ala the UNIX command tr.  
+- updated &matches to allow either a range of matching substring 
+  groups to be extracted or a single substring group.
+
+2.0-b10
+=======
+- fixed a bug with primitive values returned by HOES expressions not
+  being interpreted as their primitive selves.
+- added a function &values(%hash) for extracting all of the values from a 
+  scalar hash.
+- exposed the PrintWriter/BufferedReader in the IOObject API
+- added a check to prevent ls() on a non-existant directory from fireing an 
+  exception..
+- added uint(n) to convert scalar int n to a scalar long as an unsigned int.
+- fixed bug that was supressing HOES syntax errors
+- fixed bug with SleepUtils.getScalar(boolean) always returning a false 
+  boolean, thanks to Ralph Becker for finding and isolating the fix for this.
+- fixed a bug with pack() packing creating the byte string the wrong way 
+- fixed bug with z/Z formats only grabbing one character of a string from the 
+  IO stream if no max string size is specified.
+- changed the u format and added a U format.. u/U reads/writes 16 bit UTF-16
+  characters similar to how z/Z handles 8 bit ASCII characters.
+- bwrite and writeb now automatically flush the data after writing everything
+- added &wait($handle, [timeout]) to wait for a fork or callback associated
+  with $handle to finish.  If the specified timeout is reached the function
+  will return the empty scalar.  If $handle is a fork, the return value of the 
+  fork will be returned by &wait.
+- added a whole slew of mathematical functions bridgeing most of java.lang.Math 
+  into Sleep.
+
+2.0-b9 
+======
+- foreach loops now automatically convert hash parameters into their keyset.
+- added a new foreach syntax:
+
+  foreach $index => $value (source) { }
+
+  in this case sleep will assign the index of the source (whether a number for
+  an array or a string for a hash) and the value as well.
+- sleep console now catches uncaught exceptions with evaluated expressions
+- redid the parsing for number literals to rely on Java's methods for doing s
+  so.  this means integer/long literals can now be specified in hex, decimal,
+  and octal formats.  Octal is indicated with a 0 (digit zero) following the
+  number.  Hex is indicated with 0x followed by the hex digits.  Anything
+  else is decimal.  Any of these formats can be signed.  Also any of these
+  formats can be followed by an L to specify a long scalar rather than an
+  int.
+- the remove() function now takes multiple parameters for multiple items to 
+  remove.
+- added callback parameters for &listen() and &connect().  this will allow 
+  sleep to call a function when a connection is established or failed for
+  either of these functions.
+- fixed a deadlock condition caused by calling closef() on a socket from 
+  a thread other than the read thread. 
+- added fork(&closure) to spin &closure off in its own thread.  &closure 
+  is run in an isolated environment.  communication between the main environment
+  and the &closure environment is facilitated by a IO pipe returned by fork()
+  and available as $source within &closure().
+- added sleep(n) to cause the current thread to sleep for n milliseconds
+- removed the "script" variable scope.  this was necessary to make the 
+  forked isolated script environments a reality.  
+- HOES now sets all fields accessible property to true before invocation
+
+2.0-b8
+======
+- fixed a bug parsing tuple assignments in certain cases.
+- added a &subarray(@array, n, [m]) function for extracting an array slice
+- reworked the pack/unpack format strings to make them more useful, noteable
+  changes include:
+  s/S | are for short/unsigned short respectively
+  I   | will now read in an unsigned integer
+  z/Z | are for reading/writing ascii characters, Z will make sure the 
+      | specified field length is used to its fullest.
+  u   | is for reading a UTF-8 format string
+- rewrote sleep's interactive console to hopefully be a little more useful
+- fixed a bug with the pack/unpack format string parser not assigning the 
+  specified integer to the last format character.
+
+2.0-b7
+======
+- array index operator can now be applied to HOES expressions i.e.
+  $var = ["this is a string" split: " "][1]
+- added error detection for attempting to use foreach loop on a non array value.
+- updated &use() to only instantiate dynamically loaded class once other 
+  scripts loading this same class will share the instance
+- added Evaluation bridge for defining how `backquoted strings` should be 
+  processed when encountered in an expression.
+- added perl-like cmp operator i.e. "b" cmp "a" returning -1.
+- added perl-like spaceship operator i.e. 3 <=> 4.
+- fixed a bug with the sort() function and customized sorting functions.  also
+  added some javadoc to sleep.interfaces.Function so no one makes the same 
+  mistake I did.
+- added perl-like map(&closure, @array) function
+- altered &use's method signature:
+  use(["/path-to/jar-file/to/load/class/from.jar"], "my.package.LoadableClass");
+  the jar parameter is optional.
+- the x format char in i/o outputs a null byte (in write situations)
+- strings can no longer be faked as function literals to a HOES expression i.e.:
+  ['&some_func' message: arg1, arg2, ...] no longer works...
+
+  this created a dangerous situation where a string object passed to a HOES 
+  expression would be interpreted as a function handle first and foremost 
+  whenever the string object began with an &.
+- added function('&string') to return a real function handle for the passed in
+  &string.
+- code parsed with eval() and expr() is no longer cached, if one wants 
+  performance similar to cached eval and expr then use compile_closure instead.
+
+  this decision was made to prevent inadvertent memory leaks from scripts that
+  do a lot of eval() and expr().
+- added compile_closure('string of code') which compiles the string into an 
+  anonymous function ready for your use.
+- checkError($message) now reports syntax errors for compile_closure, expr, and
+  eval.
+- YourCodeSucksException's toString() and getMessage() have been made much more
+  informative.
+
+2.0-b6
+======
+- HOES new keyword now runs the returned object through the sleep
+  build scalar method.
+- made -isnumber friendly to the decimal place indicator .
+- fixed a bug with using the index operator on the left hand side
+  of any sleep expression (told you to expect bugs last beta!)
+- arrays returned by a HOES expression are now converted to sleep
+  scalar arrays.
+
+2.0-b5
+======
+- added -isarray and -ishash predicates.
+- added support for multi-dimensional data structure accesses
+  to sleep.   i.e.:  @array[3][4] = "hi"; 
+- index operator can now be applied to function calls, expressions
+  and $scalar's that contain/return an array or hash reference.
+
+  these changes required some massive work on the parser and a
+  little bit of work on how the instructions for these things
+  are organized.  things are passing my unit tests right now
+  but still expect bugs!
+
+- added the option of specifying integers as a hex literal and
+  the option of appending L to a number to specify a long.
+
+  $x = 0xFFFFFF;
+  $l = 4847324738247832L;
+
+- fixed infinite loop caused by calling strrep with an empty
+  string to search for.
+- fixed &size and &keys causing a NPE when their passed parameters
+  don't contain the appropriate data structure.
+- sorting functions will now copy read-only arrays before attempting
+  to in-place sort them.  
+- iswm predicate is now tolerant of empty strings
+- fixed iswm to not consider a left hand side substring to be a valid
+  match of the right hand string.  basically the whole left hand side
+  string has to be consumed for a valid match to take place.
+- added the \ character to iswm patterns to allow the next character
+  to have no meaning...
+- added ** to iswm to enable greedy matching instead of non-greedy
+- meaning of ** and * in iswm now means match 0 or more characters
+
+2.0-b4
+======
+- added new functions for dealing with binary data in sleep:
+  $ pack('format', arg1, arg2, ...)
+  $ pack('format', @array)
+  @ unpack('format', "string of binary data")
+  
+  $ readb($handle, n bytes to read)
+    writeb($handle, "string of binary data")
+
+  @ bread($handle, 'format')
+    bwrite($handle, 'format', arg1, arg2, ...)
+    bwrite($handle, 'format', @array)
+
+    the read function can now also take a optional last parameter
+    specifying the number of bytes to read on each call to the 
+    closure.  a 3rd parameter of 0 means read whole lines of text
+    as normal.
+
+  the format string is specified in the Sleep Language Reference.
+
+  As a warning the performance of these functions isn't the greatest
+  in the world.  It took 3 seconds to read in sleep.jar and another
+  4 to write it back out.  Ah well at least it didn't corrupt the jar
+  file :)
+- added i/o stream manipulation functions such as:
+
+  skip(n)   - skips n bytes in the file stream
+  mark([n]) - sets a mark in the buffer to reset to
+  reset()   - resets this stream to the last mark
+
+- added logical operators to sleep such as:
+  ^, |, &, <<, >>, and a not() function
+- values returned from  HOES will now (usually) map to
+  the appropriate sleep scalar type.  
+- exposed the Sleep IO primitives (contained in a Sleep
+  Object Scalar) as public API's.  I still have yet to
+  document it well.
+
+2.0-b3
+======
+- fixed bug when referring to class names using the dotted 
+  noation.
+- added => operator to help with instantiating hashmaps, i.e.
+  hash(a => 3 + (9 / 3), b => "this is a string", ...)
+
+  a key/value pair object scalar is created by using the =>
+  operator.  This scalar can be extracted using the 
+  BridgeUtilities class.
+- added an "is" predicate for checking object equivalency, 
+  is works just like == for checking object reference 
+  equivalence in Java.  i.e. if ($x is $y) { }
+- added closures to sleep...   See the Sleep language reference 
+  for more information
+- added two new variable scopes, a script specific variable
+  scope and a closure specific scope.  Variables can be placed
+  into thse scopes using the &this, and &module functions.
+- exception message trapping mechanism for HOES has been
+  improved.
+
+2.0-b2
+======
+- compressed the included PDF documentation
+- rewrote the HOES argument resolution to be better(? :))
+- added more detailed error messages to the HOES interface i.e. 
+  badly matched arguments will show a useful message
+- exceptions thrown in the HOES interface will now be accessible 
+  with the checkError($scalar) method.  
+- stack traces of exceptions thrown by HOES accesses will now be
+   printed to the console.
+- fixed a bug with importing single classnames from a Package.
+
+^-- These fixes resolve issues with HOES and Java 1.5.0
+
+2.0-b1 (13 Mar 05)
+======
+- Added experimental Haphazard Object Extensions for Sleep (HOES)
+  interface.  
+
+  HOES allows Sleep to access and create Java objects.  This adds 
+  a whole new dimension to what is possible with Sleep scripts.
+
+  However Sleep is a language meant to provide an easy to learn
+  abstraction of an application's API.  HOES can supplement
+  extensions/abstractions not yet provided however it should not
+  be solely relied on to provide a solid scripting interface for
+  an application.
+
+  For more information see the Sleep Scripting Language document.
+  http://sleep.hick.org/sleeplang.html#10
+
+28 Feb 05
+=========
+- fixed bone headed bug with for loop initialization terms.
+  simple stuff like for ($x = 0; ...) worked fine, stuff like
+  $x = 1 + 2 turned out to be broken.  Fixed.
+- added a new type of syntax, a "filtered environment", 
+  essentially an environment that can take a scalar filter
+- default hashtables now filter out all keys with null scalar
+  values when returning a key set.  
+- fixed -isnumber and -isletter to return false if the parameter
+  strings are equal to ""
+- added $handle = listen(port, [timeout]) function to IO bridge.
+  sets up a really simple server socket.
+- removed useless debug flag for traceing runtime steps.  
+- added an API for getting the approximate line number of a 
+  Block Object...
+- added (optional) global parsed script cache'ing mechanism.  
+  useful for applications with multiple script loaders that
+  will be loading the same script files.  
+- stack frames for temporary calculations are now contained in the
+  ScriptEnvironment rather than being instantiated for each atomic
+  step that would need them.  This saves some memory overall and
+  eliminates all runtime information from the Block/Step objects.
+- fixed race conditions in the Sleep parser
+- rewrote sleep predicate parser to be much more friendly with
+  right hand side expressions that are not grouped by parentheses.
+
+18 Dec 04
+=========
+- updated one of the SleepUtils.runCode() functions to return
+  type of Scalar instead of void.
+- added a convienence method to get the first script environment
+  out of the script loader
+- registered sleep operators that have names that could be mistaken
+  for functions with the sleep parser.  this lack of registration
+  created an ambiguous case such as:
+ 
+  $var = "hello" x (3 + 4);
+  
+  is x (3 + 4) a function call, or is it an operator?  oh well :)
+  updated documentation to reflect this requirement as well. 
+- fixed a little 'documentation' bug with ParserConfig having the
+  wrong package name.
+- added a &use("package.SomeBridge") which will attempt to dynamically
+  load the class package.SomeBridge as a Loadable object and install it
+  into the environment of the current script.  takes either a pathname
+  without the .class extension or a package name for something already
+  in the class path.
+
+25 Nov 04
+=========
+- fixed bug with return not working inside of loops.
+- made print/println functions able to handle no parameters
+- added a 'break' command for breaking out of the current 
+  loop.  
+- added a iff(condition, value_true, value_false) operator
+- added &checkError([$scalar]) which will return the last error
+  to occur since checkError was last called.  Right now it
+- process, file, and socket i/o now all flag an error if an
+  error occurs when executing, opening, or connecting.  error
+  is accessible via checkError([$scalar])
+- command line sleep, using java -jar sleep.jar now puts all
+  arguments in the array @ARGV.  
+- scalar string number conversion now does a straight conversion
+  failing if the string is not a number.  functions like
+  &long($scalar), &double($scalar), &int($scalar) now convert a 
+  string directly to those types rather than to an int and then
+  casting as the specified type.
+- moved over &parseDate(), &formatDate(), and &ticks() from jIRCii
+  about time sleep had some date processing tools...
+- built-in operator ! now works on expressions and scalar values
+  in an if statement.  i.e. if (!$1) { }  don't use it on 
+  predicate expressions or you will get a lot of runtime warning
+  errors... :)
+- added &printAll($handle, @array) for printing the entire 
+  contents of the specified array to a file.
+
+14 Nov  04
+==========
+- added sendEOF($handle) function for signaling end of file to a 
+  i/o output stream.
+- added an option to ScriptLoader to load script information raw
+  with no character set conversion.  
+- added formatNumber(number, base) for formatting the passed in
+  number to a certain base system i.e. 2 (binary), 10 (decimal), 16 (hex)
+- added parseNumber("number", base) to parse a number string encoded
+  as a certain base system into a scalar long
+- Updated &clear(@array/%hash) to clear hashes as well
+- sleep.jar now has a manifest file so you can java -jar sleep.jar to
+  start the sleep console.
+- added &hash('key=value', 'user=password') to generate a hashtable
+- updated getFileProper("parent", "child", ...) to take any number of
+  parameters and string them into a properly formatted pathname
+- fixed a parser bug: not detecting a missing ; in return statement
+  expressions...  led to all kinds of problems later
+- updated command line options to execute a script if that is all
+  that is specified on the command line i.e.
+
+  java -jar sleep.jar myscript.sl
+- IO related bridges updated to handle '/' as a universal path 
+  separator regardless of what platform you are on.
+- spent a lot of time updating the JavaDoc for the Sleep API.  The
+  JavaDoc should now be a useful resource.  :)
+
+26 Sept 04
+==========
+- unbroke sleep function &clear().
+- added a &copy(@array) function to sleep which returns a copy of the 
+  given array and copies of all of its values.
+- added an "x" string operator i.e. $var = "abc" x 3; # $var is now 
+  "abcabcabc"
+- added an expr('expression code'); function
+- documented and updated eval('code;'); function
+- added \r, \n, and \t escape constants to sleep
+- added normal array @_ to subroutines, which contains all of the 
+  arguments passed to the subroutine.
+- added getFileProper("/parent-path/, "file") - returns the appropriate 
+  filename/path string for parent-path and file for the current operating 
+  system.
+- fixed a problem with the sleep return stack, return by itself will now 
+  by default return $null - ALWAYS! 
+- added some sugar for assigning values from an array to a tuple of 
+  scalars i.e. ($x, $y, $z) = @array;  $x will be the first element of 
+  @array, $y will be the second element, and $z will be the third 
+  element.
+- removed white space requirement for the string concatenation operator .
+- added a strrep("string", "old", "new", ..., ...) for straight up string 
+  replacement without the regex bs in replace()
+
+20 Mar 04 - Initial Release, Take II
+
+06 Apr 02 - Initial Release? :)

@@ -1,0 +1,86 @@
+<project name="sleep" default="all" basedir=".">
+  <property name="project.src"   location="src/sleep" />
+  <property name="project.build" location="bin" />
+
+  <property name="project.path"  value="sleep" />
+
+  <target name="all" depends="init, compile, jar" />
+
+  <target name="init">
+    <tstamp />
+    <mkdir dir="${project.build}" />
+  </target>
+
+  <target name="compile" depends="init" description="compile the source " >
+    <javac srcdir="${project.src}/"
+           destdir="${project.build}"
+           nowarn="yes"
+           depend="yes"
+           debug="false"
+           source="1.4"
+           target="1.4"
+           optimize="yes"
+    >
+    </javac>
+  </target>
+
+  <target name="docs" description="build java documentation">
+     <javadoc packagenames="sleep.*"
+              destdir="docs/api"
+              windowtitle="Sleep 2.1 API" 
+              overview="src/overview.html">
+        <fileset dir="src" defaultexcludes="yes">
+           <include name="sleep/bridges/BridgeUtilities.java" />
+           <include name="sleep/bridges/KeyValuePair.java" />
+           <include name="sleep/bridges/SleepClosure.java" />
+           <include name="sleep/bridges/io/IOObject.java" />
+           <include name="sleep/console/ConsoleImplementation.java" />
+           <include name="sleep/console/ConsoleProxy.java" />
+           <include name="sleep/engine/Block.java" />
+           <include name="sleep/engine/ObjectUtilities.java" />
+           <include name="sleep/engine/atoms/Check.java" />
+           <include name="sleep/error/*.java" />
+           <include name="sleep/interfaces/*.java" />
+           <include name="sleep/parser/ParserConfig.java" />
+           <include name="sleep/runtime/*.java" />
+           <include name="sleep/engine/ProxyInterface.java" />
+           <include name="sleep/taint/TaintUtils.java" />
+           <exclude name="sleep/runtime/WatchScalar.java" />
+           <exclude name="sleep/runtime/CollectionWrapper.java" />
+           <exclude name="sleep/runtime/MapWrapper.java" />
+        </fileset>
+      </javadoc>
+  </target>
+
+  <target name="docs-full" description="build ALL java documentation">
+     <javadoc packagenames="sleep.*"
+              sourcepath="src"
+              destdir="docs/api"
+              windowtitle="Sleep API" 
+              overview="src/overview.html"
+     />
+  </target>
+
+  <target name="jar" depends="compile">
+     <!-- copy the JSR223 stuff into the Sleep directory -->
+     <unzip src="jsr223/sleep-engine.jar" dest="bin" />
+     <jar destfile="sleep.jar"
+          basedir="bin"
+          includes="**/*">
+
+         <manifest>
+           <attribute name="Main-Class" value="sleep.console.TextConsole" />
+         </manifest>
+
+        <!-- wow talk about jumping through hoops, whatever happened to Make? -->
+        <metainf dir="jsr223/src">
+           <include name="services/**" />
+        </metainf>
+     </jar>
+  </target>
+
+  <target name="clean" description="clean up" >
+    <delete dir="${project.build}"/>
+  </target>
+</project>
+

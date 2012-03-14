@@ -1,0 +1,2 @@
+Warning: tainted value: 'debug(debug() | 128);$handle = openf("taint4.sl");@d = readAll($handle);closef($handle);$data = join("", @d);eval($data);' from: @('debug(debug() | 128);', '', '$handle = openf("taint4.sl");', '@d = readAll($handle);', 'closef($handle);', '', '$data = join("", @d);', 'eval($data);') at taint4.sl:7
+Warning: Insecure &eval: 'debug(debug() | 128);$handle = openf("taint4.sl");@d = readAll($handle);closef($handle);$data = join("", @d);eval($data);' is tainted at taint4.sl:8
