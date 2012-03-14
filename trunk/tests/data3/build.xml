@@ -1,0 +1,40 @@
+<project name="sleep" default="all" basedir=".">
+  <property name="project.src"   location="src" />
+  <property name="project.build" location="bin" />
+
+  <property name="project.path"  value="sleep" />
+
+  <target name="all" depends="init, compile, jar" />
+
+  <target name="init">
+    <tstamp />
+    <mkdir dir="${project.build}" />
+  </target>
+
+  <target name="compile" depends="init" description="compile the source " >
+    <javac srcdir="${project.src}/"
+           destdir="${project.build}"
+           classpath="../../sleep.jar"
+           nowarn="yes"
+           depend="yes"
+           debug="no"
+           optimize="yes"
+    >
+    </javac>
+  </target>
+
+  <target name="jar" depends="compile">
+     <jar destfile="test.jar"
+          basedir="bin"
+          includes="**/*.class">
+         <manifest>
+           <attribute name="Main-Class" value="sleep.console.TextConsole" />
+         </manifest>
+      </jar>
+  </target>
+
+  <target name="clean" description="clean up" >
+    <delete dir="${build}"/>
+  </target>
+</project>
+

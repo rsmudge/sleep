@@ -1,0 +1,5 @@
+@('apple', 'cat', 'bat')
+%(a => 'apple', c => 'cat', b => 'bat')
+@('apple', 'blah', 'bat')
+%(a => 'apple', c => 'cat', b => 'bat')
+@('APPLE', 'ARDVARKS', 'DOGS', 'DUDES')

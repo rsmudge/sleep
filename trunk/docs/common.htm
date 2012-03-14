@@ -1,0 +1,82 @@
+<font color="#000099" size="+1"><b>Common Embedding Techniques Cheat Sheet</b></font>
+<br>
+
+<p>This document contains quick code snippets for common script embedding 
+operations.  The idea for this section came from the paper <u>Embedding APIs of 
+Java-Based Scripting Engines</u> available at: 
+<a href="http://pnuts.org/~tomatsu/embedding.html">http://pnuts.org/~tomatsu/embedding.html</a>
+</p>
+
+<br><b>Evaluate an Expression Reading from a String</b>
+
+<pre>
+ScriptEnvironment env = script.getScriptEnvironment();
+Scalar value = env.evaluateExpression("3 * (10 / 2)");
+</pre>
+
+<br><b>Evaluate an Expression Reading from a String</b>
+
+<pre>
+ScriptEnvironment env = script.getScriptEnvironment();
+Scalar value = env.evaluateExpression("3 * (10 / 2)");
+</pre>
+
+<br><b>Execute a Script Reading from a Stream (without creating a String)</b>
+
+<pre>
+ScriptLoader   loader = new ScriptLoader();
+ScriptInstance script = loader.loadScript("name", inputStream);
+script.runScript();
+</pre>
+
+<br><b>Catch a Runtime Script Error</b>
+
+<pre>
+public class Watchdog implements RuntimeWarningWatcher
+{
+   public void processScriptWarning(ScriptWarning warning)
+   {
+      String message = warning.getMessage();
+      int    lineNo  = warning.getLineNumber();
+      String script  = warning.getNameShort(); // name of script
+   }
+}
+
+script.addWarningWatcher(new Watchdog());
+</pre>
+
+<br><b>Catch a Syntax Error when loading a Script</b>
+
+<pre>
+try
+{
+   ScriptInstance script;
+   script = loader.loadScript("name", inputStream);
+}
+catch (YourCodeSucksException ex)
+{
+   Iterator i = ex.getErrors().iterator();
+   while (i.hasNext())
+   {
+      SyntaxError error = (SyntaxError)i.next();
+
+      String description = error.getDescription();
+      String code        = error.getCodeSnippet();
+      int    lineNumber  = error.getLineNumber();
+   }
+}
+</pre>
+
+<br><b>Set/Get a Variable without Parsing</b>
+
+<pre>
+script.getScriptVariables().putScalar("$var", SleepUtils.getScalar("value"));
+Scalar value  = script.getScriptVariables().getScalar("$var");
+</pre>
+
+<br><b>Call a function/method without parsing scripts</b>
+
+<pre>
+script.callFunction("&functionName", new Stack());
+</pre>
+

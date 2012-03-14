@@ -1,0 +1,6 @@
+%hash is now: %(d => 'dog', aa => 'appreciative ardvark', a => 'apple', c => 'cat', b => 'boy', x => 'xenophobe')
+%hash2 is now: %(d => 'dog', a => 'apple', aa => 'appreciative ardvark', c => 'cat', b => 'boy', x => 'xenophobe')
+%hash2 is now: %()
+%hash2 is now: %(d => 1, a => 1, aa => 1, c => 1, b => 1, x => 1)
+%hash2 is now: %(d => 1, a => 1, aa => 1, c => 1, 2 => 3, 0 => 1, 4 => 5, 8 => 9, b => 1, 6 => 7, x => 1)
+%hash2 is now: %()

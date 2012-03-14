@@ -1,0 +1,6 @@
+These files are a series of regression tests to make sure sleep
+isn't broken.  To run the regression tests you need perl installed.
+
+$ perl test.pl
+
+The perl script will tell you if all the tests passed or not.

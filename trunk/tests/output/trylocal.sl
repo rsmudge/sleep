@@ -1,0 +1,3 @@
+hehehe....
+   trylocal.sl:16 &bar()
+   trylocal.sl:7 <origin of exception>

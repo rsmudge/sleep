@@ -1,0 +1,18 @@
+%d = %(a => "Apple", b => "Bat", c => 1.0, d => 1, e => 1L);
+println(%d);
+removeAt(%d, 1);
+println(%d);
+removeAt(%d, "a");
+println(%d);
+remove(%d, 1);
+println(%d);
+$l = [new LinkedList];
+println($l);
+[$l add: "foo"];
+println($l);
+%d["blah"] = $l;
+println(%d);
+remove(%d, "[foo]");
+println("With foo? " . %d);
+remove(%d, $l);
+println("No foo!: " . %d);
