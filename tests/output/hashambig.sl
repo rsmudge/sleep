@@ -1,2 +1,2 @@
-Hash is: %(a => 'apple', c => 'cats', b => 'bats')
+Hash is: %(b => 'bats', c => 'cats', a => 'apple')
 Expression is: 2

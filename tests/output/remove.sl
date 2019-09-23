@@ -1,9 +1,9 @@
-%(d => 1, a => 'Apple', c => 1.0, b => 'Bat', e => 1L)
-%(d => 1, a => 'Apple', c => 1.0, b => 'Bat', e => 1L)
-%(d => 1, c => 1.0, b => 'Bat', e => 1L)
-%(c => 1.0, b => 'Bat')
+%(d => 1, e => 1L, b => 'Bat', c => 1.0, a => 'Apple')
+%(d => 1, e => 1L, b => 'Bat', c => 1.0, a => 'Apple')
+%(d => 1, e => 1L, b => 'Bat', c => 1.0)
+%(b => 'Bat', c => 1.0)
 []
 [foo]
-%(blah => [foo], c => 1.0, b => 'Bat')
-With foo? %(blah => [foo], c => 1.0, b => 'Bat')
-No foo!: %(c => 1.0, b => 'Bat')
+%(b => 'Bat', c => 1.0, blah => [foo])
+With foo? %(b => 'Bat', c => 1.0, blah => [foo])
+No foo!: %(b => 'Bat', c => 1.0)

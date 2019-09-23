@@ -12,8 +12,8 @@ of
 a
 new
 syntax
-a => apple
-c => cambodia
-b => bannana
 e => elephant
+b => bannana
+c => cambodia
+a => apple
 This is a test: f

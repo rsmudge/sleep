@@ -6,4 +6,4 @@ Trace: 3.0 isa class java.lang.Number ? TRUE at isa.sl:11
 Trace: 3.0 isa class java.lang.Double ? TRUE at isa.sl:12
 Trace: 3.0 !isa class java.lang.Integer ? TRUE at isa.sl:13
 Trace: 5 isa class java.lang.Integer ? TRUE at isa.sl:14
-Warning: attempted an invalid cast: java.lang.String at isa.sl:15
+Warning: attempted an invalid cast: java.lang.String cannot be cast to java.lang.Class at isa.sl:15

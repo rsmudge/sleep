@@ -1,1 +1,1 @@
-%(d => 'dog', a => 'apple', c => 'chump', f => &closure[addhash.sl:7]#1, j => 'jumping jack flash', p => 'pH34r', b => 'boy')
+%(f => &closure[addhash.sl:7]#1, d => 'dog', b => 'boy', c => 'chump', p => 'pH34r', a => 'apple', j => 'jumping jack flash')

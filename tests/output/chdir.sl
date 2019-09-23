@@ -1,8 +1,8 @@
-/Users/raffi/sleepdev/sleep/tests/data/build.xml
-/Users/raffi/sleepdev/sleep/tests/data/readme.txt
-/Users/raffi/sleepdev/sleep/tests/data/scripts.jar
-/Users/raffi/sleepdev/sleep/tests/data/src
-/Users/raffi/sleepdev/sleep/tests/data/test.jar
+/root/sleep/tests/data/build.xml
+/root/sleep/tests/data/readme.txt
+/root/sleep/tests/data/scripts.jar
+/root/sleep/tests/data/src
+/root/sleep/tests/data/test.jar
 So far so good...
 build.xml
 src

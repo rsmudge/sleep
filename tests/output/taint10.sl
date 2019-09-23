@@ -14,12 +14,12 @@ Warning: tainted value: '... e :)' from: 'e' at taint10.sl:20
 Before: apple
 Warning: tainted value: 'After: cat' from: 'cat' at taint10.sl:34
 After: cat
->>> a - should be ok
-Warning: tainted value: '... apple :)' from: 'apple' at taint10.sl:39
-... apple :)
->>> c - should be ok
-Warning: tainted value: '... cat :)' from: 'cat' at taint10.sl:39
-... cat :)
 >>> b - should be ok
 Warning: tainted value: '... barracuda :)' from: 'barracuda' at taint10.sl:39
 ... barracuda :)
+>>> c - should be ok
+Warning: tainted value: '... cat :)' from: 'cat' at taint10.sl:39
+... cat :)
+>>> a - should be ok
+Warning: tainted value: '... apple :)' from: 'apple' at taint10.sl:39
+... apple :)

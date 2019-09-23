@@ -1,2 +1,2 @@
-%(k => 'kiwi', a => 'apple', g => 'grape fruit', b => 'bananna')
-@('k', 'a', 'g', 'b')
+%(g => 'grape fruit', b => 'bananna', a => 'apple', k => 'kiwi')
+@('g', 'b', 'a', 'k')

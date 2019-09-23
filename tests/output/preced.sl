@@ -1,4 +1,4 @@
-%(key => 'value', 3 => 'blah') and %(key => 'value', 3 => 'blah') and %(key => 'value', 3 => 'blah')
+%(3 => 'blah', key => 'value') and %(3 => 'blah', key => 'value') and %(3 => 'blah', key => 'value')
 9
 $x = 5; $y = 5; $z = 5
 $x = 10; $y = 10; $z = 10

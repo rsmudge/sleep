@@ -6,22 +6,15 @@
    sub array 4
  item 4
  item 5
- key1 => value 1
- key3 => kvp op takes functions
- %key3 is:
-   key3a => value a
-   key3c => value c
-   key3d => value d
-   key3b => value b
- key2 => value 2
  key4 => value 4
- puncs is
-   !
-   @
-   %
-   .
-   ,
-   ^
+ key3 => kvp op takes functions
+ key2 => value 2
+ key1 => value 1
+ %key3 is:
+   key3b => value b
+   key3c => value c
+   key3a => value a
+   key3d => value d
  numbers is
    1
    2
@@ -33,11 +26,18 @@
    8
    9
    10
+ puncs is
+   !
+   @
+   %
+   .
+   ,
+   ^
+ astring => this is just a string for good measure
  letters is
    a
    b
    c
- astring => this is just a string for good measure
  letters+numbers+puncs is
      a
      b
@@ -58,11 +58,11 @@
      .
      ,
      ^
+   bjmudge => Brad Mudge
    rsmudge => Raphael Mudge
    fvmudge => Frances Mudge
-   bjmudge => Brad Mudge
    olopez => Orlando Lopez
    hlopez => Heather Lopez
-   jjsmith => Jimmy John Smith
    rj => Rick James!!!
    jsmith => John Smith
+   jjsmith => Jimmy John Smith

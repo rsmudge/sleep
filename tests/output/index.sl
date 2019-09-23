@@ -12,18 +12,18 @@
      sub sub array f
  item 4
  item 5
+ 3 => item 3
+ 2 => item 2
+ 1 => item 1
  d => item d
+ e => item e
+ b => item b
  numbers is:
    7 => number 7
+   6 => number 6
    9 => number 9
    8 => number 8
-   6 => number 6
- 3 => item 3
- 5 => item 5
- a => item a
  c => item c
- 2 => item 2
+ 5 => item 5
  4 => item 4
- b => item b
- 1 => item 1
- e => item e
+ a => item a

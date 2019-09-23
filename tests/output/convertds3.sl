@@ -32,9 +32,9 @@ Mar tests:
 int[] a
 Collection a
 Collection a
-Warning: there is no method that matches mar([Z@ce16ad) in sleep.ArrayTest1 at convertds3.sl:36
-Warning: there is no method that matches mar([F@32bd65) in sleep.ArrayTest1 at convertds3.sl:37
-Warning: there is no method that matches mar([Ljava.lang.Object;@30633a) in sleep.ArrayTest1 at convertds3.sl:38
+Warning: there is no method that matches mar([Z@690edaf3) in sleep.ArrayTest1 at convertds3.sl:36
+Warning: there is no method that matches mar([F@4e48bd67) in sleep.ArrayTest1 at convertds3.sl:37
+Warning: there is no method that matches mar([Ljava.lang.Object;@98add58) in sleep.ArrayTest1 at convertds3.sl:38
 int[] a
 Collection a
 Collection a

@@ -1,5 +1,5 @@
-%(a => 'apple', c => 'cat', n => 443, b => 'boy')
-apple
-cat
-443
+%(b => 'boy', c => 'cat', a => 'apple', n => 443)
 boy
+cat
+apple
+443

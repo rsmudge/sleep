@@ -1,4 +1,4 @@
-   key        = hello world!@
-   blah       = bleh
-   old style  = this is a literal string
    skanks     = 60.0
+   old style  = this is a literal string
+   blah       = bleh
+   key        = hello world!@

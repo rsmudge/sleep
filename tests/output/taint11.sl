@@ -1,3 +1,3 @@
-%(a => 'apple', c => 'cats', b => 'bats')
-@('a', 'c', 'b')
-@('apple', 'cats', 'bats')
+%(b => 'bats', c => 'cats', a => 'apple')
+@('b', 'c', 'a')
+@('bats', 'cats', 'apple')
