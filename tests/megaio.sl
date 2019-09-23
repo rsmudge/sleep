@@ -31,7 +31,7 @@ $src = fork({
   closef($str);
   println("Post-Close: Avail for reading from str: " . available($str));
 
-  print($server, readb($str, available($str)));
+  writeb($server, readb($str, available($str)));
   closef($server);
 });
 

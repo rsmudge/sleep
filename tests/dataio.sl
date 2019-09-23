@@ -25,7 +25,7 @@ $src = fork({
   println();
   println("Writing a massive amount of crap");
 
-  print($server, $str);
+  writeb($server, $str);
   closef($server);
 });
 
