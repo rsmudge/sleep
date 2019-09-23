@@ -72,9 +72,21 @@ public class GeneratedSteps
        return new Iterate(null, null, Iterate.ITERATOR_DESTROY);
     }
 
-    public  Check Check(String nameOfOperator, Block setupOperands)
+    public Check Check(String nameOfOperator, Block setupOperands)
     {
-       Check temp = new Check(nameOfOperator, setupOperands);
+       Check temp = new CheckEval(nameOfOperator, setupOperands);
+       return temp;
+    }
+
+    public Check CheckAnd(Check left, Check right)
+    {
+       Check temp = new CheckAnd(left, right);
+       return temp;
+    }
+
+    public Check CheckOr(Check left, Check right)
+    {
+       Check temp = new CheckOr(left, right);
        return temp;
     }
 

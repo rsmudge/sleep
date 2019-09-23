@@ -102,7 +102,7 @@ public class CodeGenerator implements ParserConstants
        String[] strings = parsePred.getStrings();
 
        Step atom;
-       Check tempc;
+       Check tempc, left, right;
        Block backup, a, b;
        Stack queue;  // locals is a stack created at parse time but used by the operators for keeping track of stuff.. yeah
 
@@ -140,45 +140,13 @@ public class CodeGenerator implements ParserConstants
 
            return tempc;
          case PRED_AND:
-           tempc = null;
-           queue = new Stack();
-           
-           for (int x = 0; x < tokens.length; x++)
-           {
-              queue.push(tokens[x]);
-           }           
-           while (!queue.isEmpty())
-           { 
-              Token t = (Token)(queue.pop());
-              if (!t.toString().equals("&&"))
-              {
-                 Check oldtemp = tempc;
-                 tempc = parsePredicate(t);
-                 tempc.setChoices(oldtemp, null);
-              }
-           }
-           return tempc;
+           left = parsePredicate(tokens[0]);
+           right = parsePredicate(tokens[1]);
+           return factory.CheckAnd(left, right);
          case PRED_OR:
-           tempc = null;
-           queue = new Stack();
-
-           for (int x = 0; x < tokens.length; x++)
-           {
-              queue.push(tokens[x]);
-           }          
-
-           while (!queue.isEmpty())
-           { 
-              Token t = (Token)(queue.pop());
-              if (!t.toString().equals("||"))
-              {
-                 Check oldtemp = tempc;
-                 tempc = parsePredicate(t);
-                 tempc.setChoices(null, oldtemp);
-              }
-           }
-
-           return tempc;
+           left = parsePredicate(tokens[0]);
+           right = parsePredicate(tokens[1]);
+           return factory.CheckOr(left, right);
       }
 
       parser.reportError("Unknown predicate.", tokens[0].copy(parsePred.toString()));

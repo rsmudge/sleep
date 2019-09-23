@@ -221,8 +221,8 @@ public class TokenParser implements ParserConstants
             myToken.setType(PRED_AND);
 
          myToken.add(tokens[x]);
-         myToken.add(tokens[x+1]);
-         x += 2;
+         myToken.add(tokens[x+2]);
+         x += 3;
       }
       else if ((x + 2) < tokens.length && Checkers.isBiPredicate(strings[x], strings[x+1], strings[x+2]))
       {

@@ -59,7 +59,7 @@ import sleep.runtime.*;
   *
   * @see sleep.interfaces.PredicateEnvironment
   */
-public class Check implements Serializable
+public class CheckEval implements Check, Serializable
 {
    private Check   iftrue;
    private Check   iffalse;
@@ -84,20 +84,6 @@ public class Check implements Serializable
        temp.append("[Setup]: \n");
        temp.append(setup.toString(prefix+"      "));
 
-       if (iftrue != null)
-       {
-          temp.append(prefix);
-          temp.append("   [AND]: \n");
-          temp.append(iftrue.toString(prefix+"      "));
-       }
-      
-       if (iffalse != null)
-       {
-          temp.append(prefix);
-          temp.append("   [OR]: \n");
-          temp.append(iffalse.toString(prefix+"      "));
-       }
-
        return temp.toString();
    }
 
@@ -108,7 +94,7 @@ public class Check implements Serializable
    }
 
    /** Constructs a check object, call by the sleep engine. */
-   public Check(String n, Block s)
+   public CheckEval(String n, Block s)
    {
       if (n.charAt(0) == '!' && n.length() > 2) // negation operator - we don't apply it though for like != or any other 2 character operator
       {
@@ -124,20 +110,6 @@ public class Check implements Serializable
 
       iftrue = null;
       iffalse = null;
-   }
-
-   /** Sets up the true and false choices, again this is handled by the sleep engine */
-   public void setChoices(Check t, Check f)
-   {
-      if (t != null)
-      {
-         iftrue = t;
-      }
-
-      if (f != null)
-      {
-         iffalse = f;
-      }
    }
 
    private int hint = -1;
@@ -211,22 +183,7 @@ public class Check implements Serializable
 
       if (negate) { temp = !temp; }
 
-      if (temp)
-      {
-         if (iftrue != null)
-         {
-            return iftrue.check(env);
-         }
-         return true;
-      }
-      else
-      {
-         if (iffalse != null)
-         {
-            return iffalse.check(env);
-         }
-         return false;
-      }
+      return temp;
    }
 }
 
