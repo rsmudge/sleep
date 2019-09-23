@@ -96,8 +96,9 @@ sub sanitize
    $1 = replace($1, '(\&closure\[.*?\]\#)\d+', '$1X');
    $1 = replace($1, '/Users/raffi/sleepdev/sleep', '==CWD==');
    $1 = replace($1, getFileParent(cwd()), '==CWD==');
-   $1 = replace($1, '([\.\[][a-zA-Z_0-9;]+@)[0-9a-f]{4,6}', '$1######');
-   $1 = replace($1, '(asc@)[0-9a-f]{4,6}', '$1######');
+   $1 = replace($1, '([\.\[][a-zA-Z_0-9;]+@)[0-9a-f]{4,8}', '$1######');
+   $1 = replace($1, '(asc@)[0-9a-f]{4,8}', '$1######');
+   $1 = strrep($1, 'class com.sun.proxy.', 'class ');
    $1 = replace($1, '\$Proxy\d+?', '\$Proxy#');
    return $1;
 }
