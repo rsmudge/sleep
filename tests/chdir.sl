@@ -1,7 +1,7 @@
 #
 
 chdir("data");
-printAll(filter({ return iff("*.svn" !iswm $1, $1); }, ls()));
+printAll(filter({ return iff("*.svn" !iswm $1, $1); }, sorta(ls())));
 
 chdir("../data2");
 
