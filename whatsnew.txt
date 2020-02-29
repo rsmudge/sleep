@@ -1,6 +1,7 @@
-2.1-release (...) [update 5]
+2.1-release (29 Feb 20) [update 5]
 ===========
 - Fixed multiple problems with generated code for && and || in predicates.
+- Changed license to BSD license
 
 2.1-release (30 Apr 09) [update 4]
 ===========

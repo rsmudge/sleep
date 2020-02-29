@@ -1,4 +1,4 @@
- ------- -------------------- ---------   ---------------  ------- ---------
+\ ------- -------------------- ---------   ---------------  ------- ---------
 Sleep 2.1 - README   
 -  ------------- -------- -   ---------------- --       -    -     -     - - -
 
@@ -166,19 +166,31 @@ forum:
 
 
  ------- -------------------- ---------   ---------------  ------- ---------
-Legal Garbage
+Legal <s>Garbage</s> Notices 
 -  ------------- -------- -   ---------------- --       -    -     -     - - -
 
-Sleep is (c) 2002, 2003, 2004, 2005, 2006, 2007, 2008, and 2009 (wow, been at 
-this awhile) Raphael Mudge (rsmudge@gmail.com).  All of the source is released 
-under the GNU Lesser Public License.
+Copyright 2002-2020 Raphael Mudge
 
-The scripts and library files supplied as input to or produced as output 
-from the Sleep library do not automatically fall under the copyright of the
-Sleep project, but belong to whomever generated them, and may be sold 
-commercially, and may be aggregated with this library.
+Redistribution and use in source and binary forms, with or without modification, are 
+permitted provided that the following conditions are met:
 
-Java or sleep subroutines supplied by you and linked into this library 
-shall not be considered part of this library.
+1. Redistributions of source code must retain the above copyright notice, this list of 
+   conditions and the following disclaimer.
 
-See license.txt for more information.
+2. Redistributions in binary form must reproduce the above copyright notice, this list 
+   of conditions and the following disclaimer in the documentation and/or other materials 
+   provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its contributors may be 
+   used to endorse or promote products derived from this software without specific prior 
+   written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY 
+EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES 
+OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL 
+THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, 
+EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE 
+GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED 
+AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING 
+NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED 
+OF THE POSSIBILITY OF SUCH DAMAGE.
