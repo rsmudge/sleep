@@ -1,6 +1,4 @@
-\ ------- -------------------- ---------   ---------------  ------- ---------
-Sleep 2.1 - README   
--  ------------- -------- -   ---------------- --       -    -     -     - - -
+# Sleep 2.1 - README   
 
 "You got the language, all you need now is the O'Reilly book".  That is
 what my friend Luke said to me upon closing out a weekend of possessed
@@ -31,9 +29,7 @@ Sleep is compatible with Java 1.4.2+
 
 Sleep Project Homepage: http://sleep.dashnine.org/
 
- ------- -------------------- ---------   ---------------  ------- ---------
-Documentation
--  ------------- -------- -   ---------------- --       -    -     -     - - -
+# Documentation
 
 An open source project just wouldn't be a good open source project without
 a documentation deficiency.  Sleep is no different. 
@@ -71,9 +67,7 @@ You also have the option of generating the JavaDoc API's for the sleep
 language.  I recommend either generating these or downloading them from 
 the sleep website.  Javadoc is your friend when working with this project.
      
- ------- -------------------- ---------   ---------------  ------- ---------
-Build Instructions
--  ------------- -------- -   ---------------- --       -    -     -     - - -
+# Build Instructions
 
 You will need Apache Ant to compile this source code. I use version 1.7.0. 
 Ant is easy to install and is available at http://ant.apache.org 
@@ -118,9 +112,7 @@ To launch a sleep script from the command line (without -jar):
 
 [raffi@beardsley ~/sleep/bin]$ java -classpath sleep.jar sleep.console.TextConsole filename.sl
 
- ------- -------------------- ---------   ---------------  ------- ---------
-Feedback
--  ------------- -------- -   ---------------- --       -    -     -     - - -
+# Feedback
 
 Feedback is always welcome.  Suggestions/comments/questions can directed to
 me via email: rsmudge@gmail.com
@@ -165,9 +157,7 @@ forum:
    foundations before embarking on such follies again.
 
 
- ------- -------------------- ---------   ---------------  ------- ---------
-Legal <s>Garbage</s> Notices 
--  ------------- -------- -   ---------------- --       -    -     -     - - -
+# Legal <s>Garbage</s> Notices 
 
 Copyright 2002-2020 Raphael Mudge
 
