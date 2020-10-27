@@ -25,13 +25,11 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */ 
- using System;
- using java = biz.ritter.javapi;
+using System;
+using java = biz.ritter.javapi;
 
-using  java.util;
 using  sleep.interfaces;
 using  sleep.engine;
-using  java.io.Serializable;
 using  sleep.runtime;
 
 namespace sleep.engine.atoms{
@@ -73,19 +71,19 @@ namespace sleep.engine.atoms{
   * @see sleep.interfaces.PredicateEnvironment
   */
 [Serializable]
-public class CheckEval : Check, Serializable
+public class CheckEval : Check, java.io.Serializable
 {
    private Check   iftrue;
    private Check   iffalse;
    private Block   setup;
-   private boolean negate;
+   private bool negate;
 
    public String name; 
 
    /** Converts this object to a string, used by the sleep engine for constructing an AST like thing */
    public String toString(String prefix)
    {     
-       StringBuffer temp = new StringBuffer();
+       java.lang.StringBuffer temp = new java.lang.StringBuffer();
        temp.append(prefix);
        temp.append("[Predicate]: ");
            temp.append("name->");
@@ -135,7 +133,7 @@ public class CheckEval : Check, Serializable
    }
 
    /** Performs this "check".  Returns the value of the condition that is checked. */
-   public boolean check(ScriptEnvironment env)
+   public bool check(ScriptEnvironment env)
    {
       env.CreateFrame();
       setup.evaluate(env);
@@ -152,7 +150,7 @@ public class CheckEval : Check, Serializable
       {
          if ((env.getScriptInstance().getDebugFlags() & ScriptInstance.DEBUG_TRACE_LOGIC) == ScriptInstance.DEBUG_TRACE_LOGIC)
          {
-            StringBuffer message = new StringBuffer(64);
+            java.lang.StringBuffer message = new java.lang.StringBuffer(64);
             if (env.getCurrentFrame().size() >= 2)
             {
                message.append(SleepUtils.describe((Scalar)env.getCurrentFrame().get(0)));

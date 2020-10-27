@@ -26,21 +26,18 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- using System;
- using java = biz.ritter.javapi;
- 
- using  java.util;
+using System;
+using java = biz.ritter.javapi;
 
 using  sleep.engine;
 using  sleep.interfaces;
 using  sleep.runtime;
-
-using  sleep.parser.ParserConfig;
+using  sleep.parser;
 
 namespace sleep.bridges{
  
 /** provides basic string parsing facilities */
-public class BasicStrings : Loadable, Predicate
+public class BasicStrings : Loadable, sleep.interfaces.Predicate
 {
     static BasicStrings()
     {
@@ -118,7 +115,7 @@ public class BasicStrings : Loadable, Predicate
         temp.put("<=>", new oper_spaceship());
     }
 
-    public boolean decide(String n, ScriptInstance i, Stack l)
+    public bool decide(String n, ScriptInstance i, java.util.Stack<Object> l)
     {
         if (l.size() == 1)
         {
@@ -196,9 +193,9 @@ public class BasicStrings : Loadable, Predicate
         return false;
     }
 
-    private static class pred_iswm : Predicate
+    private class pred_iswm : sleep.interfaces.Predicate
     {
-        public boolean decide(String name, ScriptInstance script, Stack locals)
+        public bool decide(String name, ScriptInstance script, java.util.Stack<Object> locals)
         {
            String b = locals.pop().toString();
            String a = locals.pop().toString();
@@ -276,9 +273,9 @@ public class BasicStrings : Loadable, Predicate
      
     }
 
-    private static class func_left : Function
+    private class func_left : Function
     {
-        public Scalar evaluate(String n, ScriptInstance i, Stack l)
+        public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
         {
            String temp  = l.pop().toString();
            int    value = ((Scalar)l.pop()).intValue();
@@ -287,9 +284,9 @@ public class BasicStrings : Loadable, Predicate
         }
     }
 
-    private static class func_tr : Function
+    private class func_tr : Function
     {
-        public Scalar evaluate(String n, ScriptInstance i, Stack l)
+        public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
         {
            String old       = BridgeUtilities.getString(l, "");
            String pattern   = BridgeUtilities.getString(l, "");
@@ -308,9 +305,9 @@ public class BasicStrings : Loadable, Predicate
         }
     }
 
-    private static class func_right : Function
+    private class func_right : Function
     {
-        public Scalar evaluate(String n, ScriptInstance i, Stack l)
+        public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
         {
            String temp  = l.pop().toString();
            int    value = ((Scalar)l.pop()).intValue();
@@ -319,50 +316,50 @@ public class BasicStrings : Loadable, Predicate
         }
     }
 
-    private static class func_asc : Function
+    private class func_asc : Function
     {
-        public Scalar evaluate(String n, ScriptInstance i, Stack l)
+        public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
         {
            return SleepUtils.getScalar((int)(BridgeUtilities.getString(l, "\u0000").charAt(0)));
         }
     }
 
-    private static class func_chr : Function
+    private class func_chr : Function
     {
-        public Scalar evaluate(String n, ScriptInstance i, Stack l)
+        public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
         {
            return SleepUtils.getScalar(((char)BridgeUtilities.getInt(l))+"");
         }
     }
 
 
-    private static class func_uc : Function
+    private class func_uc : Function
     {
-        public Scalar evaluate(String n, ScriptInstance i, Stack l)
+        public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
         {
            return SleepUtils.getScalar(l.pop().toString().toUpperCase());
         }
     }
 
-    private static class func_lc : Function
+    private class func_lc : Function
     {
-        public Scalar evaluate(String n, ScriptInstance i, Stack l)
+        public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
         {
            return SleepUtils.getScalar(l.pop().toString().toLowerCase());
         }
     }
 
-    private static class func_strlen : Function
+    private class func_strlen : Function
     {
-        public Scalar evaluate(String n, ScriptInstance i, Stack l)
+        public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
         {
            return SleepUtils.getScalar(l.pop().toString().length());
         }
     }
 
-    private static class func_strrep : Function
+    private class func_strrep : Function
     {
-        public Scalar evaluate(String n, ScriptInstance i, Stack l)
+        public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
         {
            StringBuffer work    = new StringBuffer(BridgeUtilities.getString(l, ""));
 
@@ -388,9 +385,9 @@ public class BasicStrings : Loadable, Predicate
         }
     }
 
-    private static class func_replaceAt : Function
+    private class func_replaceAt : Function
     {
-        public Scalar evaluate(String n, ScriptInstance i, Stack l)
+        public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
         {
            StringBuffer work    = new StringBuffer(BridgeUtilities.getString(l, ""));
            String       nstr    = BridgeUtilities.getString(l, "");
@@ -404,9 +401,9 @@ public class BasicStrings : Loadable, Predicate
         }
     }
 
-    private static class func_substr : Function
+    private class func_substr : Function
     {
-        public Scalar evaluate(String n, ScriptInstance i, Stack l)
+        public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
         {
            String value = BridgeUtilities.getString(l, "");
 
@@ -426,9 +423,9 @@ public class BasicStrings : Loadable, Predicate
         }
     }
 
-    private static class func_indexOf : Function
+    private class func_indexOf : Function
     {
-        public Scalar evaluate(String n, ScriptInstance i, Stack l)
+        public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
         {
            String value = l.pop().toString();
            String item  = l.pop().toString();
@@ -451,9 +448,9 @@ public class BasicStrings : Loadable, Predicate
         }
     }
 
-    private static class func_charAt : Function
+    private class func_charAt : Function
     {
-        public Scalar evaluate(String n, ScriptInstance i, Stack l)
+        public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
         {
            String value = l.pop().toString();
            int    start = BridgeUtilities.getInt(l);
@@ -469,13 +466,13 @@ public class BasicStrings : Loadable, Predicate
         }
     }
 
-    private static class func_sort : Function
+    private class func_sort : Function
     {
-        public Scalar evaluate(String n, ScriptInstance i, Stack l)
+        public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
         {
            if (l.size() != 2)
            {
-              throw new IllegalArgumentException("&sort requires a function to specify how to sort the data");
+              throw new java.lang.IllegalArgumentException("&sort requires a function to specify how to sort the data");
            }
 
            Function     my_func   = BridgeUtilities.getFunction(l, i);
@@ -491,9 +488,9 @@ public class BasicStrings : Loadable, Predicate
         }
     }
 
-    private static class func_sorters : Function
+    private class func_sorters : Function
     {
-        public Scalar evaluate(String n, ScriptInstance i, Stack l)
+        public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
         {
            ScalarArray  array     = BridgeUtilities.getWorkableArray(l);
 
@@ -514,11 +511,11 @@ public class BasicStrings : Loadable, Predicate
         }
     }
 
-    private static class CompareFunction : Comparator
+    private class CompareFunction : java.util.Comparator<Object>
     {
         protected SleepClosure   func;
         protected ScriptInstance script;
-        protected Stack          locals;
+        protected java.util.Stack<Object>          locals;
 
         public CompareFunction(Function _func, ScriptInstance _script)
         {
@@ -535,9 +532,15 @@ public class BasicStrings : Loadable, Predicate
            Scalar temp = func.callClosure("&sort", script, locals);
            return temp.intValue();
         }
+
+        /// FIXME: remove with VampireApi 0.11
+        public bool equals (Object o) { 
+           return this.Equals(o);
+        }
+
     }
 
-    private static class CompareNumbers : Comparator
+    private class CompareNumbers : java.util.Comparator<Object>
     {
         public int compare(Object a, Object b)
         {
@@ -546,9 +549,15 @@ public class BasicStrings : Loadable, Predicate
 
            return (int)(aa - bb);
         }
+
+        /// FIXME: remove with VampireApi 0.11
+        public bool equals (Object o) { 
+           return this.Equals(o);
+        }
+
     }
 
-    private static class CompareDoubles : Comparator
+    private class CompareDoubles : java.util.Comparator<Object>
     {
         public int compare(Object a, Object b)
         {
@@ -563,19 +572,30 @@ public class BasicStrings : Loadable, Predicate
 
            return 1;
         }
+
+        /// FIXME: remove with VampireApi 0.11
+        public bool equals (Object o) { 
+           return this.Equals(o);
+        }
     }
 
-    private static class CompareStrings : Comparator
+    private class CompareStrings : java.util.Comparator<Object>
     {
         public int compare(Object a, Object b)
         {
            return a.toString().compareTo(b.toString());
         }
+
+        /// FIXME: remove with VampireApi 0.11
+        public bool equals (Object o) { 
+           return this.Equals(o);
+        }
+
     }
 
-    private static class oper_concat : Operator
+    private class oper_concat : Operator
     {
-        public Scalar operate(String o, ScriptInstance i, Stack l)
+        public Scalar operate(String o, ScriptInstance i, java.util.Stack<Object> l)
         {
            Scalar left = (Scalar)(l.pop());
            Scalar right = (Scalar)(l.pop());
@@ -589,9 +609,9 @@ public class BasicStrings : Loadable, Predicate
         }
     }
 
-    private static class oper_multiply : Operator
+    private class oper_multiply : Operator
     {
-        public Scalar operate(String o, ScriptInstance i, Stack l)
+        public Scalar operate(String o, ScriptInstance i, java.util.Stack<Object> l)
         {
            Scalar left = (Scalar)(l.pop());
            Scalar right = (Scalar)(l.pop());
@@ -610,9 +630,9 @@ public class BasicStrings : Loadable, Predicate
         }
     }
 
-    private static class oper_compare : Operator
+    private class oper_compare : Operator
     {
-        public Scalar operate(String o, ScriptInstance i, Stack l)
+        public Scalar operate(String o, ScriptInstance i, java.util.Stack<Object> l)
         {
            Scalar left = (Scalar)(l.pop());
            Scalar right = (Scalar)(l.pop());
@@ -621,9 +641,9 @@ public class BasicStrings : Loadable, Predicate
         }
     }
 
-    private static class oper_spaceship : Operator
+    private class oper_spaceship : Operator
     {
-        public Scalar operate(String o, ScriptInstance i, Stack l)
+        public Scalar operate(String o, ScriptInstance i, java.util.Stack<Object> l)
         {
            ScalarType left  = BridgeUtilities.getScalar(l).getActualValue();
            ScalarType right = BridgeUtilities.getScalar(l).getActualValue();
@@ -656,7 +676,7 @@ public class BasicStrings : Loadable, Predicate
 
    /** Normalizes the start/end parameters based on the length of the string and returns a substring.  Strings normalized
        in this way will be able to accept negative indices for their parameters. */
-   private static sealed String substring(String func, String str, int _start, int _end)
+   private static String substring(String func, String str, int _start, int _end)
    {
       int length = str.length();
       int start, end;
@@ -671,7 +691,7 @@ public class BasicStrings : Loadable, Predicate
       }
       else if (start > end)
       {
-         throw new IllegalArgumentException(func + ": illegal substring('" + str + "', " + _start + " -> " + start + ", " + _end + " -> " + end + ") indices");
+         throw new java.lang.IllegalArgumentException(func + ": illegal substring('" + str + "', " + _start + " -> " + start + ", " + _end + " -> " + end + ") indices");
       }
 
       return str.substring(start, end);
@@ -679,7 +699,7 @@ public class BasicStrings : Loadable, Predicate
 
    /** Normalizes the start parameter based on the length of the string and returns a character.  Functions with
        parameters normalized in this way will be able to accept nagative indices for their parameters */
-   private static sealed char charAt(String str, int start)
+   private static char charAt(String str, int start)
    {
       return str.charAt(BridgeUtilities.normalize(start, str.length()));
    }

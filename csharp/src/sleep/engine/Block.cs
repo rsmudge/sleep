@@ -26,15 +26,12 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */ 
- using System;
- using java = biz.ritter.javapi;
+using System;
+using java = biz.ritter.javapi;
 
-using  java.util;
-using  java.io;
-
-using  sleep.interfaces.Function;
+using  sleep.interfaces;
 using  sleep.runtime;
-using  sleep.bridges.SleepClosure;
+using  sleep.bridges;
 
 namespace sleep.engine{
 
@@ -60,7 +57,7 @@ namespace sleep.engine{
  * @see sleep.runtime.ScriptInstance
  */
  [Serializable]
-public class Block : Serializable
+public class Block : java.io.Serializable
 {
     /** our first step in this block */
     protected Step  first;

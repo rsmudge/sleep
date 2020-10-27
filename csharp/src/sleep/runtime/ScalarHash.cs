@@ -26,11 +26,8 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- using System;
- using java = biz.ritter.javapi;
-
-using  java.util;
-
+using System;
+using java = biz.ritter.javapi;
 
 namespace sleep.runtime{
 
@@ -49,7 +46,6 @@ namespace sleep.runtime{
  * <p>Keep in mind when implementing the interface below that you are defining the interface to a dictionary style
  * data structure.</p>
  */
- [Serializable]
 public interface ScalarHash : java.io.Serializable
 {
    /** Retrieves a scalar from the hashtable.  If a scalar key does not exist then the key should be created with a 
@@ -65,6 +61,6 @@ public interface ScalarHash : java.io.Serializable
    public void remove(Scalar key);
 
    /** Return the data structure backing this hash please */
-   public Map getData();
+   public java.util.Map<Object,Object> getData();
 }
 }

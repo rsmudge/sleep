@@ -29,21 +29,15 @@
  using System;
  using java = biz.ritter.javapi;
  
-using  java.util;
-using  java.util.regex;
-
 using  sleep.engine;
 using  sleep.engine.types;
-
 using  sleep.interfaces;
 using  sleep.runtime;
-
-using  java.io;
 
 namespace sleep.bridges{
  
 /** provides a bridge for accessing the local file system */
-public class FileSystemBridge : Loadable, Function, Predicate
+public class FileSystemBridge : Loadable, Function, sleep.interfaces.Predicate
 {
     public void scriptUnloaded(ScriptInstance aScript)
     {
@@ -51,7 +45,7 @@ public class FileSystemBridge : Loadable, Function, Predicate
 
     public void scriptLoaded (ScriptInstance aScript)
     {
-        Hashtable temp = aScript.getScriptEnvironment().getEnvironment();
+        java.util.Hashtable<Object,Object> temp = aScript.getScriptEnvironment().getEnvironment();
 
         // predicates
         temp.put("-exists",   this);
@@ -82,7 +76,7 @@ public class FileSystemBridge : Loadable, Function, Predicate
         temp.put("&setReadOnly",     this);
     }
 
-    public Scalar evaluate(String n, ScriptInstance i, Stack l)
+    public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
     {
         if (n.equals("&createNewFile"))
         {
@@ -153,18 +147,18 @@ public class FileSystemBridge : Loadable, Function, Predicate
         return SleepUtils.getEmptyScalar();
     }
 
-    private static class getFileName : Function
+    private class getFileName : Function
     {
-       public Scalar evaluate(String n, ScriptInstance i, Stack l)
+       public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
        {
            File a = BridgeUtilities.getFile(l, i);
            return SleepUtils.getScalar(a.getName());
        }
     }
 
-    private static class getFileProper : Function
+    private class getFileProper : Function
     {
-       public Scalar evaluate(String n, ScriptInstance i, Stack l)
+       public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
        {
            File start = BridgeUtilities.getFile(l, i);
 
@@ -177,36 +171,36 @@ public class FileSystemBridge : Loadable, Function, Predicate
        }
     }
 
-    private static class getFileParent : Function
+    private class getFileParent : Function
     {
-       public Scalar evaluate(String n, ScriptInstance i, Stack l)
+       public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
        {
            File a = BridgeUtilities.getFile(l, i);
            return SleepUtils.getScalar(a.getParent());
        }
     }
 
-    private static class lastModified : Function
+    private class lastModified : Function
     {
-       public Scalar evaluate(String n, ScriptInstance i, Stack l)
+       public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
        {
            File a = BridgeUtilities.getFile(l, i);
            return SleepUtils.getScalar(a.lastModified());
        }
     }
 
-    private static class lof : Function
+    private class lof : Function
     {
-       public Scalar evaluate(String n, ScriptInstance i, Stack l)
+       public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
        {
            File a = BridgeUtilities.getFile(l, i);
            return SleepUtils.getScalar(a.length());
        }
     }
 
-    private static class listFiles : Function
+    private class listFiles : Function
     {
-       public Scalar evaluate(String n, ScriptInstance i, Stack l)
+       public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
        {
            File[] files;
  
@@ -234,7 +228,7 @@ public class FileSystemBridge : Loadable, Function, Predicate
        }
     }
 
-    public boolean decide(String n, ScriptInstance i, Stack l)
+    public bool decide(String n, ScriptInstance i, java.util.Stack<Object> l)
     {
        File a = BridgeUtilities.getFile(l, i);
 

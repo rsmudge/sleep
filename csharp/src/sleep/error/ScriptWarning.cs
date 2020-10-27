@@ -25,11 +25,10 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- using System;
- using java = biz.ritter.javapi;
+using System;
+using java = biz.ritter.javapi;
 
-using  sleep.runtime.ScriptInstance;
-using  java.io.File;
+using  sleep.runtime;
 
 namespace sleep.error{
 
@@ -44,7 +43,7 @@ public class ScriptWarning
    protected ScriptInstance script;
    protected String         message; 
    protected int            line;
-   protected boolean        trace;
+   protected bool        trace;
    protected String         source;
 
    public ScriptWarning(ScriptInstance _script, String _message, int _line)
@@ -52,7 +51,7 @@ public class ScriptWarning
       this(_script, _message, _line, false);
    }
 
-   public ScriptWarning(ScriptInstance _script, String _message, int _line, boolean _trace)
+   public ScriptWarning(ScriptInstance _script, String _message, int _line, bool _trace)
    {
       script  = _script;
       message = _message;
@@ -62,7 +61,7 @@ public class ScriptWarning
    }
 
    /** is this a trace message for one of the trace debug options */
-   public boolean isDebugTrace()
+   public bool isDebugTrace()
    {
       return trace;
    }

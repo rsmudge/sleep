@@ -26,18 +26,15 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */ 
- using System;
- using java = biz.ritter.javapi;
+using System;
+using java = biz.ritter.javapi;
 
-
-using  java.util;
 using  sleep.interfaces;
-using  java.io.Serializable;
 using  sleep.runtime;
 
 namespace sleep.engine{
 [Serializable]
-public class Step : Serializable
+public class Step : java.io.Serializable
 {
    /** the script line number that this step was generated from */
    protected int  line;
@@ -46,44 +43,44 @@ public class Step : Serializable
    public    Step next; 
 
    /** returns a string representation of this atomic step */
-   public String toString(String prefix)
+   public virtual String toString(String prefix)
    {
       return prefix+"[NOP]\n";
    }
  
    /** convience method for the code generator to set the line number. */
-   public void setInfo(int _line)
+   public virtual void setInfo(int _line)
    {
       line = _line;
    }
 
    /** returns the last line number that this step is associated with (assuming it is
        associated with multiple lines */
-   public int getHighLineNumber()
+   public virtual int getHighLineNumber()
    {
       return getLineNumber();
    }
 
    /** returns the first line number that this step is associated with (assuming it is
        associated with multiple lines */
-   public int getLowLineNumber()
+   public virtual int getLowLineNumber()
    {
       return getLineNumber();
    }
 
    /** returns the line number this step is associated with */
-   public int getLineNumber()
+   public virtual int getLineNumber()
    {
       return line;
    }
 
    /** evaluate this atomic step. */
-   public Scalar evaluate(ScriptEnvironment e) 
+   public virtual Scalar evaluate(ScriptEnvironment e) 
    {
       return SleepUtils.getEmptyScalar();
    }
 
-   public String toString()
+   public virtual String toString()
    {
       return toString("");
    }

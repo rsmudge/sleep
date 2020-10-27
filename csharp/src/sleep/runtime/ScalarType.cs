@@ -26,11 +26,8 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- using System;
- using java = biz.ritter.javapi;
-
-using  java.io.Serializable;
-
+using System;
+using java = biz.ritter.javapi;
 
 namespace sleep.runtime{
 
@@ -48,7 +45,6 @@ namespace sleep.runtime{
  * <p>In the above example MyScalarType is an instance that implements the ScalarType interface.</p>
  * 
  */
- [Serializable]
 public interface ScalarType : java.io.Serializable
 {
    /** create a clone of this scalar's value.  It is important to note that you should return a copy here unless you really want 

@@ -28,7 +28,7 @@
  */
 using System;
 using java = biz.ritter.javapi;
-using  java.util;
+
 namespace sleep.parser{
 
 
@@ -39,7 +39,7 @@ namespace sleep.parser{
 public class Checkers 
 {
    /** a hashtable that keeps track of language keywords so they are not mistaken for function names */
-   protected static Hashtable keywords;
+   protected static java.util.Hashtable<Object,Object> keywords;
 
    public static void addKeyword(String keyword)
    {
@@ -48,7 +48,7 @@ public class Checkers
 
    static Checkers()
    {
-      keywords = new Hashtable();
+      keywords = new java.util.Hashtable<Object,Object>();
 
       keywords.put("if",       Boolean.TRUE);
       keywords.put("for",      Boolean.TRUE);
@@ -85,37 +85,37 @@ public class Checkers
       return (a.equals("else") && isIfStatement(b, c, d));
    }
 
-   public static sealed bool isIncrementHack (String a)
+   public static bool isIncrementHack (String a)
    {
        return (isScalar(a) && a.length() > 3 && (a.substring(a.length() - 2, a.length()).equals("++")));
    }
 
-   public static sealed bool isDecrementHack (String a)
+   public static bool isDecrementHack (String a)
    {
        return (isScalar(a) && a.length() > 3 && (a.substring(a.length() - 2, a.length()).equals("--")));
    }
    
-   public static sealed bool isObjectNew(String a, String b)
+   public static bool isObjectNew(String a, String b)
    {
        return (a.equals("new"));
    }
 
-   public static sealed bool isClosureCall(String a, String b)
+   public static bool isClosureCall(String a, String b)
    {
        return (b.equals("EOT"));
    }
 
-   public static sealed bool isImportStatement(String a, String b)
+   public static bool isImportStatement(String a, String b)
    {
        return (a.equals("import"));
    }
 
-   public static sealed bool isClassLiteral(String a)
+   public static bool isClassLiteral(String a)
    {
        return a.length() >= 2 && a.charAt(0) == '^';
    }
 
-   public static sealed bool isClassPiece(String a)
+   public static bool isClassPiece(String a)
    {
        if (a.length() >= 1 && !isVariable(a) && Character.isJavaIdentifierStart(a.charAt(0)))
        {
@@ -131,22 +131,22 @@ public class Checkers
        return false;
    }
 
-   public static sealed bool isClassIdentifier(Parser parser, String a)
+   public static bool isClassIdentifier(Parser parser, String a)
    {
        return isClassPiece(a) && parser.findImportedClass(a) != null;
    }
 
-   public static sealed bool isBindFilter(String a, String b, String c, String d)
+   public static bool isBindFilter(String a, String b, String c, String d)
    {
       return (isBlock(d));
    }
 
-   public static sealed bool isBindPredicate(String a, String b, String c)
+   public static bool isBindPredicate(String a, String b, String c)
    {
       return (isExpression(b) && isBlock(c));
    }
 
-   public static sealed bool isBind(String a, String b, String c)
+   public static bool isBind(String a, String b, String c)
    {
       return (!b.equals("=") && isBlock(c));
    }
@@ -166,17 +166,17 @@ public class Checkers
       return (a.charAt(0) == '&' && a.length() > 1 && !a.equals("&&"));
    }
 
-   public static sealed bool isVariableReference (String temp)
+   public static bool isVariableReference (String temp)
    {
       return temp.length() >= 3 && temp.charAt(0) == '\\' && !temp.equals("\\$null") && isVariable(temp.substring(1));
    }
 
-   public static sealed bool isVariable (String temp)
+   public static bool isVariable (String temp)
    {
       return (isScalar(temp) || isHash(temp) || isArray(temp));
    }
 
-   public static sealed bool isScalar (String temp)
+   public static bool isScalar (String temp)
    {
       return (temp.charAt(0) == '$');
    }
@@ -248,64 +248,64 @@ public class Checkers
        return true;
    }
 
-   public static sealed bool isSpecialWhile(String a, String b, String c, String d)
+   public static bool isSpecialWhile(String a, String b, String c, String d)
    {
        return isWhile(a, c, d) && isVariable(b);
    }
 
-   public static sealed bool isWhile (String a, String b, String c)
+   public static bool isWhile (String a, String b, String c)
    {
        return (a.equals("while") && isExpression(b) && isBlock(c));
    }
 
-   public static sealed bool isFor (String a, String b, String c)
+   public static bool isFor (String a, String b, String c)
    {
        return (a.equals("for") && isExpression(b) && isBlock(c));
    }
 
-   public static sealed bool isTryCatch (String a, String b, String c, String d, String e)
+   public static bool isTryCatch (String a, String b, String c, String d, String e)
    {
        return a.equals("try") && c.equals("catch") && isBlock(b) && isBlock(e) && isScalar(d);
    }
   
-   public static sealed bool isForeach (String a, String b, String c, String d)
+   public static bool isForeach (String a, String b, String c, String d)
    {
        return (a.equals("foreach") && isVariable(b) && isExpression(c) && isBlock(d));
    }
 
-   public static sealed bool isSpecialForeach (String a, String b, String c, String d, String e, String f)
+   public static bool isSpecialForeach (String a, String b, String c, String d, String e, String f)
    {
        return (a.equals("foreach") && isVariable(b) && c.equals("=>") && isVariable(d) && isExpression(e) && isBlock(f));
    }
 
-   public static sealed bool isAssert (String temp)
+   public static bool isAssert (String temp)
    {
        return (temp.equals("assert"));
    }
 
-   public static sealed bool isReturn (String temp)
+   public static bool isReturn (String temp)
    {
        // halt and done are kind of jIRC related... when you write the scripting language you
        // can do whatever you want...
        return  (temp.equals("return") || temp.equals("done") || temp.equals("halt") || temp.equals("break") || temp.equals("yield") || temp.equals("continue") || temp.equals("throw") || temp.equals("callcc"));
    }
 
-   public static sealed bool isString (String item)
+   public static bool isString (String item)
    {
       return (item.charAt(0) == '\"' && item.charAt(item.length()-1) == '\"');
    }
 
-   public static sealed bool isBacktick (String item)
+   public static bool isBacktick (String item)
    {
       return (item.charAt(0) == '`' && item.charAt(item.length()-1) == '`');
    }
 
-   public static sealed bool isLiteral (String item)
+   public static bool isLiteral (String item)
    {
       return (item.charAt(0) == '\'' && item.charAt(item.length()-1) == '\'');
    }
 
-   public static sealed bool isNumber (String temp)
+   public static bool isNumber (String temp)
    {
       try
       {
@@ -319,57 +319,57 @@ public class Checkers
             Integer.decode(temp);
          }
       }
-      catch (Exception hex) 
+      catch (java.lang.Exception hex) 
       {
          return false;
       }
       return true;
    }
 
-   public static sealed bool isDouble (String temp)
+   public static bool isDouble (String temp)
    {
       try
       {
          Double.parseDouble(temp);
       }
-      catch (Exception hex) 
+      catch (java.lang.Exception hex) 
       {
          return false;
       }
       return true;
    }
 
-   public static sealed bool isBoolean (String temp)
+   public static bool isBoolean (String temp)
    {
       return (temp.equals("true") || temp.equals("false"));
    }
 
-   public static sealed bool isBiPredicate (String a, String b, String c)
+   public static bool isBiPredicate (String a, String b, String c)
    {
       return true;
    }
 
-   public static sealed bool isUniPredicate (String a, String b)
+   public static bool isUniPredicate (String a, String b)
    {
       return (a.charAt(0) == '-') || (a.length() > 1 && a.charAt(0) == '!' && a.charAt(1) == '-');
    }
 
-   public static sealed bool isAndPredicate (String a, String b, String c)
+   public static bool isAndPredicate (String a, String b, String c)
    {
       return (b.equals("&&"));
    }
 
-   public static sealed bool isOrPredicate (String a, String b, String c)
+   public static bool isOrPredicate (String a, String b, String c)
    {
       return (b.equals("||"));
    }
 
-   public static sealed bool isComment (String a)
+   public static bool isComment (String a)
    {
       return (a.charAt(0) == '#' && a.charAt(a.length() - 1) == '\n');
    }
 
-   public static sealed bool isEndOfVar(char n)
+   public static bool isEndOfVar(char n)
    {
       return n == ' ' || n == '\t' || n == '\n' || n == '$' || n == '\\';
    }

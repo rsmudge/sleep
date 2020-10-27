@@ -26,14 +26,9 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- using System;
- using java = biz.ritter.javapi;
+using System;
+using java = biz.ritter.javapi;
  
-using  java.util;
-using  java.text;
-
-using  java.util.regex.PatternSyntaxException;
-
 namespace sleep.bridges{
  
 /**
@@ -115,12 +110,12 @@ public class Transliteration
     /** the head of a linked list of pattern elements */
     private Element pattern = null;
 
-    private static class Element 
+    private class Element 
     {
         public char     item = 'x';
         public char     replacement = 'x';
-        public boolean  isSpecial   = false; 
-        public boolean  isWildcard  = false;
+        public bool  isSpecial   = false; 
+        public bool  isWildcard  = false;
 
         public Element next = null;
     }
@@ -128,8 +123,8 @@ public class Transliteration
     /** Returns a string representation of this transliteration pattern... */
     public String toString()
     {
-        StringBuffer a = new StringBuffer();
-        StringBuffer b = new StringBuffer();
+        java.lang.StringBuffer a = new java.lang.StringBuffer();
+        java.lang.StringBuffer b = new java.lang.StringBuffer();
         Element temp = pattern;
         while (temp != null)
         {
@@ -201,7 +196,7 @@ public class Transliteration
 
     private static String expandRanges(String text) //throws PatternSyntaxException
     {
-        StringBuffer temp = new StringBuffer(text);
+        java.lang.StringBuffer temp = new java.lang.StringBuffer(text);
 
         for (int x = 0; x < temp.length(); x++)
         {
@@ -212,7 +207,7 @@ public class Transliteration
             else if (temp.charAt(x) == '-')
             {
                if (x <= 0 || x >= (temp.length() - 1))
-                    throw new PatternSyntaxException("Dangling range operator '-'", text, text.length() - 1);
+                    throw new java.util.regex.PatternSyntaxException("Dangling range operator '-'", text, text.length() - 1);
 
                String range = getRange(temp.charAt(x-1), temp.charAt(x+1));
                temp.replace(x - 1, x + 1, range);
@@ -255,11 +250,11 @@ public class Transliteration
 
                  if (a.current() == StringCharacterIterator.DONE)
                  {
-                    throw new PatternSyntaxException("attempting to escape end of pattern string", pattern, a.getEndIndex() - 1);
+                    throw new java.util.regex.PatternSyntaxException("attempting to escape end of pattern string", pattern, a.getEndIndex() - 1);
                  }
                  else if (AvailableOptions.indexOf(temp.item) == -1)
                  {
-                    throw new PatternSyntaxException("unrecognized escaped meta-character '" + temp.item + "'", pattern, a.getIndex());
+                    throw new java.util.regex.PatternSyntaxException("unrecognized escaped meta-character '" + temp.item + "'", pattern, a.getIndex());
                  }
                  else
                  {
@@ -312,9 +307,9 @@ public class Transliteration
          return value;
     }
 
-    private boolean isMatch(char current, Element element)
+    private bool isMatch(char current, Element element)
     {
-        boolean rv = false;
+        bool rv = false;
 
         if (element.isSpecial)
         {
@@ -359,11 +354,11 @@ public class Transliteration
     /** Applies this Transliteration to the specified text. */
     public String translate(String text)
     {
-        StringBuffer rv = new StringBuffer();
+        java.lang.StringBuffer rv = new java.lang.StringBuffer();
 
         Element temp = null;
         char         current;
-        boolean match = false;
+        bool match = false;
 
         for (int x = 0; x < text.length(); x++)
         {

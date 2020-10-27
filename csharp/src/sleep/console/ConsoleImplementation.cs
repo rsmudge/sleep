@@ -26,19 +26,14 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */ 
- using System;
- using java = biz.ritter.javapi;
-
-using  java.io;
-using  java.util;
+using System;
+using java = biz.ritter.javapi;
 
 using  sleep.interfaces;
-
 using  sleep.engine;
 using  sleep.error;
 using  sleep.parser;
 using  sleep.runtime;
-
 using  sleep.bridges;
 
 namespace sleep.console{
@@ -77,7 +72,7 @@ public class ConsoleImplementation : RuntimeWarningWatcher, Loadable, ConsolePro
    private ConsoleProxy myProxy; 
 
    /** the script environment with all of the installed functions, predicates, and environments */
-   private Hashtable        sharedEnvironment; 
+   private java.util.Hashtable<Object,Object>        sharedEnvironment; 
 
    /** the shared variable container for all scripts, assuming variables are being shared */
    private Variable         sharedVariables; 
@@ -92,7 +87,7 @@ public class ConsoleImplementation : RuntimeWarningWatcher, Loadable, ConsolePro
        applications environment.  Any scripts loaded via this console will have only the default bridges.  */
    public ConsoleImplementation()
    {
-      this(new Hashtable(), new DefaultVariable(), new ScriptLoader());
+      this(new java.util.Hashtable<Object,Object>(), new DefaultVariable(), new ScriptLoader());
    }
 
    /** Creates an implementation of the sleep console that shares what your application is already using.  Any of the 
@@ -107,7 +102,7 @@ public class ConsoleImplementation : RuntimeWarningWatcher, Loadable, ConsolePro
      * @param _sharedVariables the Variable class is a container for Scalar variables with global, local, and script specific scope
      * @param _loader the Script Loader is a container for managing all of the currently loaded scripts
      */
-   public ConsoleImplementation(Hashtable _sharedEnvironment, Variable _sharedVariables, ScriptLoader _loader)
+   public ConsoleImplementation(java.util.Hashtable<Object,Object> _sharedEnvironment, Variable _sharedVariables, ScriptLoader _loader)
    {
       if (_sharedEnvironment == null)
          _sharedEnvironment = new Hashtable();
@@ -147,31 +142,31 @@ public class ConsoleImplementation : RuntimeWarningWatcher, Loadable, ConsolePro
    /** Dummy implementation, does nothing. */
    public void consolePrintln(Object m) { }
 
-   private boolean interact = true; // are we in interact mode?
+   private bool _interact = true; // are we in interact mode?
 
    /** starts the console */
    public void rppl() //throws IOException
    {
        getProxy().consolePrintln(">> Welcome to the Sleep scripting language");
 
-       interact = false;
+       _interact = false;
 
        String input;
-       StringBuffer code   = new StringBuffer();
+       java.lang.StringBuffer code   = new java.lang.StringBuffer();
        String       repeat = ""; 
 
        while (true)
        {
-          if (!interact)
+          if (!_interact)
              getProxy().consolePrint("> ");
 
           input = getProxy().consoleReadln();
 
-          if (interact)
+          if (_interact)
           {
              if (input == null || input.equals("done"))
              {
-                interact = false;
+                _interact = false;
              }
              else if (input.equals("."))
              { 
@@ -233,7 +228,7 @@ public class ConsoleImplementation : RuntimeWarningWatcher, Loadable, ConsolePro
              }
              else if (command.equals("interact"))
              {
-                interact();
+                _interact();
              }
              else if (command.equals("list"))
              {
@@ -296,7 +291,7 @@ public class ConsoleImplementation : RuntimeWarningWatcher, Loadable, ConsolePro
           }
       }
 
-      interact = true;
+      _interact = true;
    }
 
    private void help()
@@ -401,7 +396,7 @@ public class ConsoleImplementation : RuntimeWarningWatcher, Loadable, ConsolePro
        {
           processScriptErrors(yex);
        }
-       catch (Exception ex)
+       catch (java.lang.Exception ex)
        {
           getProxy().consolePrintln("Could not load script " + file + ": " + ex.getMessage());
        }
@@ -540,7 +535,7 @@ public class ConsoleImplementation : RuntimeWarningWatcher, Loadable, ConsolePro
 
    private void interact()
    {
-       interact = true;
+       _interact = true;
        getProxy().consolePrintln(">> Welcome to interactive mode.");
        getProxy().consolePrintln("Type your code and then '.' on a line by itself to execute the code.");
        getProxy().consolePrintln("Type Ctrl+D or 'done' on a line by itself to leave interactive mode.");

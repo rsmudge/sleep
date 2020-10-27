@@ -26,14 +26,10 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- using System;
- using java = biz.ritter.javapi;
+using System;
+using java = biz.ritter.javapi;
 
-
-using  sleep.runtime.Scalar;
-using  sleep.runtime.ScriptInstance;
-
-using  java.util.Stack;
+using  sleep.runtime;
 
 namespace sleep.interfaces{
 /**
@@ -69,6 +65,6 @@ public interface Operator
     *
     * @return a Scalar containing the result of the operatorName applied to the passedInLocals, in the case of "+" applied to [4, 3] we would get a Scalar containing the integer 7.
     */
-   public Scalar operate(String operatorName, ScriptInstance anInstance, Stack passedInLocals);   
+   public Scalar operate(String operatorName, ScriptInstance anInstance, java.util.Stack<Object> passedInLocals);   
 }
 }

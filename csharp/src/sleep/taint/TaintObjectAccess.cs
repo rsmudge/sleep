@@ -26,28 +26,25 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- using System;
- using java = biz.ritter.javapi;
+using System;
+using java = biz.ritter.javapi;
 
-using  java.util;
 using  sleep.interfaces;
 using  sleep.engine;
 using  sleep.runtime;
+using  sleep.bridges;
 
-using  sleep.bridges.SleepClosure;
-
-using  java.lang.reflect;
 namespace sleep.taint{
 
 
 public class TaintObjectAccess : PermeableStep
 {
    protected String name;
-   protected Class  classRef;
+   protected Type  classRef;
 
-   public TaintObjectAccess(Step wrapit, String _name, Class _classRef)
-   {
-      super(wrapit);
+   public TaintObjectAccess(Step wrapit, String _name, Type _classRef)
+   :
+      base(wrapit){
       name     = _name;
       classRef = _classRef;
    }
@@ -59,7 +56,7 @@ public class TaintObjectAccess : PermeableStep
 
       if (classRef != null || SleepUtils.isFunctionScalar((Scalar)e.getCurrentFrame().peek()))
       {
-         return super.evaluate(e);
+         return base.evaluate(e);
       }
 
       String desc = e.hasFrame() ? TaintUtils.checkArguments(e.getCurrentFrame()) : null;

@@ -26,7 +26,10 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-using  sleep.engine.Block;
+using System;
+
+using sleep.engine;
+using sleep.runtime;
 
 namespace sleep.interfaces{
  

@@ -26,10 +26,8 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- using System;
- using java = biz.ritter.javapi;
-
-using  java.util;
+using System;
+using java = biz.ritter.javapi;
 
 namespace sleep.parser{
 
@@ -60,13 +58,13 @@ public class StringIterator
    }
 
    /** check that there is another character out there for us to get */
-   public boolean hasNext()
+   public bool hasNext()
    {
       return position < text.length;
    }
 
    /** check that there are at least n chars we can still get */
-   public boolean hasNext(int n)
+   public bool hasNext(int n)
    {
       return (position + n - 1) < text.length;
    }
@@ -97,12 +95,12 @@ public class StringIterator
       return position - begin;
    }
 
-   public boolean isNextString(String n)
+   public bool isNextString(String n)
    {
       return ((position + n.length()) <= text.length) && texts.substring(position, position + n.length()).equals(n);
    }
 
-   public boolean isNextChar(char n)
+   public bool isNextChar(char n)
    {
       return hasNext() && text[position] == n;
    }
@@ -163,8 +161,8 @@ public class StringIterator
       return texts.substring(temp1.intValue(), position);
    }
 
-   protected LinkedList mark1 = new LinkedList();
-   protected LinkedList mark2 = new LinkedList();
+   protected java.util.LinkedList<Object> mark1 = new java.util.LinkedList<Object>();
+   protected java.util.LinkedList<Object> mark2 = new java.util.LinkedList<Object>();
  
 
    public static void main(String[] args)

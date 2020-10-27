@@ -26,11 +26,10 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- using System;
- using java = biz.ritter.javapi;
+using System;
+using java = biz.ritter.javapi;
 
-using  java.util;
-using  sleep.engine.ObjectUtilities;
+using  sleep.engine;
 
 
 namespace sleep.runtime{
@@ -39,13 +38,13 @@ namespace sleep.runtime{
 Values will be marshalled into Sleep scalars when accessed. */
 public class CollectionWrapper : ScalarArray
 {
-   protected Collection values;
+   protected java.util.Collection<Object> values;
    protected Object[]   array  = null;
 
    public ScalarArray sublist(int begin, int end)
    {
-      List temp = new LinkedList();
-      Iterator i = values.iterator();
+      java.util.List<Object> temp = new java.util.LinkedList<Object>();
+      java.util.Iterator<Object> i = values.iterator();
 
       int count = 0;
       while (i.hasNext() && count < end)
@@ -62,7 +61,7 @@ public class CollectionWrapper : ScalarArray
       return new CollectionWrapper(temp);
    }  
  
-   public CollectionWrapper(Collection _values)
+   public CollectionWrapper(java.util.Collection<Object> _values)
    {
       values = _values;
    }
@@ -74,17 +73,17 @@ public class CollectionWrapper : ScalarArray
 
    public Scalar pop()
    {
-      throw new RuntimeException("array is read-only");
+      throw new java.lang.RuntimeException("array is read-only");
    }
 
-   public void sort(Comparator compare)
+   public void sort(java.util.Comparator<Object> compare)
    {
-      throw new RuntimeException("array is read-only");
+      throw new java.lang.RuntimeException("array is read-only");
    }
 
    public Scalar push(Scalar value)
    {
-      throw new RuntimeException("array is read-only");
+      throw new java.lang.RuntimeException("array is read-only");
    }
 
    public int size()
@@ -94,7 +93,7 @@ public class CollectionWrapper : ScalarArray
 
    public Scalar remove(int index)
    {
-      throw new RuntimeException("array is read-only");
+      throw new java.lang.RuntimeException("array is read-only");
    }
 
    public Scalar getAt(int index)
@@ -107,19 +106,19 @@ public class CollectionWrapper : ScalarArray
       return ObjectUtilities.BuildScalar(true, array[index]);
    }
 
-   public Iterator scalarIterator()
+   public java.util.Iterator<Object> scalarIterator()
    {
       return new ProxyIterator(values.iterator(), false);
    }
 
    public Scalar add(Scalar value, int index)
    {
-      throw new RuntimeException("array is read-only");
+      throw new java.lang.RuntimeException("array is read-only");
    }
 
    public void remove(Scalar value)
    {
-      throw new RuntimeException("array is read-only");
+      throw new java.lang.RuntimeException("array is read-only");
       // do nothing
    }
 }

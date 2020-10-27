@@ -28,13 +28,12 @@
  */
 using System;
 using java = biz.ritter.javapi;
-using  java.util;
 
 namespace sleep.parser{
 
 public class TokenList
 {
-   protected LinkedList terms  = new LinkedList();
+   protected java.util.LinkedList<Object> terms  = new java.util.LinkedList<Object>();
    protected String[]   sarray = null;
    protected Token[]    tarray = null;
 
@@ -57,13 +56,13 @@ public class TokenList
       return rv.toString();
    }
 
-   public LinkedList getList()
+   public java.util.LinkedList<Object> getList()
    {
       return terms;
    }
 
-   private static sealed Token[]  dummyT = new Token[0];
-   private static sealed String[] dummyS = new String[0];
+   private static readonly Token[]  dummyT = new Token[0];
+   private static readonly String[] dummyS = new String[0];
 
    public Token[] getTokens()
    {

@@ -26,23 +26,14 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- using System;
- using java = biz.ritter.javapi;
-
+using System;
+using java = biz.ritter.javapi;
 
 using  sleep.bridges;
-using  sleep.engine.Block;
-using  sleep.error.YourCodeSucksException;
-using  sleep.interfaces.Loadable;
-using  sleep.parser.Parser;
-
-using  java.io;
-using  java.nio.ByteBuffer;
-using  java.nio.CharBuffer;
-using  java.nio.charset.CharsetDecoder;
-using  java.nio.charset.CoderResult;
-using  java.util;
-
+using  sleep.engine;
+using  sleep.error;
+using  sleep.interfaces;
+using  sleep.parser;
 using  sleep.taint;
 
 namespace sleep.runtime{
@@ -113,7 +104,7 @@ public class ScriptLoader
     /**
      * cache for parsed scripts mantained (optionally) by the script loader.
      */
-    protected static Map BLOCK_CACHE = null;
+    protected static java.util.Map<Object,Object> BLOCK_CACHE = null;
 
     private Block retrieveCacheEntry(String name)
     {
@@ -127,7 +118,7 @@ public class ScriptLoader
        return null;
     }
 
-    private static boolean isCacheHit(String name)
+    private static bool isCacheHit(String name)
     {
        return BLOCK_CACHE != null && BLOCK_CACHE.containsKey(name);
     }
@@ -150,37 +141,37 @@ public class ScriptLoader
     /**
      * loaded scripts
      */
-    protected LinkedList loadedScripts;
+    protected java.util.LinkedList<Object> loadedScripts;
 
     /**
      * loaded scripts except referable by key
      */
-    protected Map scripts;
+    protected java.util.Map<Object,Object> scripts;
 
     /**
      * global bridges
      */
-    protected LinkedList bridgesg;
+    protected java.util.LinkedList<Object> bridgesg;
 
     /**
      * specific bridges
      */
-    protected LinkedList bridgess;
+    protected java.util.LinkedList<Object> bridgess;
 
     /**
      * path to search for jar files imported using [using  * from: *] syntax
      */
-    protected LinkedList paths;
+    protected java.util.LinkedList<Object> paths;
 
     /**
      * initializes the script loader
      */
     public ScriptLoader()
     {
-        loadedScripts = new LinkedList();
-        scripts = new HashMap();
-        bridgesg = new LinkedList();
-        bridgess = new LinkedList();
+        loadedScripts = new java.util.LinkedList<Object>();
+        scripts = new java.util.HashMap<Object,Object>();
+        bridgesg = new java.util.LinkedList<Object>();
+        bridgess = new java.util.LinkedList<Object>();
 
         initDefaultBridges();
     }
@@ -189,10 +180,10 @@ public class ScriptLoader
      * The Sleep script loader can optionally cache parsed script files once they are loaded.  This is useful if you will have
      * several script loader instances loading the same script files in isolated objects.
      */
-    public Map setGlobalCache(boolean setting)
+    public java.util.Map<Object,Object> setGlobalCache(bool setting)
     {
         if (setting && BLOCK_CACHE == null)
-            BLOCK_CACHE = Collections.synchronizedMap(new HashMap());
+            BLOCK_CACHE = Collections.synchronizedMap(new java.util.HashMap<Object,Object>());
 
         if (!setting)
             BLOCK_CACHE = null;
@@ -240,7 +231,7 @@ public class ScriptLoader
      * Returns a HashMap with all loaded scripts, the key is a string which is just the filename, the value is a ScriptInstance
      * object
      */
-    public Map getScriptsByKey()
+    public java.util.Map<Object,Object> getScriptsByKey()
     {
         return scripts;
     }
@@ -248,7 +239,7 @@ public class ScriptLoader
     /**
      * Determines wether or not the script is loaded by checking if the specified key exists in the script db.
      */
-    public boolean isLoaded(String name)
+    public bool isLoaded(String name)
     {
         return scripts.containsKey(name);
     }
@@ -270,7 +261,7 @@ public class ScriptLoader
     /**
      * Returns a linked list of all loaded ScriptInstance objects
      */
-    public LinkedList getScripts()
+    public java.util.LinkedList<Object> getScripts()
     {
         return loadedScripts;
     }
@@ -283,7 +274,7 @@ public class ScriptLoader
     {
         si.setName(name);
 
-        Iterator i = bridgess.iterator();
+        java.util.Iterator<Object> i = bridgess.iterator();
         while (i.hasNext()) 
         {
             ((Loadable) i.next()).scriptLoaded(si);
@@ -309,13 +300,13 @@ public class ScriptLoader
      *
      * @param script a file object pointing to the script file...
      */
-    public ScriptInstance loadSerialized(File script, Hashtable env) //throws IOException, ClassNotFoundException
+    public ScriptInstance loadSerialized(java.io.File script, java.util.Hashtable<Object,Object> env) //throws IOException, ClassNotFoundException
     {
-        File bin = new File(script.getAbsolutePath() + ".bin");
+        java.io.File bin = new java.io.File(script.getAbsolutePath() + ".bin");
 
         if (bin.exists() && (!script.exists() || script.lastModified() < bin.lastModified())) 
         {
-            return loadSerialized(script.getName(), new FileInputStream(bin), env);
+            return loadSerialized(script.getName(), new java.io.FileInputStream(bin), env);
         }
 
         ScriptInstance si = loadScript(script, env);
@@ -326,9 +317,9 @@ public class ScriptLoader
     /**
      * Loads a serialized script from the specified input stream with the specified name
      */
-    public ScriptInstance loadSerialized(String name, InputStream stream, Hashtable env) //throws IOException, ClassNotFoundException
+    public ScriptInstance loadSerialized(String name, java.io.InputStream stream, java.util.Hashtable<Object,Object> env) //throws IOException, ClassNotFoundException
     {
-        ObjectInputStream p = new ObjectInputStream(stream);
+        java.io.ObjectInputStream p = new java.io.ObjectInputStream(stream);
         Block block = (Block) p.readObject();
         return loadScript(name, block, env);
     }
@@ -338,22 +329,22 @@ public class ScriptLoader
      */
     public static void saveSerialized(ScriptInstance si) //throws IOException
     {
-        saveSerialized(si, new FileOutputStream(si.getName() + ".bin"));
+        saveSerialized(si, new java.io.FileOutputStream(si.getName() + ".bin"));
     }
 
     /**
      * Saves a serialized version of the ScriptInstance si to the specified output stream
      */
-    public static void saveSerialized(ScriptInstance si, OutputStream stream) //throws IOException
+    public static void saveSerialized(ScriptInstance si, java.io.OutputStream stream) //throws IOException
     {
-        ObjectOutputStream o = new ObjectOutputStream(stream);
+        java.io.ObjectOutputStream o = new java.io.ObjectOutputStream(stream);
         o.writeObject(si.getRunnableBlock());
     }
 
     /** creates a Sleep script instance using the precompiled code, name, and shared environment.  This function also
         processes the script using the global and specific bridges registered with this script loader.  No reference
         to the newly created script is kept by the script loader */
-    public ScriptInstance loadScriptNoReference(String name, Block code, Hashtable env)
+    public ScriptInstance loadScriptNoReference(String name, Block code, java.util.Hashtable<Object,Object> env)
     {
         ScriptInstance si = new ScriptInstance(env);
         si.installBlock(code);
@@ -366,7 +357,7 @@ public class ScriptLoader
         processes the script using the global and specific bridges registered with this script loader.  The script is
         also referened by this loader so it can be processed again (during the unload phase) when unloadScript is
         called. */
-    public ScriptInstance loadScript(String name, Block code, Hashtable env)
+    public ScriptInstance loadScript(String name, Block code, java.util.Hashtable<Object,Object> env)
     {
         ScriptInstance si = loadScriptNoReference(name, code, env);
 
@@ -381,13 +372,13 @@ public class ScriptLoader
     }
 
     /** loads the specified script */
-    public ScriptInstance loadScript(String name, String code, Hashtable env) //throws YourCodeSucksException
+    public ScriptInstance loadScript(String name, String code, java.util.Hashtable<Object,Object> env) //throws YourCodeSucksException
     {
         return loadScript(name, compileScript(name, code), env);
     }
 
     /** compiles a script using the specified stream as a source */
-    public Block compileScript(String name, InputStream stream) //throws YourCodeSucksException, IOException
+    public Block compileScript(String name, java.io.InputStream stream) //throws YourCodeSucksException, IOException
     {
         if (isCacheHit(name)) 
         {
@@ -395,9 +386,9 @@ public class ScriptLoader
             return retrieveCacheEntry(name);
         }
 
-        StringBuffer code = new StringBuffer(8192);
+        java.lang.StringBuffer code = new java.lang.StringBuffer(8192);
 
-        BufferedReader inJ = new BufferedReader(getInputStreamReader(stream));
+        java.io.BufferedReader inJ = new java.io.BufferedReader(getInputStreamReader(stream));
         String s = inJ.readLine();
         while (s != null) 
         {
@@ -415,10 +406,10 @@ public class ScriptLoader
     /**
      * compiles the specified script file
      */
-    public Block compileScript(File file) //throws IOException, YourCodeSucksException
+    public Block compileScript(java.io.File file) //throws IOException, YourCodeSucksException
     {
         touch(file.getAbsolutePath(), file.lastModified());
-        return compileScript(file.getAbsolutePath(), new FileInputStream(file));
+        return compileScript(file.getAbsolutePath(), new java.io.FileInputStream(file));
     }
 
     /**
@@ -426,7 +417,7 @@ public class ScriptLoader
      */
     public Block compileScript(String fileName) //throws IOException, YourCodeSucksException
     {
-        return compileScript(new File(fileName));
+        return compileScript(new java.io.File(fileName));
     }
 
     /** compiles the specified script into a runnable block */
@@ -457,13 +448,13 @@ public class ScriptLoader
     }
 
     /** loads a script from the specified inputstream */
-    public ScriptInstance loadScript(String name, InputStream stream) //throws YourCodeSucksException, IOException
+    public ScriptInstance loadScript(String name, java.io.InputStream stream) //throws YourCodeSucksException, IOException
     {
         return loadScript(name, stream, null);
     }
 
     /** loads a script from the specified input stream using the specified hashtable as a shared environment */
-    public ScriptInstance loadScript(String name, InputStream stream, Hashtable env) //throws YourCodeSucksException, IOException
+    public ScriptInstance loadScript(String name, java.io.InputStream stream, java.util.Hashtable<Object,Object> env) //throws YourCodeSucksException, IOException
     {
         return loadScript(name, compileScript(name, stream), env);
     }
@@ -473,23 +464,23 @@ public class ScriptLoader
      */
     public ScriptInstance loadScript(String fileName) //throws IOException, YourCodeSucksException
     {
-        return loadScript(new File(fileName), null);
+        return loadScript(new java.io.File(fileName), null);
     }
 
     /**
      * Loads the specified script file, uses the specified hashtable for the environment
      */
-    public ScriptInstance loadScript(String fileName, Hashtable env) //throws IOException, YourCodeSucksException
+    public ScriptInstance loadScript(String fileName, java.util.Hashtable<Object,Object> env) //throws IOException, YourCodeSucksException
     {
-        return loadScript(new File(fileName), env);
+        return loadScript(new java.io.File(fileName), env);
     }
 
     /**
      * Loads the specified script file, uses the specified hashtable for the environment
      */
-    public ScriptInstance loadScript(File file, Hashtable env) //throws IOException, YourCodeSucksException
+    public ScriptInstance loadScript(java.io.File file, java.util.Hashtable<Object,Object> env) //throws IOException, YourCodeSucksException
     {
-        ScriptInstance script = loadScript(file.getAbsolutePath(), new FileInputStream(file), env);
+        ScriptInstance script = loadScript(file.getAbsolutePath(), new java.io.FileInputStream(file), env);
         script.associateFile(file);
         return script;
     }
@@ -497,7 +488,7 @@ public class ScriptLoader
     /**
      * Loads the specified script file
      */
-    public ScriptInstance loadScript(File file) //throws IOException, YourCodeSucksException
+    public ScriptInstance loadScript(java.io.File file) //throws IOException, YourCodeSucksException
     {
         return loadScript(file, null);
     }
@@ -535,7 +526,7 @@ public class ScriptLoader
         //
         // tell bridges script is going bye bye
         //
-        Iterator i = bridgess.iterator();
+        java.util.Iterator<Object> i = bridgess.iterator();
         while (i.hasNext()) {
             Loadable temp = (Loadable) i.next();
             temp.scriptUnloaded(script);
@@ -554,10 +545,10 @@ public class ScriptLoader
      * determined to be in need of unloading.  The return Set contains String objects of the script names.  The passed in Set is
      * expected to be the same thing (a bunch of Strings).
      */
-    public Set getScriptsToUnload(Set configured)
+    public java.util.Set<Object> getScriptsToUnload(java.util.Set<Object> configured)
     {
-        Set unload, loaded;
-        unload = new LinkedHashSet();
+        java.util.Set<Object> unload, loaded;
+        unload = new java.util.LinkedHashSet<Object>();
 
         // scripts that are currently loaded and active...
         loaded = scripts.keySet();
@@ -575,10 +566,10 @@ public class ScriptLoader
      * are determined to be in need of loading.  The return Set contains String objects of the script names.  The passed in
      * Set is expected to be the same thing (a bunch of Strings).
      */
-    public Set getScriptsToLoad(Set configured)
+    public java.util.Set<Object> getScriptsToLoad(java.util.Set<Object> configured)
     {
-        Set load, loaded;
-        load = new LinkedHashSet();
+        java.util.Set<Object> load, loaded;
+        load = new java.util.LinkedHashSet<Object>();
 
         // scripts that are currently loaded and active...
         loaded = scripts.keySet();
@@ -593,18 +584,18 @@ public class ScriptLoader
     /**
      * Java by default maps characters from an 8bit ascii file to an internal 32bit unicode representation.  How this mapping is done is called a character set encoding.  Sometimes this conversion can frustrate scripters making them say "hey, I didn't put that character in my script".  You can use this option to ensure sleep disables charset conversions for scripts loaded with this script loader
      */
-    public void setCharsetConversion(boolean b)
+    public void setCharsetConversion(bool b)
     {
         disableConversions = !b;
     }
 
-    public boolean isCharsetConversions()
+    public bool isCharsetConversions()
     {
         return !disableConversions;
     }
 
-    protected boolean disableConversions = false;
-    private static CharsetDecoder decoder = null;
+    protected bool disableConversions = false;
+    private static java.nio.charset.CharsetDecoder decoder = null;
     private String charset = null;
 
     public String getCharset()
@@ -622,38 +613,38 @@ public class ScriptLoader
         this.charset = charset;
     }
 
-    private InputStreamReader getInputStreamReader(InputStream inJ)
+    private java.io.InputStreamReader getInputStreamReader(java.io.InputStream inJ)
     {
         if (disableConversions) {
             if (decoder == null)
                 decoder = new NoConversion();
 
-            return new InputStreamReader(inJ, decoder);
+            return new java.io.InputStreamReader(inJ, decoder);
         }
 
         if (charset != null) {
             try {
-                return new InputStreamReader(inJ, charset);
-            } catch (UnsupportedEncodingException e) {
+                return new java.io.InputStreamReader(inJ, charset);
+            } catch (java.nio.charset.UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
         }
 
-        return new InputStreamReader(inJ);
+        return new java.io.InputStreamReader(inJ);
     }
 
     /**
      * Java likes to convert characters inside of a loaded script into something else.  This prevents that if the app
      * developer chooses to flag that option
      */
-    private static class NoConversion : CharsetDecoder
+    private class NoConversion : java.nio.charset.CharsetDecoder
     {
         public NoConversion()
-        {
-            super(null, 1.0f, 1.0f);
+        :
+            base(null, 1.0f, 1.0f){
         }
 
-        protected CoderResult decodeLoop(ByteBuffer inJ, CharBuffer outJ)
+        protected override java.nio.charset.CoderResult decodeLoop(java.nio.ByteBuffer inJ, java.nio.CharBuffer outJ)
         {
             int mark = inJ.position();
             try {

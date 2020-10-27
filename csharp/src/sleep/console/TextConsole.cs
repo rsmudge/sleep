@@ -26,18 +26,14 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */ 
- using System;
- using java = biz.ritter.javapi;
-
-using  java.io;
-using  java.util;
+using System;
+using java = biz.ritter.javapi;
 
 using  sleep.engine;
 using  sleep.parser;
 using  sleep.runtime;
 using  sleep.error;
-
-using  sleep.taint.TaintUtils;
+using  sleep.taint;
 
 namespace sleep.console{
 
@@ -53,41 +49,41 @@ public class TextConsole : ConsoleProxy
 
       if (args.Length > 0)
       {
-         boolean check = false;
-         boolean ast   = false;
-         boolean eval  = false;
-         boolean expr  = false;
-         boolean prof  = false;
-         boolean time  = false;
+         bool check = false;
+         bool ast   = false;
+         bool eval  = false;
+         bool expr  = false;
+         bool prof  = false;
+         bool time  = false;
          int     start = 0;
 
          while (start < args.length && (args[start].startsWith("--") || (args[start].length() >= 2 && args[start].charAt(0) == '-')))
          {
             if (args[start].equals("-version") || args[start].equals("--version") || args[start].equals("-v"))
             {
-                SystemJ.outJ.println(SleepUtils.SLEEP_VERSION + " (" + SleepUtils.SLEEP_RELEASE + ")");
+                java.lang.SystemJ.outJ.println(SleepUtils.SLEEP_VERSION + " (" + SleepUtils.SLEEP_RELEASE + ")");
                 return;
             } 
             else if (args[start].equals("-help") || args[start].equals("--help") || args[start].equals("-h"))
             {
-                SystemJ.outJ.println(SleepUtils.SLEEP_VERSION + " (" + SleepUtils.SLEEP_RELEASE + ")");
-                SystemJ.outJ.println("Usage: java [properties] -jar sleep.jar [options] [-|file|expression]");
-                SystemJ.outJ.println("       properties:");
-                SystemJ.outJ.println("         -Dsleep.assert=<true|false>");
-                SystemJ.outJ.println("         -Dsleep.classpath=<path to locate 3rd party jars from>");
-                SystemJ.outJ.println("         -Dsleep.debug=<debug level>");
-                SystemJ.outJ.println("         -Dsleep.taint=<true|false>");
-                SystemJ.outJ.println("       options:");
-                SystemJ.outJ.println("         -a --ast       display the abstract syntax tree of the specified script");
-                SystemJ.outJ.println("         -c --check     check the syntax of the specified file");
-                SystemJ.outJ.println("         -e --eval      evaluate a script as specified on command line");
-                SystemJ.outJ.println("         -h --help      display this help message");
-                SystemJ.outJ.println("         -p --profile   collect and display runtime profile statistics");
-                SystemJ.outJ.println("         -t --time      display total script runtime");
-                SystemJ.outJ.println("         -v --version   display version information");
-                SystemJ.outJ.println("         -x --expr      evaluate an expression as specified on the command line");
-                SystemJ.outJ.println("       file:");
-                SystemJ.outJ.println("         specify a '-' to read script from STDIN");
+                java.lang.SystemJ.outJ.println(SleepUtils.SLEEP_VERSION + " (" + SleepUtils.SLEEP_RELEASE + ")");
+                java.lang.SystemJ.outJ.println("Usage: java [properties] -jar sleep.jar [options] [-|file|expression]");
+                java.lang.SystemJ.outJ.println("       properties:");
+                java.lang.SystemJ.outJ.println("         -Dsleep.assert=<true|false>");
+                java.lang.SystemJ.outJ.println("         -Dsleep.classpath=<path to locate 3rd party jars from>");
+                java.lang.SystemJ.outJ.println("         -Dsleep.debug=<debug level>");
+                java.lang.SystemJ.outJ.println("         -Dsleep.taint=<true|false>");
+                java.lang.SystemJ.outJ.println("       options:");
+                java.lang.SystemJ.outJ.println("         -a --ast       display the abstract syntax tree of the specified script");
+                java.lang.SystemJ.outJ.println("         -c --check     check the syntax of the specified file");
+                java.lang.SystemJ.outJ.println("         -e --eval      evaluate a script as specified on command line");
+                java.lang.SystemJ.outJ.println("         -h --help      display this help message");
+                java.lang.SystemJ.outJ.println("         -p --profile   collect and display runtime profile statistics");
+                java.lang.SystemJ.outJ.println("         -t --time      display total script runtime");
+                java.lang.SystemJ.outJ.println("         -v --version   display version information");
+                java.lang.SystemJ.outJ.println("         -x --expr      evaluate an expression as specified on the command line");
+                java.lang.SystemJ.outJ.println("       file:");
+                java.lang.SystemJ.outJ.println("         specify a '-' to read script from STDIN");
                 return;
              }
              else if (args[start].equals("--check") || args[start].equals("-c"))
@@ -197,7 +193,7 @@ public class TextConsole : ConsoleProxy
             // deal with all of our syntax errors, I'm using the console as a convienence
             temp.processScriptErrors(yex);
          }
-         catch (Exception ex)
+         catch (java.lang.Exception ex)
          {
             ex.printStackTrace();
          }
@@ -208,7 +204,7 @@ public class TextConsole : ConsoleProxy
          {
             temp.rppl();
          }
-         catch (Exception ex)
+         catch (java.lang.Exception ex)
          {
             ex.printStackTrace();
          }
@@ -231,18 +227,18 @@ public class TextConsole : ConsoleProxy
       {
          return inJ.readLine();
       }
-      catch (Exception ex)
+      catch (java.lang.Exception ex)
       {
          ex.printStackTrace();
          return null;
       }
    }
    
-   BufferedReader inJ;
+   java.io.BufferedReader inJ;
 
    public TextConsole()
    {
-      inJ = new BufferedReader(new InputStreamReader(SystemJ.inJ));
+      inJ = new java.io.BufferedReader(new java.io.InputStreamReader(SystemJ.inJ));
    }
 }
 }

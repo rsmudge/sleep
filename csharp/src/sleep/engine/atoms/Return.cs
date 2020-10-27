@@ -29,7 +29,6 @@
  using System;
  using java = biz.ritter.javapi;
 
-using  java.util;
 using  sleep.interfaces;
 using  sleep.engine;
 using  sleep.runtime;
@@ -46,12 +45,12 @@ public class Return : Step
       return_type = type;
    }
 
-   public String toString(String prefix)
+   public override String toString(String prefix)
    {
       return prefix + "[Return]: " + return_type + " \n";
    }
   
-   public Scalar evaluate(ScriptEnvironment e)
+   public override Scalar evaluate(ScriptEnvironment e)
    {
       if (return_type == ScriptEnvironment.FLOW_CONTROL_THROW)
       {

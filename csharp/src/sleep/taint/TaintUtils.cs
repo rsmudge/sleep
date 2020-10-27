@@ -32,11 +32,9 @@ using java = biz.ritter.javapi;
 using  sleep.engine;
 using  sleep.interfaces;
 using  sleep.runtime;
-
 using  sleep.bridges;
 using  sleep.engine.types;
 
-using  java.util;
 namespace sleep.taint{
 
 
@@ -85,13 +83,13 @@ namespace sleep.taint{
 public class TaintUtils
 {
     /** one global static variable to determine if Sleep is running in taint mode or not */
-    private static boolean isTaintMode = System.getProperty("sleep.taint", "false").equals("true");
+    private static bool _isTaintMode = java.lang.SystemJ.getProperty("sleep.taint", "false").equals("true");
 
     /** checks if Sleep is in taint mode or not.  This value does not change during runtime */
-    public static boolean isTaintMode()
+    public static bool isTaintMode()
     {
 //       return true;
-       return isTaintMode;
+       return this._isTaintMode;
     }
 
     /** taints the specified scalar (if it is a value scalar only).  returns the original container.  If tainting is disabled the original bridge is returned. */
@@ -106,7 +104,7 @@ public class TaintUtils
     }
 
     /** taints all of the Scalar values in the specified stack.  More fun that a barrel full of monkeys.  this function acts on the passed in stack */
-    public static Stack taint(Stack values)
+    public static java.util.Stack<Object> taint(java.util.Stack<Object> values)
     {
        if (isTaintMode())
        {
@@ -171,7 +169,7 @@ public class TaintUtils
     }
 
     /** check if a value is tainted honoring circular dependencies */
-    private static boolean isTainted(Set seen, Scalar value)
+    private static bool isTainted(java.util.Set<Object> seen, Scalar value)
     {
        if (value.getHash() != null)
        {
@@ -197,7 +195,7 @@ public class TaintUtils
           {
              seen.add(value.getArray());
 
-             Iterator i = value.getArray().scalarIterator();
+             java.util.Iterator<Object> i = value.getArray().scalarIterator();
              while (i.hasNext())
              {
                 if (isTainted(seen, (Scalar)i.next()))
@@ -216,7 +214,7 @@ public class TaintUtils
     }
 
     /** checks if a scalar is tainted */
-    public static boolean isTainted(Scalar value)
+    public static bool isTainted(Scalar value)
     {
        if (value.getActualValue() == null)
        {
@@ -269,12 +267,12 @@ public class TaintUtils
     }
 
     /** checks the specified argument stack for tainted values.  If there are tainted values a comma separated string description is returned.  Otherwise null is returned. */
-    public static String checkArguments(Stack arguments)
+    public static String checkArguments(java.util.Stack<Object> arguments)
     {
-       Stack values = new Stack(); /* track all of our tainted values */
+       java.util.Stack<Object> values = new java.util.Stack<Object>(); /* track all of our tainted values */
        String desc  = null;
 
-       Iterator i = arguments.iterator();
+       java.util.Iterator<Object> i = arguments.iterator();
        while (i.hasNext())
        {
           Scalar argument = (Scalar)i.next();

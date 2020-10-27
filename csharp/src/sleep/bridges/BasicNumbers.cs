@@ -26,23 +26,18 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- using System;
- using java = biz.ritter.javapi;
+using System;
+using java = biz.ritter.javapi;
  
- using  java.util;
-
 using  sleep.engine;
 using  sleep.engine.types;
-
 using  sleep.interfaces;
 using  sleep.runtime;
-
-using  java.math;
 
 namespace sleep.bridges{
  
 /** provides some of the basic number crunching functionality */
-public class BasicNumbers : Predicate, Operator, Loadable, Function
+public class BasicNumbers : sleep.interfaces.Predicate, Operator, Loadable, Function
 {
     public void scriptUnloaded(ScriptInstance aScript)
     {
@@ -50,7 +45,7 @@ public class BasicNumbers : Predicate, Operator, Loadable, Function
 
     public void scriptLoaded(ScriptInstance aScript)
     {
-       Hashtable temp = aScript.getScriptEnvironment().getEnvironment();
+       java.util.Hashtable<Object,Object> temp = aScript.getScriptEnvironment().getEnvironment();
 
        Object sanitized = sleep.taint.TaintUtils.Sanitizer(this);
 
@@ -107,7 +102,7 @@ public class BasicNumbers : Predicate, Operator, Loadable, Function
        temp.put("&srand", sanitized);
     }
 
-    public Scalar evaluate(String name, ScriptInstance si, Stack args)
+    public Scalar evaluate(String name, ScriptInstance si, java.util.Stack<Object> args)
     {
        if (name.equals("&abs")) { return SleepUtils.getScalar(Math.abs(BridgeUtilities.getDouble(args, 0.0))); }
        else if (name.equals("&acos")) { return SleepUtils.getScalar(Math.acos(BridgeUtilities.getDouble(args, 0.0))); }
@@ -283,7 +278,7 @@ public class BasicNumbers : Predicate, Operator, Loadable, Function
        return SleepUtils.getEmptyScalar();
     }
 
-    public boolean decide(String n, ScriptInstance i, Stack l)
+    public bool decide(String n, ScriptInstance i, java.util.Stack<Object> l)
     {
        Stack env = i.getScriptEnvironment().getEnvironmentStack();
        Scalar vb = (Scalar)l.pop();
@@ -335,7 +330,7 @@ public class BasicNumbers : Predicate, Operator, Loadable, Function
        return false;
     }
 
-    public Scalar operate(String o, ScriptInstance i, Stack locals)
+    public Scalar operate(String o, ScriptInstance i, java.util.Stack<Object> locals)
     {
        ScalarType left  = ((Scalar)locals.pop()).getActualValue();
        ScalarType right = ((Scalar)locals.pop()).getActualValue();

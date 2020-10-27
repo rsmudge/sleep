@@ -26,23 +26,19 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- using System;
- using java = biz.ritter.javapi;
+using System;
+using java = biz.ritter.javapi;
  
-using  sleep.runtime.Scalar;
-using  sleep.runtime.ScriptInstance;
-using  sleep.interfaces.Variable;
-using  sleep.interfaces.Loadable;
-
-using  java.util.Hashtable;
+using sleep.runtime;
+using sleep.interfaces;
 
 namespace sleep.bridges{
 [Serializable]
 public class DefaultVariable : Variable, Loadable
 {
-    protected Hashtable values = new Hashtable();
+    protected java.util.Hashtable<Object,Object> values = new java.util.Hashtable<Object,Object>();
 
-    public boolean scalarExists(String key)
+    public bool scalarExists(String key)
     {
         return values.containsKey(key);
     }

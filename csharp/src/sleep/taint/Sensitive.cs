@@ -26,16 +26,12 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- using System;
- using java = biz.ritter.javapi;
-
+using System;
+using java = biz.ritter.javapi;
 
 using  sleep.engine;
 using  sleep.interfaces;
 using  sleep.runtime;
-
-using  java.util;
-
 
 namespace sleep.taint{
 /** A sensitive function */
@@ -48,10 +44,10 @@ public class Sensitive : Function
       function = f;
    }   
 
-   public Scalar evaluate(String name, ScriptInstance script, Stack arguments)
+   public Scalar evaluate(String name, ScriptInstance script, java.util.Stack<Object> arguments)
    {
-      Stack dangers = new Stack();
-      Iterator i = arguments.iterator();
+      java.util.Stack<Object> dangers = new java.util.Stack<Object>();
+      java.util.Iterator<Object> i = arguments.iterator();
       while (i.hasNext())
       {
          Scalar next = (Scalar)i.next();
@@ -68,7 +64,7 @@ public class Sensitive : Function
       }
       else
       {
-         throw new RuntimeException("Insecure " + name + ": " + SleepUtils.describe(dangers) + " is tainted");
+         throw new java.lang.RuntimeException("Insecure " + name + ": " + SleepUtils.describe(dangers) + " is tainted");
       }
    }
 }

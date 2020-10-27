@@ -26,14 +26,13 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- using System;
- using java = biz.ritter.javapi;
+using System;
+using java = biz.ritter.javapi;
 
 using  sleep.engine;
 using  sleep.interfaces;
 using  sleep.runtime;
 
-using  java.util;
 namespace sleep.taint{
 
 public class Tainter : Function
@@ -45,7 +44,7 @@ public class Tainter : Function
       function = f;
    }
 
-   public Scalar evaluate(String name, ScriptInstance script, Stack arguments)
+   public Scalar evaluate(String name, ScriptInstance script, java.util.Stack<Object> arguments)
    {
       Scalar value = ((Function)function).evaluate(name, script, arguments);
       TaintUtils.taintAll(value);

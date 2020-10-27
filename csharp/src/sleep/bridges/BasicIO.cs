@@ -26,26 +26,14 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- using System;
- using java = biz.ritter.javapi;
-
-using  java.util;
-using  java.util.regex;
+using System;
+using java = biz.ritter.javapi;
 
 using  sleep.engine;
 using  sleep.engine.types;
-
 using  sleep.interfaces;
 using  sleep.runtime;
-
-using  java.io;
-using  java.nio;
 using  sleep.bridges.io;
-
-using  java.util.zip;
-using  javax.crypto;
-using  java.security;
-
 using  sleep.taint;
 
 namespace sleep.bridges{
@@ -129,14 +117,14 @@ public class BasicIO : Loadable, Function
         temp.put("&digest",   this);
     }
 
-    private static Checksum getChecksum(String algorithm)
+    private static java.util.zip.Checksum getChecksum(String algorithm)
     {
        if (algorithm.equals("Adler32")) { return new Adler32(); }
        if (algorithm.equals("CRC32")) { return new CRC32(); }
        return null;
     }
 
-    public Scalar evaluate(String n, ScriptInstance i, Stack l)
+    public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
     {
        if (n.equals("&wait"))
        {
@@ -151,7 +139,7 @@ public class BasicIO : Loadable, Function
 
           try
           { 
-             Process proc  = Runtime.getRuntime().exec(BridgeUtilities.getString(l, ""), null, i.cwd());
+             java.lang.Process proc  = java.lang.Runtime.getRuntime().exec(BridgeUtilities.getString(l, ""), null, i.cwd());
 
              IOObject reader = SleepUtils.getIOHandle(proc.getInputStream(), null);
 
@@ -166,7 +154,7 @@ public class BasicIO : Loadable, Function
                 i.getScriptEnvironment().flagError("abnormal termination: " + proc.exitValue());
              }
           }
-          catch (Exception ex)
+          catch (java.lang.Exception ex)
           {
              i.getScriptEnvironment().flagError(ex);
           }
@@ -181,7 +169,7 @@ public class BasicIO : Loadable, Function
              Scalar   b = (Scalar)l.pop();
              try
              {
-                ObjectOutputStream ois = new ObjectOutputStream(a.getWriter());
+                java.io.ObjectOutputStream ois = new java.io.ObjectOutputStream(a.getWriter());
 
                 if (n.equals("&writeAsObject"))
                 {
@@ -204,7 +192,7 @@ public class BasicIO : Loadable, Function
           IOObject a = chooseSource(l, 1, i);
           try
           {
-             ObjectInputStream ois = new ObjectInputStream(a.getReader());
+             java.io.ObjectInputStream ois = new java.io.ObjectInputStream(a.getReader());
 
              if (n.equals("&readAsObject"))
              {
@@ -216,11 +204,11 @@ public class BasicIO : Loadable, Function
                 return value;
              }
           }
-          catch (EOFException eofex)
+          catch (Ejava.io.OFException eofex)
           {
              a.close();
           }
-          catch (Exception ex)
+          catch (java.lang.Exception ex)
           {
              i.getScriptEnvironment().flagError(ex);
              a.close();
@@ -240,7 +228,7 @@ public class BasicIO : Loadable, Function
           {
              /* do our fun stuff to setup a checksum object */
 
-             boolean isRead  = true;
+             bool isRead  = true;
 
              String temp = BridgeUtilities.getString(l, "MD5");
              if (temp.charAt(0) == '>')
@@ -254,13 +242,13 @@ public class BasicIO : Loadable, Function
              try
              {
                 if (isRead)             {
-                   DigestInputStream cis = new DigestInputStream(io.getInputStream(), MessageDigest.getInstance(temp));
+                   java.security.DigestInputStream cis = new Djava.securityigestInputStream(io.getInputStream(), MessageDigest.getInstance(temp));
                    io.openRead(cis);
                    return SleepUtils.getScalar(cis.getMessageDigest());
                 }
                 else
                 {
-                   DigestOutputStream cos = new DigestOutputStream(io.getOutputStream(), MessageDigest.getInstance(temp));
+                   java.security.DigestOutputStream cos = new java.securityDigestOutputStream(io.getOutputStream(), MessageDigest.getInstance(temp));
                    io.openWrite(cos);
                    return SleepUtils.getScalar(cos.getMessageDigest());
                 }
@@ -367,9 +355,9 @@ public class BasicIO : Loadable, Function
        return SleepUtils.getEmptyScalar();
     }
 
-    private static class openf : Function
+    private class openf : Function
     {
-       public Scalar evaluate(String n, ScriptInstance i, Stack l)
+       public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
        {
           String a = ((Scalar)l.pop()).toString();
 
@@ -380,9 +368,9 @@ public class BasicIO : Loadable, Function
        }
     }
 
-    private static class exec : Function
+    private class exec : Function
     {
-       public Scalar evaluate(String n, ScriptInstance i, Stack l)
+       public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
        {
           Scalar   cmd      = l.isEmpty() ? SleepUtils.getEmptyScalar() : (Scalar)l.pop();
           String[]   command;
@@ -437,9 +425,9 @@ public class BasicIO : Loadable, Function
        }
     }
 
-    private static class sleep : Function
+    private class sleep : Function
     {
-       public Scalar evaluate(String n, ScriptInstance i, Stack l)
+       public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
        {
           try
           {
@@ -451,9 +439,9 @@ public class BasicIO : Loadable, Function
        }
     }
 
-    private static class fork : Function
+    private class fork : Function
     {
-       public Scalar evaluate(String n, ScriptInstance i, Stack l)
+       public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
        {
           SleepClosure   param = BridgeUtilities.getFunction(l, i);        
 
@@ -509,9 +497,9 @@ public class BasicIO : Loadable, Function
        }
     }
 
-    private static class SocketFuncs : Function
+    private class SocketFuncs : Function
     {
-       public Scalar evaluate(String n, ScriptInstance i, Stack l)
+       public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
        {
           Map options = BridgeUtilities.extractNamedParameters(l);
 
@@ -550,9 +538,9 @@ public class BasicIO : Loadable, Function
        }
     }
 
-    private static class closef : Function
+    private class closef : Function
     {
-       public Scalar evaluate(String n, ScriptInstance i, Stack l)
+       public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
        {
           if (!l.isEmpty() && ((Scalar)l.peek()).objectValue() is IOObject)
           {
@@ -569,9 +557,9 @@ public class BasicIO : Loadable, Function
        }
     }
 
-    private static class readln : Function
+    private class readln : Function
     {
-       public Scalar evaluate(String n, ScriptInstance i, Stack l)
+       public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
        {
           IOObject a = chooseSource(l, 1, i);
     
@@ -586,9 +574,9 @@ public class BasicIO : Loadable, Function
        }
     }
 
-    private static class readAll : Function
+    private class readAll : Function
     {
-       public Scalar evaluate(String n, ScriptInstance i, Stack l)
+       public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
        {
           IOObject a = chooseSource(l, 1, i);
 
@@ -604,9 +592,9 @@ public class BasicIO : Loadable, Function
        }
     }
 
-    private static class println : Function
+    private class println : Function
     {
-       public Scalar evaluate(String n, ScriptInstance i, Stack l)
+       public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
        {
           IOObject a = chooseSource(l, 2, i);
 
@@ -617,9 +605,9 @@ public class BasicIO : Loadable, Function
        }
     }
 
-    private static class printArray : Function
+    private class printArray : Function
     {
-       public Scalar evaluate(String n, ScriptInstance inst, Stack l)
+       public Scalar evaluate(String n, ScriptInstance inst, java.util.Stack<Object> l)
        {
           IOObject a       = chooseSource(l, 2, inst);
 
@@ -633,9 +621,9 @@ public class BasicIO : Loadable, Function
        }
     }
 
-    private static class print : Function
+    private class print : Function
     {
-       public Scalar evaluate(String n, ScriptInstance i, Stack l)
+       public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
        {
           IOObject a = chooseSource(l, 2, i);
 
@@ -647,9 +635,9 @@ public class BasicIO : Loadable, Function
     }
 
 
-    private static class printEOF : Function
+    private class printEOF : Function
     {
-       public Scalar evaluate(String n, ScriptInstance i, Stack l)
+       public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
        {
           IOObject a = chooseSource(l, 1, i);
           a.sendEOF();
@@ -658,7 +646,7 @@ public class BasicIO : Loadable, Function
        }
     }
 
-    private static IOObject chooseSource(Stack l, int args, ScriptInstance i)
+    private static IOObject chooseSource(java.util.Stack<Object> l, int args, ScriptInstance i)
     {
        if (l.size() < args && !l.isEmpty())
        {
@@ -685,21 +673,21 @@ public class BasicIO : Loadable, Function
        return IOObject.getConsole(i.getScriptEnvironment());
     }
 
-    private static class getConsoleObject : Function
+    private class getConsoleObject : Function
     {
-       public Scalar evaluate(String n, ScriptInstance i, Stack l)
+       public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
        {
           return SleepUtils.getScalar(IOObject.getConsole(i.getScriptEnvironment()));
        }
     }
 
-    private static Scalar ReadFormatted(String format, InputStream inJ, ScriptEnvironment env, IOObject control)
+    private static Scalar ReadFormatted(String format, java.io.InputStream inJ, ScriptEnvironment env, IOObject control)
     {
        Scalar temp         = SleepUtils.getArrayScalar();
        DataPattern pattern = DataPattern.Parse(format);
 
        byte[]        bdata = new byte[8]; 
-       ByteBuffer  buffer  = ByteBuffer.wrap(bdata);
+       java.nio.ByteBuffer  buffer  = java.nio.ByteBuffer.wrap(bdata);
        int         read    = 0;
        int         early, later;
 
@@ -720,11 +708,11 @@ public class BasicIO : Loadable, Function
              {
                 inJ.skip(pattern.count);
              }
-             catch (Exception ex) { }
+             catch (java.lang.Exception ex) { }
           }
           else if (pattern.value == 'h' || pattern.value == 'H')
           {
-             StringBuffer temps = new StringBuffer();
+             java.lang.StringBuffer temps = new java.lang.StringBuffer();
 
              try
              {
@@ -732,7 +720,7 @@ public class BasicIO : Loadable, Function
                 {
                    read = inJ.read(bdata, 0, 1);
 
-                   if (read < 1) throw new EOFException();
+                   if (read < 1) throw new java.io.EOFException();
  
                    early = (buffer.get(0) & 0x00F0) >> 4;
                    later = (buffer.get(0) & 0x000F);
@@ -749,7 +737,7 @@ public class BasicIO : Loadable, Function
                    }
                 }
              }
-             catch (Exception fex) 
+             catch (java.lang.Exception fex) 
              { 
                 if (control != null) control.close();
                 temp.getArray().push(SleepUtils.getScalar(temps.toString()));       
@@ -760,7 +748,7 @@ public class BasicIO : Loadable, Function
           }
           else if (pattern.value == 'z' || pattern.value == 'Z' || pattern.value == 'U' || pattern.value == 'u')
           {
-             StringBuffer temps = new StringBuffer();
+             java.lang.StringBuffer temps = new java.lang.StringBuffer();
              int tempval;
 
              try
@@ -768,13 +756,13 @@ public class BasicIO : Loadable, Function
                 if (pattern.value == 'u' || pattern.value == 'U')
                 {
                    read = inJ.read(bdata, 0, 2);
-                   if (read < 2) throw new EOFException();
+                   if (read < 2) throw new java.io.EOFException();
                    tempval = (int)buffer.getChar(0);
                 }
                 else
                 {
                    tempval = inJ.read();
-                   if (tempval == -1) throw new EOFException();
+                   if (tempval == -1) throw new java.io.EOFException();
                 }
              
                 int z = 1;
@@ -786,13 +774,13 @@ public class BasicIO : Loadable, Function
                    if (pattern.value == 'u' || pattern.value == 'U')
                    {
                       read = inJ.read(bdata, 0, 2);
-                      if (read < 2) throw new EOFException();
+                      if (read < 2) throw new java.io.EOFException();
                       tempval = (int)buffer.getChar(0);
                    }
                    else
                    {
                       tempval = inJ.read();
-                      if (tempval == -1) throw new EOFException();
+                      if (tempval == -1) throw new java.io.EOFException();
                    }
                 } 
 
@@ -807,7 +795,7 @@ public class BasicIO : Loadable, Function
                    inJ.skip(skipby);
                 }
              }
-             catch (Exception fex) 
+             catch (java.lang.Exception fex) 
              { 
                 if (control != null) control.close();
                 temp.getArray().push(SleepUtils.getScalar(temps.toString()));       
@@ -832,82 +820,82 @@ public class BasicIO : Loadable, Function
                       case 'C':
                         read = inJ.read(bdata, 0, 1);
 
-                        if (read < 1) throw new EOFException();
+                        if (read < 1) throw new java.io.EOFException();
 
                         value = SleepUtils.getScalar((char)bdata[0] + ""); // turns the char into a string
                         break;
                       case 'c':
                         read = inJ.read(bdata, 0, 2);
 
-                        if (read < 2) throw new EOFException();
+                        if (read < 2) throw new java.io.EOFException();
 
                         value = SleepUtils.getScalar(buffer.getChar(0) + ""); // turns the char into a string
                         break;
                       case 'b':
                         bdata[0] = (byte)inJ.read();
 
-                        if (bdata[0] == -1) throw new EOFException();
+                        if (bdata[0] == -1) throw new java.io.EOFException();
 
                         value = SleepUtils.getScalar((int)bdata[0]); // turns the byte into an int
                         break;
                       case 'B':
                         read = inJ.read();
 
-                        if (read == -1) throw new EOFException();
+                        if (read == -1) throw new java.io.EOFException();
 
                         value = SleepUtils.getScalar(read);
                         break;
                       case 's':
                         read = inJ.read(bdata, 0, 2);
 
-                        if (read < 2) throw new EOFException();
+                        if (read < 2) throw new java.io.EOFException();
 
                         value = SleepUtils.getScalar(buffer.getShort(0));
                         break;
                       case 'S':
                         read = inJ.read(bdata, 0, 2);
 
-                        if (read < 2) throw new EOFException();
+                        if (read < 2) throw new java.io.EOFException();
 
                         value = SleepUtils.getScalar((int)buffer.getShort(0) & 0x0000FFFF);
                         break;
                       case 'i':
                         read = inJ.read(bdata, 0, 4);
 
-                        if (read < 4) throw new EOFException();
+                        if (read < 4) throw new java.io.EOFException();
 
                         value = SleepUtils.getScalar(buffer.getInt(0)); // turns the byte into an int
                         break;
                       case 'I':
                         read = inJ.read(bdata, 0, 4);
 
-                        if (read < 4) throw new EOFException();
+                        if (read < 4) throw new java.io.EOFException();
 
                         value = SleepUtils.getScalar((long)buffer.getInt(0) & 0x00000000FFFFFFFFL); // turns the byte into an int
                         break;
                       case 'f':
                         read = inJ.read(bdata, 0, 4);
 
-                        if (read < 4) throw new EOFException();
+                        if (read < 4) throw new java.io.EOFException();
 
                         value = SleepUtils.getScalar(buffer.getFloat(0)); // turns the byte into an int
                         break;
                       case 'd':
                         read = inJ.read(bdata, 0, 8);
 
-                        if (read < 8) throw new EOFException();
+                        if (read < 8) throw new java.io.EOFException();
 
                         value = SleepUtils.getScalar(buffer.getDouble(0)); // turns the byte into an int
                         break;
                       case 'l':
                         read = inJ.read(bdata, 0, 8);
 
-                        if (read < 8) throw new EOFException();
+                        if (read < 8) throw new java.io.EOFException();
 
                         value = SleepUtils.getScalar(buffer.getLong(0)); // turns the byte into an int
                         break;
                       case 'o':
-                        ObjectInputStream ois = new ObjectInputStream(inJ);
+                        java.io.ObjectInputStream ois = new java.io.ObjectInputStream(inJ);
                         value = (Scalar)ois.readObject();
                         break;
 
@@ -915,7 +903,7 @@ public class BasicIO : Loadable, Function
                         env.showDebugMessage("unknown file pattern character: " + pattern.value);
                    }
                 }
-                catch (Exception ex) 
+                catch (java.lang.Exception ex) 
                 { 
                    if (control != null) control.close();
                    if (value != null)   
@@ -934,14 +922,14 @@ public class BasicIO : Loadable, Function
        return temp;
     }
 
-    private static void WriteFormatted(String format, OutputStream outJ, ScriptEnvironment env, Stack arguments, IOObject control)
+    private static void WriteFormatted(String format, java.io.OutputStream outJ, ScriptEnvironment env, java.util.Stack<Object> arguments, IOObject control)
     {
        DataPattern pattern  = DataPattern.Parse(format);
 
        if (arguments.size() == 1 && ((Scalar)arguments.peek()).getArray() != null)
        {
-          Stack temp = new Stack();
-          Iterator i = ((Scalar)arguments.peek()).getArray().scalarIterator();
+          java.util.Stack<Object> temp = new java.util.Stack<Object>();
+          java.util.Iterator<Object> i = ((Scalar)arguments.peek()).getArray().scalarIterator();
           while (i.hasNext())
               temp.push(i.next());
 
@@ -1013,12 +1001,12 @@ public class BasicIO : Loadable, Function
           {
              try
              {
-                StringBuffer number = new StringBuffer("FF");
+                java.lang.StringBuffer number = new java.lang.StringBuffer("FF");
                 String       argzz  = BridgeUtilities.getString(arguments, "");
              
                 if ((argzz.length() % 2) != 0)
                 {
-                   throw new IllegalArgumentException("can not pack '" + argzz + "' as hex string, number of characters must be even");
+                   throw new java.lang.IllegalArgumentException("can not pack '" + argzz + "' as hex string, number of characters must be even");
                 }
 
                 char[] tempchars = argzz.toCharArray();
@@ -1040,12 +1028,12 @@ public class BasicIO : Loadable, Function
                    outJ.write(bdata, 3, 1);
                 }
              }
-             catch (IllegalArgumentException aex)
+             catch (java.lang.IllegalArgumentException aex)
              {
                 if (control != null) control.close();
                 throw (aex);
              }
-             catch (Exception ex)
+             catch (java.lang.Exception ex)
              {
                 ex.printStackTrace();
                 if (control != null) control.close();
@@ -1109,7 +1097,7 @@ public class BasicIO : Loadable, Function
                       case 'o':
                         try
                         {
-                           ObjectOutputStream oos = new ObjectOutputStream(outJ);
+                           java.io.ObjectOutputStream oos = new java.io.ObjectOutputStream(outJ);
                            oos.writeObject(temp);
                         }
                         catch (Exception ex)
@@ -1121,7 +1109,7 @@ public class BasicIO : Loadable, Function
                       default:
                    }
                 }
-                catch (Exception ex) 
+                catch (java.lang.Exception ex) 
                 { 
                    if (control != null) control.close();
                    return;
@@ -1136,12 +1124,12 @@ public class BasicIO : Loadable, Function
        {
           outJ.flush();
        }
-       catch (Exception ex) { }
+       catch (java.lang.Exception ex) { }
     }
 
-    private static class bread : Function
+    private class bread : Function
     {
-       public Scalar evaluate(String n, ScriptInstance i, Stack l)
+       public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
        {
           IOObject        a = chooseSource(l, 2, i);
           String    pattern = BridgeUtilities.getString(l, "");
@@ -1150,9 +1138,9 @@ public class BasicIO : Loadable, Function
        }
     }
 
-    private static class bwrite : Function
+    private class bwrite : Function
     {
-       public Scalar evaluate(String n, ScriptInstance i, Stack l)
+       public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
        {
           IOObject        a = chooseSource(l, 3, i);
           String    pattern = BridgeUtilities.getString(l, "");
@@ -1162,9 +1150,9 @@ public class BasicIO : Loadable, Function
        }
     }
 
-    private static class mark : Function
+    private class mark : Function
     {
-       public Scalar evaluate(String n, ScriptInstance i, Stack l)
+       public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
        {
           IOObject        a = chooseSource(l, 2, i);
 
@@ -1179,9 +1167,9 @@ public class BasicIO : Loadable, Function
        }
     }
 
-    private static class available : Function
+    private class available : Function
     {
-       public Scalar evaluate(String n, ScriptInstance i, Stack l)
+       public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
        {
           try
           {
@@ -1213,37 +1201,37 @@ public class BasicIO : Loadable, Function
                 return SleepUtils.getScalar(temp.indexOf(delim) > -1);
              }
           }
-          catch (Exception ex) { return SleepUtils.getEmptyScalar(); }
+          catch (java.lang.Exception ex) { return SleepUtils.getEmptyScalar(); }
        }
     }
 
-    private static class reset : Function
+    private class reset : Function
     {
-       public Scalar evaluate(String n, ScriptInstance i, Stack l)
+       public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
        {
           try {
           IOObject        a = chooseSource(l, 1, i);
           a.getInputBuffer().reset();
-          } catch (Exception ex) { }
+          } catch (java.lang.Exception ex) { }
 
           return SleepUtils.getEmptyScalar();
        }
     }
 
-    private static class unpack : Function
+    private class unpack : Function
     {
-       public Scalar evaluate(String n, ScriptInstance i, Stack l)
+       public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
        {
           String    pattern = BridgeUtilities.getString(l, "");
           String    data    = BridgeUtilities.getString(l, "");
 
           try
           {
-             ByteArrayOutputStream outJ = new ByteArrayOutputStream(data.length());
-             DataOutputStream toBytes  = new DataOutputStream(outJ);
+             java.io.ByteArrayOutputStream outJ = new java.io.ByteArrayOutputStream(data.length());
+             java.io.DataOutputStream toBytes  = new java.io.DataOutputStream(outJ);
              toBytes.writeBytes(data);     
 
-             return ReadFormatted(pattern, new DataInputStream(new ByteArrayInputStream(outJ.toByteArray())), i.getScriptEnvironment(), null);
+             return ReadFormatted(pattern, new java.io.DataInputStream(new java.io.ByteArrayInputStream(outJ.toByteArray())), i.getScriptEnvironment(), null);
           }
           catch (Exception ex)
           {
@@ -1252,23 +1240,23 @@ public class BasicIO : Loadable, Function
        }
     }
 
-    private static class pack : Function
+    private class pack : Function
     {
-       public Scalar evaluate(String n, ScriptInstance i, Stack l)
+       public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
        {
           String    pattern = BridgeUtilities.getString(l, "");
 
-          ByteArrayOutputStream temp = new ByteArrayOutputStream(DataPattern.EstimateSize(pattern) + 128);
+          java.io.ByteArrayOutputStream temp = new Bjava.io.yteArrayOutputStream(DataPattern.EstimateSize(pattern) + 128);
          
-          WriteFormatted(pattern, new DataOutputStream(temp), i.getScriptEnvironment(), l, null);
+          WriteFormatted(pattern, new java.io.DataOutputStream(temp), i.getScriptEnvironment(), l, null);
 
           return SleepUtils.getScalar(temp.toByteArray(), temp.size());
        }
     }
 
-    private static class writeb : Function
+    private class writeb : Function
     {
-       public Scalar evaluate(String n, ScriptInstance i, Stack l)
+       public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
        {
           IOObject     a = chooseSource(l, 2, i);
           String    data = BridgeUtilities.getString(l, "");
@@ -1291,15 +1279,15 @@ public class BasicIO : Loadable, Function
        }
     }
 
-    private static class readb : Function
+    private class readb : Function
     {
-       public Scalar evaluate(String n, ScriptInstance i, Stack l)
+       public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
        {
           IOObject           a = chooseSource(l, 2, i);
           int               to = BridgeUtilities.getInt(l, 1);
           int             last = 0;
           byte[]          temp = null;
-          StringBuffer  buffer = null;
+          java.lang.StringBuffer  buffer = null;
 
           if (a.getReader() != null)
           {
@@ -1309,7 +1297,7 @@ public class BasicIO : Loadable, Function
              {
                 if (to == -1)
                 {
-                   buffer = new StringBuffer(BridgeUtilities.getInt(l, 2048));
+                   buffer = new java.lang.StringBuffer(BridgeUtilities.getInt(l, 2048));
 
                    while (true)
                    { 
@@ -1358,9 +1346,9 @@ public class BasicIO : Loadable, Function
        }
     }
 
-    private static class consume : Function
+    private class consume : Function
     {
-       public Scalar evaluate(String n, ScriptInstance i, Stack l)
+       public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
        {
           IOObject         a = chooseSource(l, 2, i);
           int             to = BridgeUtilities.getInt(l, 1);
@@ -1406,9 +1394,9 @@ public class BasicIO : Loadable, Function
        }
     }
 
-    private static class read : Function
+    private class read : Function
     {
-       public Scalar evaluate(String n, ScriptInstance i, Stack l)
+       public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
        {
           IOObject     a = chooseSource(l, 2, i);
           SleepClosure b = BridgeUtilities.getFunction(l, i);
@@ -1421,16 +1409,16 @@ public class BasicIO : Loadable, Function
        }
     }
 
-    private static class iseof : Predicate
+    private class iseof : Predicate
     {
-       public boolean decide(String n, ScriptInstance i, Stack l)
+       public bool decide(String n, ScriptInstance i, java.util.Stack<Object> l)
        {
           IOObject a = (IOObject)BridgeUtilities.getObject(l);
           return a.isEOF();
        }
     }
 
-    private static class CallbackReader : Runnable
+    private class CallbackReader : java.lang.Runnable
     {
        protected IOObject       source;
        protected ScriptInstance script;
@@ -1447,7 +1435,7 @@ public class BasicIO : Loadable, Function
 
        public void run()
        {
-          Stack  args = new Stack();
+          java.util.Stack  args = new Stack();
           String temp;
 
           if (bytes <= 0)

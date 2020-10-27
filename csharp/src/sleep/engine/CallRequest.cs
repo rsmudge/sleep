@@ -25,16 +25,14 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */ 
- using System;
- using java = biz.ritter.javapi;
+using System;
+using java = biz.ritter.javapi;
 
 using  sleep.engine;
 using  sleep.runtime;
-
-using  java.util;
 using  sleep.interfaces;
 using  sleep.engine.types;
-using  sleep.bridges.SleepClosure;
+using  sleep.bridges;
 
 namespace sleep.engine{
 
@@ -82,10 +80,10 @@ public abstract class CallRequest
    protected abstract Scalar execute();
 
    /** return a string view of this function call for trace messages; arguments are captured as comma separated descriptions of all args */
-   protected abstract String formatCall(String args);
+   public abstract String formatCall(String args);
 
    /** return true if debug trace is enabled.  override this to add/change criteria for trace activiation */
-   public boolean isDebug()
+   public bool isDebug()
    {
       return (getScriptEnvironment().getScriptInstance().getDebugFlags() & ScriptInstance.DEBUG_TRACE_CALLS) == ScriptInstance.DEBUG_TRACE_CALLS;
    }
@@ -104,12 +102,12 @@ public abstract class CallRequest
              try
              {
                 long total = e.getScriptInstance().total();
-                long stat  = System.currentTimeMillis();
+                long stat  = java.lang.SystemJ.currentTimeMillis();
                 temp       = execute();
-                stat       = (System.currentTimeMillis() - stat) - (e.getScriptInstance().total() - total);
+                stat       = (java.lang.SystemJ.currentTimeMillis() - stat) - (e.getScriptInstance().total() - total);
                 e.getScriptInstance().collect(getFunctionName(), getLineNumber(), stat);
              }
-             catch (RuntimeException rex)
+             catch (java.lang.RuntimeException rex)
              {
                 if (rex.getCause() == null || ! (  
                    (rex.getCause() is typeof(java.lang.reflect.InvocationTargetException))))
@@ -130,9 +128,9 @@ public abstract class CallRequest
              try
              {
                 long total = e.getScriptInstance().total();
-                long stat = System.currentTimeMillis();
+                long stat = java.lang.SystemJ.currentTimeMillis();
                 temp = execute();
-                stat       = (System.currentTimeMillis() - stat) - (e.getScriptInstance().total() - total);
+                stat       = (java.lang.SystemJ.currentTimeMillis() - stat) - (e.getScriptInstance().total() - total);
                 e.getScriptInstance().collect(getFunctionName(), getLineNumber(), stat);
 
                 if (e.isThrownValue())
@@ -152,7 +150,7 @@ public abstract class CallRequest
                    e.getScriptInstance().fireWarning(formatCall(args) + " = " + SleepUtils.describe(temp), getLineNumber(), true);
                 }
              }
-             catch (RuntimeException rex)
+             catch (java.lang.RuntimeException rex)
              {
                 e.getScriptInstance().fireWarning(formatCall(args) + " - FAILED!", getLineNumber(), true);
 
@@ -175,7 +173,7 @@ public abstract class CallRequest
          {
              temp = execute();
          }
-         catch (RuntimeException rex)
+         catch (java.lang.RuntimeException rex)
          {
              if (rex.getCause() == null || ! (  
                 (rex.getCause() is typeof(java.lang.reflect.InvocationTargetException))))
@@ -238,29 +236,29 @@ public abstract class CallRequest
    }
 
    /** execute a closure with all of the trimmings. */
-   public static class ClosureCallRequest : CallRequest
+   public class ClosureCallRequest : CallRequest
    {
       protected String name;
       protected Scalar scalar;
 
       public ClosureCallRequest(ScriptEnvironment e, int lineNo, Scalar _scalar, String _name)
-      {
-         super(e, lineNo);
+      :
+         base(e, lineNo){
          scalar = _scalar;
          name   = _name;
       }
 
-      public String getFunctionName()
+      public override String getFunctionName()
       {
          return ((SleepClosure)scalar.objectValue()).toStringGeneric();
       }
 
-      public String getFrameDescription()
+      public override String getFrameDescription()
       {
          return scalar.toString();
       }
 
-      public String formatCall(String args)
+      public override String formatCall(String args)
       {
          StringBuffer buffer = new StringBuffer("[" + SleepUtils.describe(scalar));
 
@@ -279,7 +277,7 @@ public abstract class CallRequest
          return buffer.toString();
       }
 
-      protected Scalar execute()
+      protected override Scalar execute()
       {
          Function func = SleepUtils.getFunctionFromScalar(scalar, getScriptEnvironment().getScriptInstance());
 
@@ -291,39 +289,39 @@ public abstract class CallRequest
    }
 
    /** execute a function with all of the debug, trace, etc.. support */
-   public static class FunctionCallRequest : CallRequest
+   public class FunctionCallRequest : CallRequest
    {
       protected String function;
       protected Function callme;
 
       public FunctionCallRequest(ScriptEnvironment e, int lineNo, String functionName, Function f)
-      {
-         super(e, lineNo);
+      :
+         base(e, lineNo){
          function = functionName;
          callme   = f;
       }
 
-      public String getFunctionName()
+      public override String getFunctionName()
       {
          return function;
       }
 
-      public String getFrameDescription()    
+      public override String getFrameDescription()    
       {
          return function + "()";
       }
 
-      public String formatCall(String args) 
+      public override String formatCall(String args) 
       {
          return function + "(" + args + ")";
       }
 
-      public boolean isDebug()
+      public bool isDebug()
       {
-         return super.isDebug() && !function.equals("&@") && !function.equals("&%") && !function.equals("&warn");
+         return base.isDebug() && !function.equals("&@") && !function.equals("&%") && !function.equals("&warn");
       }
 
-      protected Scalar execute()
+      protected override Scalar execute()
       {
          Scalar temp = callme.evaluate(function, getScriptEnvironment().getScriptInstance(), getScriptEnvironment().getCurrentFrame());
          getScriptEnvironment().clearReturn();
@@ -332,34 +330,34 @@ public abstract class CallRequest
    }
 
    /** execute a block of code inline with all the profiling, tracing, and other support */
-   public static class InlineCallRequest : CallRequest
+   public class InlineCallRequest : CallRequest
    {
       protected String function;
       protected Block  inline;
 
       public InlineCallRequest(ScriptEnvironment e, int lineNo, String functionName, Block i)
-      {
-         super(e, lineNo);
+      
+         : base(e, lineNo){
          function = functionName;
          inline   = i;
       }
 
-      public String getFunctionName()
+      public override String getFunctionName()
       {
          return "<inline> " + function;
       }
 
-      public String getFrameDescription()    
+      public override String getFrameDescription()    
       {
          return "<inline> " + function + "()";
       }
 
-      protected String formatCall(String args) 
+      public override String formatCall(String args) 
       {
          return "<inline> " + function + "(" + args + ")";
       }
 
-      protected Scalar execute()
+      protected override Scalar execute()
       {
          ScriptVariables vars = getScriptEnvironment().getScriptVariables();
          lock (vars)

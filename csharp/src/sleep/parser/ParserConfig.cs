@@ -28,8 +28,7 @@
  */
  using System;
  using java = biz.ritter.javapi;
- using  java.io;
-
+ 
 namespace sleep.parser{
 
 /**
@@ -82,21 +81,21 @@ public class ParserConfig
        jar files that scripts attempt to using  */
    public static void setSleepClasspath(String path)
    {
-      SystemJ.setProperty("sleep.classpath", path);
+      java.lang.SystemJ.setProperty("sleep.classpath", path);
    }
 
    /** Search the sleep classpath for the specified file.  Returns a File object reflecting where the
        file was found.  This method does not return null.  If the file does not exist then a File object
        constructed with just the passed in name is returned */
-   public static File findJarFile(String name)
+   public static java.io.File findJarFile(String name)
    {
-       File cp = new File(name);
+       java.io.File cp = new java.io.File(name);
 
        if (cp.exists()) { return cp; }
 
-       String[] paths = SystemJ.getProperty("sleep.classpath", ".").replace(':', ';').split(";");
+       String[] paths = java.lang.SystemJ.getProperty("sleep.classpath", ".").replace(':', ';').split(";");
 
-       for (int x = 0; x < paths.length; x++)
+       for (int x = 0; x < paths.Length; x++)
        {
           File temp = new File(paths[x], name);
           if (temp.exists())

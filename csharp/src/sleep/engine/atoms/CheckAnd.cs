@@ -26,19 +26,17 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */ 
- using System;
- using java = biz.ritter.javapi;
+using System;
+using java = biz.ritter.javapi;
 
-using  java.util;
 using  sleep.interfaces;
 using  sleep.engine;
-using  java.io.Serializable;
 using  sleep.runtime;
 
 namespace sleep.engine.atoms{
 
 [Serializable]
-public class CheckAnd : Check, Serializable
+public class CheckAnd : Check, java.io.Serializable
 {
    private Check   left;
    private Check   right;
@@ -46,7 +44,7 @@ public class CheckAnd : Check, Serializable
    /** Converts this object to a string, used by the sleep engine for constructing an AST like thing */
    public String toString(String prefix)
    {
-       StringBuffer temp = new StringBuffer();
+       java.lang.StringBuffer temp = new java.lang.StringBuffer();
        temp.append(prefix);
        temp.append("[AND]:\n");
        temp.append(left.toString(prefix+"      "));
@@ -67,7 +65,7 @@ public class CheckAnd : Check, Serializable
    }
 
    /** Performs this "check".  Returns the value of the condition that is checked. */
-   public boolean check(ScriptEnvironment env)
+   public bool check(ScriptEnvironment env)
    {
       return left.check(env) && right.check(env);
    }

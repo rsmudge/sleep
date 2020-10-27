@@ -26,12 +26,8 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- using System;
- using java = biz.ritter.javapi;
-
-
-using java.util;
-using java.nio;
+using System;
+using java = biz.ritter.javapi;
 
 namespace sleep.bridges.io{
 
@@ -42,9 +38,9 @@ public class DataPattern
    public int         count = 1;
    public char        value = ' ';
    public int         size  = 0;
-   public ByteOrder   order = ByteOrder.BIG_ENDIAN;
+   public java.nio.ByteOrder   order = java.nio.ByteOrder.BIG_ENDIAN;
 
-   private static HashMap patternCache = new HashMap();
+   private static java.util.HashMap<Object,Object> patternCache = new Hjava.utilashMap<Object,Object>();
 
    public static int EstimateSize(String format)
    {

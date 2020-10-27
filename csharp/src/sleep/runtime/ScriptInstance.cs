@@ -26,30 +26,15 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- using System;
- using java = biz.ritter.javapi;
+using System;
+using java = biz.ritter.javapi;
 
- using  sleep.runtime.Scalar;
-using  sleep.engine.Block;
-using  sleep.engine.CallRequest;
-
-using  sleep.bridges.BasicNumbers;
-using  sleep.bridges.BasicStrings;
-using  sleep.bridges.BasicIO;
-using  sleep.bridges.BasicUtilities;
-using  sleep.bridges.DefaultEnvironment;
-using  sleep.bridges.DefaultVariable;
-using  sleep.bridges.RegexBridge;
-using  sleep.bridges.SleepClosure;
-
+using  sleep.runtime;
+using  sleep.engine;
+using  sleep.bridges;
 using  sleep.interfaces;
 using  sleep.error;
-
-using  sleep.parser.Parser;
-using  sleep.parser.ParserUtilities;
-
-using  java.util;
-using  java.io;
+using  sleep.parser;
 
 namespace sleep.runtime{
 
@@ -58,17 +43,17 @@ namespace sleep.runtime{
   * form, variable information, and listeners for runtime issues.
   */
   [Serializable]
-public class ScriptInstance : Serializable, Runnable
+public class ScriptInstance : java.io.Serializable, java.lang.Runnable
 {
     /** the name of this script */
     protected String  name   = "Script";
 
     /** true by default, indicates wether or not the script is loaded.  Once unloaded this variable must be flagged to false so
         the bridges know data related to this script is stale */
-    protected boolean loaded; 
+    protected bool loaded; 
 
     /** A list of listeners watching for a runtime error */
-    protected LinkedList watchers = new LinkedList(); 
+    protected java.util.LinkedList<Object> watchers = new java.util.LinkedList<Object>(); 
 
     /** The script environment which contains all of the runtime info for a script */
     protected ScriptEnvironment environment;
@@ -118,10 +103,10 @@ public class ScriptInstance : Serializable, Runnable
     protected long loadTime = System.currentTimeMillis();
 
     /** list of source files associated with this script (to account for &include) */
-    protected List sourceFiles = new LinkedList();
+    protected java.util.List<Object> sourceFiles = new LinkedList<Object>();
 
     /** associates the specified source file with this script */
-    public void associateFile(File f)
+    public void associateFile(java.io.File f)
     {
        if (f.exists())
        {
@@ -130,12 +115,12 @@ public class ScriptInstance : Serializable, Runnable
     }
 
     /** this script instance checks if (to the best of its knowledge) any of its source files have changed */
-    public boolean hasChanged()
+    public bool hasChanged()
     {
-       Iterator i = sourceFiles.iterator();
+       java.util.Iterator<Object> i = sourceFiles.iterator();
        while (i.hasNext())
        {
-          File temp = (File)i.next();
+          java.io.File temp = (Fjava.io.ile)i.next();
           if (temp.lastModified() > loadTime)
           {
              return true;
@@ -160,7 +145,7 @@ public class ScriptInstance : Serializable, Runnable
     /** Constructs a script instance, if the parameter is null a default implementation will be used.
         By specifying the same shared Hashtable container for all scripts, such scripts can be made to
         environment information */
-    public ScriptInstance(Hashtable environmentToShare)
+    public ScriptInstance(java.util.Hashtable<Object,Object> environmentToShare)
     {
         this((Variable)null, environmentToShare);
     }
@@ -168,11 +153,11 @@ public class ScriptInstance : Serializable, Runnable
     /** Constructs a script instance, if either of the parameters are null a default implementation will be used.
         By specifying the same shared Variable and Hashtable containers for all scripts, scripts can be made to
         share variables and environment information */
-    public ScriptInstance(Variable varContainerToUse, Hashtable environmentToShare)
+    public ScriptInstance(Variable varContainerToUse, java.util.Hashtable<Object,Object> environmentToShare)
     {
         if (environmentToShare == null)
         {
-           environmentToShare = new Hashtable();
+           environmentToShare = new java.util.Hashtable();
         }
 
         if (varContainerToUse == null)
@@ -239,7 +224,7 @@ public class ScriptInstance : Serializable, Runnable
  
     /** A container for Sleep strack trace elements. */
     [Serializable]
-    public static class SleepStackElement : Serializable
+    public class SleepStackElement : java.io.Serializable
     {
         public String sourcefile;
         public String description;
@@ -271,22 +256,22 @@ public class ScriptInstance : Serializable, Runnable
     }
 
     /** return the current working directory value associated with this script. */
-    public File cwd()
+    public java.io.File cwd()
     {
        if (!getMetadata().containsKey("__CWD__"))
        {
           chdir(null);
        }
 
-       return (File)getMetadata().get("__CWD__");
+       return (java.io.File)getMetadata().get("__CWD__");
     }
 
     /** sets the current working directory value for this script */
-    public void chdir(File f)
+    public void chdir(java.io.File f)
     {
        if (f == null)
        {
-           f = new File("");
+           f = new java.io.File("");
        }
 
        getMetadata().put("__CWD__", f.getAbsoluteFile());
@@ -301,27 +286,27 @@ public class ScriptInstance : Serializable, Runnable
     /** Removes the top element of the stack trace */
     public void clearStackTrace()
     {
-       List strace = new LinkedList();
+       java.util.List<Object> strace = new java.util.LinkedList<Object>();
        getScriptEnvironment().getEnvironment().put("%strace%", strace);
     }
 
     /** Returns the last stack trace.  Each element of the list is a ScriptInstance.SleepStackElement object.  
         First element is the top of the trace, last element is the origin of the trace.  This function also
         clears the stack trace. */
-    public List getStackTrace()
+    public java.util.List<Object> getStackTrace()
     {
-       List strace = (List)getScriptEnvironment().getEnvironment().get("%strace%");
+       java.util.List<Object> strace = (java.util.List<Object>)getScriptEnvironment().getEnvironment().get("%strace%");
        clearStackTrace(); /* clear the old stack trace */
        if (strace == null)
        {
-          strace = new LinkedList();
+          strace = new java.util.LinkedList<Object>();
        }
        return strace;
     }
 
     /** A container for a profile statistic about a sleep function */
     [Serializable]
-    public static class ProfilerStatistic : Comparable, Serializable
+    public class ProfilerStatistic : java.lang.Comparable<Object>, java.io.Serializable
     {
         /** the name of the function call */
         public String functionName;
@@ -387,7 +372,7 @@ public class ScriptInstance : Serializable, Runnable
     }
 
     /** a quick way to check if we are profiling and not tracing the script steps */
-    public boolean isProfileOnly()
+    public bool isProfileOnly()
     {
        return (getDebugFlags() & DEBUG_TRACE_PROFILE_ONLY) == DEBUG_TRACE_PROFILE_ONLY;
     }
@@ -395,46 +380,46 @@ public class ScriptInstance : Serializable, Runnable
     /** Returns a sorted (in order of total ticks used) list of function call statistics for this
         script environment.  The list contains ScriptInstance.ProfileStatistic objects. 
         Note!!! For Sleep to provide profiler statistics, DEBUG_TRACE_CALLS or DEBUG_TRACE_PROFILE_ONLY must be enabled! */
-    public List getProfilerStatistics()
+    public java.util.List<Object> getProfilerStatistics()
     {
-        Map statistics = (Map)getMetadata().get("%statistics%");
+        java.util.Map<Object,Object> statistics = (java.util.Map<Object,Object>)getMetadata().get("%statistics%");
 
         if (statistics != null)
         {
-           List values = new LinkedList(statistics.values());
+           java.util.List<Object> values = new java.util.LinkedList<Object>(statistics.values());
            Collections.sort(values);
 
            return values;
         }
         else
         {
-           return new LinkedList();
+           return new java.util.LinkedList<Object>();
         }
     }
 
     /** retrieves script meta data for you to update */
-    public Map getMetadata()
+    public java.util.Map<Object,Object> getMetadata()
     {
        Scalar container = getScriptVariables().getGlobalVariables().getScalar("__meta__");
-       Map    meta      = null;
+       java.util.Map<Object,Object>    meta      = null;
 
        if (container == null)
        {
-          meta = Collections.synchronizedMap(new HashMap()); /* we do this because this metadata may be shared between multiple threads */
+          meta = Collections.synchronizedMap(new java.util.HashMap<Object,Object>()); /* we do this because this metadata may be shared between multiple threads */
           getScriptVariables().getGlobalVariables().putScalar("__meta__", SleepUtils.getScalar((Object)meta));
        }
        else
        {
-          meta = (Map)container.objectValue();
+          meta = (java.util.Map<Object,Object>)container.objectValue();
        }
 
        return meta;
     }
 
     /** Dumps the profiler statistics to the specified stream */
-    public void printProfileStatistics(OutputStream outJ)
+    public void printProfileStatistics(java.io.OutputStream outJ)
     {
-        PrintWriter pout = new PrintWriter(outJ, true);
+        java.io.PrintWriter pout = new java.io.PrintWriter(outJ, true);
 
         Iterator i = getProfilerStatistics().iterator();
         while (i.hasNext())
@@ -524,7 +509,7 @@ public class ScriptInstance : Serializable, Runnable
     }
 
     /** Calls a subroutine/built-in function using this script. */
-    public Scalar callFunction(String funcName, Stack parameters)
+    public Scalar callFunction(String funcName, java.util.Stack<Object> parameters)
     {
        Function myfunction = getScriptEnvironment().getFunction(funcName);
 
@@ -547,7 +532,7 @@ public class ScriptInstance : Serializable, Runnable
 
     /** Returns wether or not this script is loaded.  If it is unloaded it should be removed from data structures and
         its modifications to the environment should be ignored */
-    public boolean isLoaded()
+    public bool isLoaded()
     {
        return loaded;
     }
@@ -572,7 +557,7 @@ public class ScriptInstance : Serializable, Runnable
     }
 
     /** Fire a runtime script warning */
-    public void fireWarning(String message, int line, boolean isTrace)
+    public void fireWarning(String message, int line, bool isTrace)
     {
        if (debug != DEBUG_NONE && (!isTrace || (getDebugFlags() & DEBUG_TRACE_SUPPRESS) != DEBUG_TRACE_SUPPRESS))
        {

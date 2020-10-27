@@ -26,13 +26,11 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- using System;
- using java = biz.ritter.javapi;
+using System;
+using java = biz.ritter.javapi;
  
-
 using  sleep.runtime;
-using  java.util;
-using  sleep.engine.ObjectUtilities;
+using  sleep.engine;
 
 namespace sleep.taint{
 
@@ -62,14 +60,14 @@ public class TaintHash : ScalarHash
       source.remove(key);
    }
 
-   public Map getData()
+   public java.util.Map<Object,Object> getData()
    {
-      Map temp = source.getData();
+      java.util.Map<Object,Object> temp = source.getData();
 
-      Iterator i = temp.entrySet().iterator();
+      java.util.Iterator<Object> i = temp.entrySet().iterator();
       while (i.hasNext())
       {
-         Map.Entry next = (Map.Entry)i.next();
+         java.util.MapNS.Entry<Object,Object> next = (java.util.MapNS.Entry<Object,Object>)i.next();
 
          if (next.getValue() != null && next.getKey() != null)
          {

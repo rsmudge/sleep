@@ -26,26 +26,22 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */ 
- using System;
- using java = biz.ritter.javapi;
+using System;
+using java = biz.ritter.javapi;
 
-using  java.util;
 using  sleep.interfaces;
 using  sleep.engine;
 using  sleep.runtime;
-
-using  sleep.bridges.SleepClosure;
-
-using  java.lang.reflect;
+using  sleep.bridges;
 
 namespace sleep.engine.atoms{
 
 public class ObjectAccess : Step
 {
    protected String name;
-   protected Class  classRef;
+   protected Type  classRef;
 
-   public ObjectAccess(String _name, Class _classRef)
+   public ObjectAccess(String _name, Type _classRef)
    {
       name     = _name;
       classRef = _classRef;
@@ -56,33 +52,33 @@ public class ObjectAccess : Step
       return "[Object Access]: "+classRef+"#"+name+"\n";
    }
 
-   private static class MethodCallRequest : CallRequest
+   private class MethodCallRequest : CallRequest
    {
-      protected Method theMethod;
+      protected java.lang.reflect.Method theMethod;
       protected Scalar scalar;
       protected String name;
-      protected Class  theClass;
+      protected Type  theClass;
 
-      public MethodCallRequest(ScriptEnvironment e, int lineNo, Method method, Scalar _scalar, String _name, Class _class)
-      {
-         super(e, lineNo);
+      public MethodCallRequest(ScriptEnvironment e, int lineNo, java.lang.reflect.Method method, Scalar _scalar, String _name, Type _class)
+      :
+         base(e, lineNo){
          theMethod = method;
          scalar    = _scalar;
          name      = _name;
          theClass  = _class;
       }
 
-      public String getFunctionName()
+      public override String getFunctionName()
       {
          return theMethod.toString();
       }
 
-      public String getFrameDescription()
+      public override String getFrameDescription()
       {
          return theMethod.toString();   
       }
 
-      public String formatCall(String args)
+      public override String formatCall(String args)
       {
          StringBuffer trace = new StringBuffer("[");
 
@@ -100,7 +96,7 @@ public class ObjectAccess : Step
          return trace.toString();
       }
 
-      protected Scalar execute()
+      protected override Scalar execute()
       {
          Object[] parameters = ObjectUtilities.buildArgumentArray(theMethod.getParameterTypes(), getScriptEnvironment().getCurrentFrame(), getScriptEnvironment().getScriptInstance());
 

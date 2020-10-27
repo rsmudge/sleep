@@ -26,8 +26,10 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-using  sleep.runtime.Scalar;
-using  sleep.runtime.ScriptInstance;
+using System;
+using java = biz.ritter.javapi;
+
+using  sleep.runtime;
 
 namespace sleep.interfaces{ 
 
@@ -50,8 +52,9 @@ namespace sleep.interfaces{
  * 
  */
  using System;
- [Serializable]
-public interface Variable : java.io.Serializable
+ using java = biz.ritter.javapi;
+ 
+ public interface Variable : java.io.Serializable
 {
     /** true if a scalar named key exists in this variable environment */
     public bool    scalarExists(String key); 

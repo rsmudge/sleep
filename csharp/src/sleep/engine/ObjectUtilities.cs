@@ -26,21 +26,15 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */ 
- using System;
- using java = biz.ritter.javapi;
-
-using  java.lang.reflect;
-using  java.util;
+using System;
+using java = biz.ritter.javapi;
 
 using  sleep.runtime;
-
 using  sleep.engine.types;
-using  sleep.interfaces.Function;
-
+using  sleep.interfaces;
 using  sleep.bridges;
 
 namespace sleep.engine{
-
 
 /** This class is sort of the center of the HOES universe containing several methods for mapping 
     between Sleep and Java and resolving which mappings make sense. */
@@ -71,7 +65,7 @@ public class ObjectUtilities
    public static readonly int ARG_MATCH_MAYBE = 1;
 
    /** convienence method to determine wether or not the stack of values is a safe match for the specified method signature */
-   public static int isArgMatch(Type[] check, Stack arguments)
+   public static int isArgMatch(Type[] check, java.util.Stack<Object> arguments)
    {
       int value = ARG_MATCH_YES;
 
@@ -93,7 +87,7 @@ public class ObjectUtilities
    }
 
    /** converts the primitive version of the specified class to a regular usable version */
-   private static Class normalizePrimitive(Type check)
+   private static Type normalizePrimitive(Type check)
    {
       if (check == Integer.TYPE) { check = typeof(Integer); }
       else if (check == Double.TYPE)   { check = typeof(Double); }
@@ -249,12 +243,12 @@ public class ObjectUtilities
    }
 
    /** attempts to find the method that is the closest match to the specified arguments */
-   public static Method findMethod(Type theClass, String method, Stack arguments)
+   public static java.lang.reflect.Method findMethod(Type theClass, String method, java.util.Stack<Object> arguments)
    {
       int      size    = arguments.size();
 
-      Method   temp    = null;
-      Method[] methods = theClass.getMethods();
+      java.lang.reflect.Method   temp    = null;
+      java.lang.reflect.Method[] methods = theClass.getMethods();
 
       for (int x = 0; x < methods.length; x++) 
       {
@@ -276,7 +270,7 @@ public class ObjectUtilities
    }
 
    /** attempts to find the constructor that is the closest match to the arguments */
-   public static Constructor findConstructor(Class theClass, Stack arguments)
+   public static java.lang.reflect.Constructor findConstructor(Type theClass, java.util.Stack<Object> arguments)
    {
       int      size    = arguments.size();
 
@@ -303,7 +297,7 @@ public class ObjectUtilities
    }
 
    /** this function checks if the specified scalar is a Class literal and uses that if it is, otherwise description is converted to a string and the convertDescriptionToClass method is used */
-   public static Class convertScalarDescriptionToClass(Scalar description)
+   public static Type convertScalarDescriptionToClass(Scalar description)
    {
        if (description.objectValue() is Type)
        {
@@ -510,7 +504,7 @@ public class ObjectUtilities
    } 
 
    /** populates a Java array with Sleep values marshalled into values of the specified types. */
-   public static Object[] buildArgumentArray(Class[] types, Stack arguments, ScriptInstance script)
+   public static Object[] buildArgumentArray(Type[] types, java.util.Stack<Object> arguments, ScriptInstance script)
    {
       Object[] parameters = new Object[types.length];
 
@@ -525,12 +519,12 @@ public class ObjectUtilities
 
    /** marshalls a Java type into the appropriate Sleep scalar.  The primitives value will force this method to also check
        if the Java type could map to an int, long, double, etc.  Use true when in doubt. */
-   public static Scalar BuildScalar(boolean primitives, Object value)
+   public static Scalar BuildScalar(bool primitives, Object value)
    {
       if (value == null)
          return SleepUtils.getEmptyScalar();
 
-      Class check = value.getClass();
+      Type check = value.getClass();
 
       if (check.isArray())
       {
@@ -606,7 +600,7 @@ public class ObjectUtilities
    }
 
    /** Determines the primitive type of the specified array.  Primitive Sleep values (int, long, double) will return the appropriate Number.TYPE class.  This is an important distinction as Double.TYPE != new Double().getClass() */
-   public static Class getArrayType(Scalar value, Type defaultc)
+   public static Type getArrayType(Scalar value, Type defaultc)
    {
       if (value.getArray() != null && value.getArray().size() > 0 && (defaultc == null || (
          defaultc == typeof(java.lang.Object) || defaultc == typeof (System.Object))))
@@ -645,7 +639,7 @@ public class ObjectUtilities
 
    /** Standard method to handle a Java exception from a HOES call.  Basically this places the exception into Sleep's 
        throw mechanism and collects the stack frame. */
-   public static void handleExceptionFromJava(Throwable ex, ScriptEnvironment env, String description, int lineNumber)
+   public static void handleExceptionFromJava(java.lang.Throwable ex, ScriptEnvironment env, String description, int lineNumber)
    {
       if (ex != null)
       {                  

@@ -34,7 +34,6 @@ using  sleep.engine;
 using  sleep.interfaces;
 using  sleep.runtime;
 
-using  java.util;
 namespace sleep.taint{
 
 
@@ -84,9 +83,9 @@ public class TaintedValue : ScalarType
       return value.objectValue();
    }
 
-   public Class getType()
+   public Type getType()
    {
-      return value.getType();
+      return value.GetType();
    }
 }
 

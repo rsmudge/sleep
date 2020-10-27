@@ -26,6 +26,9 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+using System;
+using java = biz.ritter.javapi;
+
 namespace sleep.parser{
 
 /** as much as possible this is a String with a line number associate with it (aka hint) */

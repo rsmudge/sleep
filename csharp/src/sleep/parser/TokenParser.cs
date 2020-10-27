@@ -26,10 +26,8 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- using System;
- using java = biz.ritter.javapi;
-
-using  java.util;
+using System;
+using java = biz.ritter.javapi;
 
 namespace sleep.parser{
 
@@ -330,12 +328,12 @@ public class TokenParser : ParserConstants
        return start;
    }
 
-   public static LinkedList ParseIdea(Parser parser, TokenList data)
+   public static java.util.LinkedList<Object> ParseIdea(Parser parser, TokenList data)
    {
       Token[]  tokens  = data.getTokens();
       String[] strings = data.getStrings();
 
-      LinkedList value = new LinkedList();
+      java.util.LinkedList<Object> value = new java.util.LinkedList<Object>();
 
       Statement myToken;
 
@@ -495,7 +493,7 @@ public class TokenParser : ParserConstants
       return value;
    }
 
-   public static LinkedList ParseBlocks(Parser parser, TokenList data)
+   public static java.util.LinkedList<Object> ParseBlocks(Parser parser, TokenList data)
    {
       String[]  strings = data.getStrings();
       Token[]   tokens  = data.getTokens();
@@ -505,7 +503,7 @@ public class TokenParser : ParserConstants
       Statement myToken;
       int check;
 
-      for (int x = 0; x < tokens.length; x++)
+      for (int x = 0; x < tokens.Length; x++)
       {
     	 myToken = new Statement();
 

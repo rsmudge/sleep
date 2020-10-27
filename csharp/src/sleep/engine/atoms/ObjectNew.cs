@@ -26,23 +26,20 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */ 
- using System;
- using java = biz.ritter.javapi;
+using System;
+using java = biz.ritter.javapi;
 
-using  java.util;
 using  sleep.interfaces;
 using  sleep.engine;
 using  sleep.runtime;
-
-using  java.lang.reflect;
 
 namespace sleep.engine.atoms{
 
 public class ObjectNew : Step
 {
-   protected Class name;
+   protected Type name;
 
-   public ObjectNew(Class _name)
+   public ObjectNew(Type _name)
    {
       name = _name;
    }
@@ -52,29 +49,29 @@ public class ObjectNew : Step
       return "[Object New]: "+name+"\n";
    }
 
-   private static class ConstructorCallRequest : CallRequest
+   private class ConstructorCallRequest : CallRequest
    {
-      protected Constructor theConstructor;
-      protected Class  name;
+      protected java.lang.reflect.Constructor theConstructor;
+      protected Type  name;
 
-      public ConstructorCallRequest(ScriptEnvironment e, int lineNo, Constructor cont, Class _name)
-      {
-         super(e, lineNo);
+      public ConstructorCallRequest(ScriptEnvironment e, int lineNo, java.lang.reflect.Constructor cont, Type _name)
+      :
+         base(e, lineNo){
          theConstructor = cont;
          name      = _name;
       }
 
-      public String getFunctionName()
+      public override String getFunctionName()
       {
          return name.toString();
       }
 
-      public String getFrameDescription()
+      public override String getFrameDescription()
       {
          return name.toString();
       }
 
-      public String formatCall(String args)
+      public override String formatCall(String args)
       {
          if (args != null && args.length() > 0) { args = ": " + args; }
          StringBuffer trace = new StringBuffer("[new " + name.getName() + args + "]");
@@ -82,7 +79,7 @@ public class ObjectNew : Step
          return trace.toString();
       }
 
-      protected Scalar execute()
+      protected override Scalar execute()
       {
          Object[] parameters = ObjectUtilities.buildArgumentArray(theConstructor.getParameterTypes(), getScriptEnvironment().getCurrentFrame(), getScriptEnvironment().getScriptInstance());
 

@@ -26,13 +26,10 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- using System;
- using java = biz.ritter.javapi;
+using System;
+using java = biz.ritter.javapi;
 
-using  sleep.runtime.ScriptInstance;
-using  sleep.runtime.Scalar;
-
-using  java.util.Stack;
+using  sleep.runtime;
 
 namespace sleep.interfaces{
 
@@ -45,7 +42,7 @@ namespace sleep.interfaces{
  * <pre>
  * public class MyAddFunction implements Function
  * {
- *    public Scalar evaluate(String name, ScriptInstance script, Stack arguments) 
+ *    public Scalar evaluate(String name, ScriptInstance script, java.util.Stack arguments) 
  *    {
  *       if (name.equals("&add"))
  *       {
@@ -83,7 +80,7 @@ namespace sleep.interfaces{
  * <p>To evaluate a Function object (should you ever need to directly evaluate one):</p>
  *
  *
- * <pre>// assume Function func; ScriptInstance script; Stack locals
+ * <pre>// assume Function func; ScriptInstance script; java.util.Stack locals
  *
  * Scalar value = SleepUtils.runCode(func, "&name", script, locals);</pre>
  *
@@ -94,7 +91,6 @@ namespace sleep.interfaces{
  * @see sleep.runtime.ScriptInstance
  * @see sleep.runtime.SleepUtils
  */
- [Serializable]
 public interface Function : java.io.Serializable
 {
    /**
@@ -109,6 +105,6 @@ public interface Function : java.io.Serializable
     *
     * @return an instance of Scalar containing the return value of this function.
     */
-   public Scalar evaluate(String functionName, ScriptInstance anInstance, Stack passedInLocals);
+   public Scalar evaluate(String functionName, ScriptInstance anInstance, java.util.Stack<Object> passedInLocals);
 }
 }

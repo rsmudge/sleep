@@ -28,16 +28,13 @@
  */
 using System;
 using java = biz.ritter.javapi;
-
-
-using  javax.script;
-using  java.util;
+using javax = biz.ritter.javapix;
 
 using  sleep.runtime;
 
 namespace org.dashnine.sleep{
 
-public class SleepScriptEngineFactory : ScriptEngineFactory 
+public class SleepScriptEngineFactory : javax.script.ScriptEngineFactory 
 {
     public String getEngineName() 
     { 
@@ -49,7 +46,7 @@ public class SleepScriptEngineFactory : ScriptEngineFactory
         return SleepUtils.SLEEP_RELEASE + "";
     }
 
-    public List<String> getExtensions() 
+    public java.util.List<String> getExtensions() 
     {
         return extensions;
     }
@@ -64,9 +61,9 @@ public class SleepScriptEngineFactory : ScriptEngineFactory
         return "2.1";
     }
 
-    public String getMethodCallSyntax(String obj, String m, String args = new String[]) 
+    public String getMethodCallSyntax(String obj, String m, String args = "") 
     {
-        StringBuilder buf = new StringBuilder();
+        java.lang.StringBuilder buf = new java.lang.StringBuilder();
         buf.append('[');
         buf.append(obj);
         buf.append(' ');
@@ -86,19 +83,19 @@ public class SleepScriptEngineFactory : ScriptEngineFactory
         return buf.toString();
     }
 
-    public List<String> getMimeTypes() 
+    public java.util.List<String> getMimeTypes() 
     {
         return mimeTypes;
     }
 
-    public List<String> getNames() 
+    public java.util.List<String> getNames() 
     {
         return names;
     }
 
     public String getOutputStatement(String toDisplay) 
     {
-        StringBuilder buf = new StringBuilder();
+        java.lang.StringBuilder buf = new java.lang.StringBuilder();
         buf.append("print('");
         int len = toDisplay.length();
         for (int i = 0; i < len; i++) 
@@ -136,9 +133,9 @@ public class SleepScriptEngineFactory : ScriptEngineFactory
         }
     } 
 
-    public String getProgram(String statements = new String []) 
+    public String getProgram(String statements = "") 
     {
-        StringBuilder buf = new StringBuilder();
+        java.lang.StringBuilder buf = new java.lang.StringBuilder();
         for (int i = 0; i < statements.length; i++) {
             buf.append(statements[i]);
             buf.append(";\n");
@@ -146,26 +143,26 @@ public class SleepScriptEngineFactory : ScriptEngineFactory
         return buf.toString();
     }
 
-    public ScriptEngine getScriptEngine() {
+    public javax.script.ScriptEngine getScriptEngine() {
         SleepScriptEngine engine = new SleepScriptEngine();
    	  engine.setFactory(this);
         return engine;
     }
 
-    private static List<String> names;
-    private static List<String> extensions;
-    private static List<String> mimeTypes;
+    private static java.util.List<String> names;
+    private static java.util.List<String> extensions;
+    private static java.util.List<String> mimeTypes;
     static SleepScriptEngineFactory(){
-        names = new ArrayList<String>(3);
+        names = new java.util.ArrayList<String>(3);
         names.add("sleep");
         names.add("Sleep");
         names.add("sl");
-        names = Collections.unmodifiableList(names);
-        extensions = new ArrayList<String>(1);
+        names = java.util.Collections<String>.unmodifiableList(names);
+        extensions = new java.util.ArrayList<String>(1);
         extensions.add("sl");
-        extensions = Collections.unmodifiableList(extensions);
-        mimeTypes = new ArrayList<String>(0);
-        mimeTypes = Collections.unmodifiableList(mimeTypes);
+        extensions = java.util.Collections<String>.unmodifiableList(extensions);
+        mimeTypes = new java.util.ArrayList<String>(0);
+        mimeTypes = java.util.Collections<String>.unmodifiableList(mimeTypes);
     }
 }
 }

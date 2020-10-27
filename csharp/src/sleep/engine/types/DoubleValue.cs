@@ -29,7 +29,7 @@
  using System;
  using java = biz.ritter.javapi;
 
-using  sleep.runtime.ScalarType;
+using  sleep.runtime;
 
 namespace sleep.engine.types{
 
@@ -72,5 +72,8 @@ public class DoubleValue : ScalarType
       return new Double(value);
    }
 
+   public Type getType() {
+      return this.value.GetType();
+   }
 }
 }

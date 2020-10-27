@@ -29,9 +29,6 @@
  using System;
  using java = biz.ritter.javapi;
  
-using  java.util;
-using  java.io;
-
 using  sleep.engine;
 using  sleep.engine.types;
 using  sleep.interfaces;
@@ -45,12 +42,12 @@ public class SleepClosure : Function, java.lang.Runnable
     private static int ccount = -1;
     private int id;
 
-    private class ClosureIterator : Iterator
+    private class ClosureIterator : java.util.Iterator<Object>
     {
        protected Scalar            current;
-       protected Stack             locals = new Stack();
+       protected java.util.Stack<Object>             locals = new java.util.Stack<Object>();
 
-       public boolean hasNext()
+       public bool hasNext()
        {
           current = callClosure("eval", null, locals);
           return !SleepUtils.isEmptyScalar(current);
@@ -66,7 +63,7 @@ public class SleepClosure : Function, java.lang.Runnable
        }
     }
 
-    public Iterator scalarIterator()
+    public java.util.Iterator<Object> scalarIterator()
     {
        return new ClosureIterator();
     }
@@ -78,10 +75,10 @@ public class SleepClosure : Function, java.lang.Runnable
     ScriptInstance      owner;
 
     /** the saved context of this closure */
-    Stack             context;
+    java.util.Stack<Object>             context;
 
     /** the meta data for this closure context */
-    HashMap          metadata; 
+    java.util.HashMap<Object,Object>          metadata; 
 
     /** the closure variables referenced by this closure */
     Variable         variables;
@@ -101,7 +98,7 @@ public class SleepClosure : Function, java.lang.Runnable
     }
 
     /** saves the top level context; may throw an exception if an error is detected... be sure to move critical cleanup prior to this function. */
-    private void saveToplevelContext(Stack _context, LinkedList localLevel)
+    private void saveToplevelContext(java.util.Stack<Object> _context, java.util.LinkedList<Object> localLevel)
     {
        if (!_context.isEmpty())
        {
@@ -116,13 +113,13 @@ public class SleepClosure : Function, java.lang.Runnable
     }
 
     /** returns the top most context stack... */
-    private Stack getToplevelContext()
+    private java.util.Stack<Object> getToplevelContext()
     {
        if (context.isEmpty())
        {
-          return new Stack();
+          return new java.util.Stack<Object>();
        }
-       return (Stack)context.pop();
+       return (java.util.Stack<Object>)context.pop();
     }
 
     /** Returns a generic string version of this closure without id information */
@@ -204,7 +201,7 @@ public class SleepClosure : Function, java.lang.Runnable
 
         @return the scalar returned by this closure
      */
-    public Scalar callClosure(String message, ScriptInstance si, Stack locals)
+    public Scalar callClosure(String message, ScriptInstance si, java.util.Stack<Object> locals)
     {
        if (si == null)
            si = getOwner();
@@ -231,7 +228,7 @@ public class SleepClosure : Function, java.lang.Runnable
     }
 
     /** Evaluates the closure, use callClosure instead. */
-    public Scalar evaluate(String message, ScriptInstance si, Stack locals)
+    public Scalar evaluate(String message, ScriptInstance si, java.util.Stack<Object> locals)
     {
        if (owner == null) { owner = si; }
 
@@ -244,7 +241,7 @@ public class SleepClosure : Function, java.lang.Runnable
 
        lock (vars)
        {
-          Stack toplevel = getToplevelContext();
+          java.util.Stack<Object> toplevel = getToplevelContext();
           env.loadContext(toplevel, metadata);
 
           vars.pushClosureLevel(getVariables()); 
@@ -300,7 +297,7 @@ public class SleepClosure : Function, java.lang.Runnable
        return temp;
     }
 
-    private void writeObject(ObjectOutputStream outJ) //throws IOException
+    private void writeObject(java.io.ObjectOutputStream outJ) //throws IOException
     {
        outJ.writeInt(id);
        outJ.writeObject(code);
@@ -309,12 +306,12 @@ public class SleepClosure : Function, java.lang.Runnable
        outJ.writeObject(variables);
     }
 
-    private void readObject(ObjectInputStream inJ) //throws IOException, ClassNotFoundException
+    private void readObject(java.io.ObjectInputStream inJ) //throws IOException, ClassNotFoundException
     {
        id        = inJ.readInt();
        code      = (Block)inJ.readObject();
-       context   = (Stack)inJ.readObject();
-       metadata  = new HashMap();
+       context   = (java.util.Stack<Object>)inJ.readObject();
+       metadata  = new java.util.HashMap<Object,Object>();
 /*       metadata  = (HashMap)in.readObject(); */
        variables = (Variable)inJ.readObject();
        owner     = null;

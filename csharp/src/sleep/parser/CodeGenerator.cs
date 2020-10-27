@@ -26,16 +26,14 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- using System;
- using java = biz.ritter.javapi;
-
-using  java.util;
-using  java.io;
+using System;
+using java = biz.ritter.javapi;
 
 using  sleep.engine;
 using  sleep.engine.atoms;
 using  sleep.error;
 using  sleep.runtime;
+
 namespace sleep.parser{
 
 
@@ -44,12 +42,12 @@ function */
 public class CodeGenerator : ParserConstants
 {
    protected Block CURRENT_BLOCK;
-   protected Stack BACKUP_BLOCKS;
+   protected java.util.Stack<Object> BACKUP_BLOCKS;
 
    protected GeneratedSteps factory; /* allow specification of a factory for generating steps */
    protected Parser         parser;
 
-   protected static HashMap escape_constants = new HashMap();
+   protected static java.util.HashMap<Object,Object> escape_constants = new java.util.HashMap<Object,Object>();
 
    static CodeGenerator ()
    {
@@ -283,25 +281,25 @@ public class CodeGenerator : ParserConstants
       }
    }
 
-   public void parseBlock(LinkedList data)
+   public void parseBlock(java.util.LinkedList<Object> data)
    {  
-      Iterator i = data.iterator();
+      java.util.Iterator<Object> i = data.iterator();
       while (i.hasNext())
       {
          parse((Statement)i.next());
       }
    }
   
-   public List parseIdea(Token data) 
+   public java.util.List<Object> parseIdea(Token data) 
    {
-      LinkedList allData = TokenParser.ParseIdea(parser, LexicalAnalyzer.GroupBlockTokens(parser, new StringIterator(data.toString(), data.getHint())));
+      java.util.LinkedList<Object> allData = TokenParser.ParseIdea(parser, LexicalAnalyzer.GroupBlockTokens(parser, new StringIterator(data.toString(), data.getHint())));
       
       if (parser.hasErrors())
       {
          return null;
       }
 
-      Iterator i = allData.iterator();
+      java.util.Iterator<Object> i = allData.iterator();
       while (i.hasNext())
       {
          parse((Statement)i.next());
@@ -319,10 +317,10 @@ public class CodeGenerator : ParserConstants
 
        Check    tempp;
 
-       Iterator i;
-       List     ll;
+       java.util.Iterator<Object> i;
+       java.util.List<Object>     ll;
        String   mutilate; // mutilate this string as I see fit...
-       StringBuffer sb;  
+       java.lang.StringBuffer sb;  
 
        String[] strings = datum.getStrings(); // was "temp"
        Token[]  tokens  = datum.getTokens();
@@ -353,10 +351,10 @@ public class CodeGenerator : ParserConstants
            //
            // parse B
            //
-           List valuez = parseIdea(tokens[2]);
+           java.util.List<Object> valuez = parseIdea(tokens[2]);
 
            /* a bit of error checking to guard against a common error */
-           Iterator iz = valuez.iterator();
+           java.util.Iterator<Object> iz = valuez.iterator();
            while (iz.hasNext())
            {
               Statement t = (Statement)iz.next();
@@ -406,7 +404,7 @@ public class CodeGenerator : ParserConstants
            parseObject(ParserUtilities.extract(tokens[0]));
            break;
          case IDEA_LITERAL: // implemented                   
-           sb = new StringBuffer(ParserUtilities.extract(strings[0]));
+           sb = new java.lang.StringBuffer(ParserUtilities.extract(strings[0]));
 
            for (int x = 0; x < sb.length(); x++)
            {
@@ -449,7 +447,7 @@ public class CodeGenerator : ParserConstants
            add(atom, tokens[0]);
            break;
          case IDEA_CLASS:
-           Class claz = parser.findImportedClass(strings[0].substring(1));
+           Type claz = parser.findImportedClass(strings[0].substring(1));
  
            if (claz == null)
            {
@@ -509,13 +507,13 @@ public class CodeGenerator : ParserConstants
            atom = factory.CreateFrame();
            add(atom, tokens[0]);
            
-           boolean isVar = false; // is the current buffer d a varname or not?
+           bool isVar = false; // is the current buffer d a varname or not?
 
            String varname, align; // some temp vars we'll use later...
            
-           StringBuffer d = new StringBuffer(); // the string buffer where we will dump our results.
+           java.lang.StringBuffer d = new java.lang.StringBuffer(); // the string buffer where we will dump our results.
 
-           ll = new LinkedList();
+           ll = new java.util.LinkedList<Object>();
            StringIterator si = new StringIterator(ParserUtilities.extract(strings[0]), tokens[0].getHint());
    
            while (si.hasNext())
@@ -546,7 +544,7 @@ public class CodeGenerator : ParserConstants
                            int codepoint = Integer.parseInt(mutilate, 16);
                            d.append((char)codepoint);
                         }
-                        catch (NumberFormatException nex)
+                        catch (java.lang.NumberFormatException nex)
                         {
                            parser.reportErrorWithMarker("invalid unicode escape \\u"+mutilate+" - must be hex digits", si.getErrorToken());
                         }
@@ -567,7 +565,7 @@ public class CodeGenerator : ParserConstants
                            int codepoint = Integer.parseInt(mutilate, 16);
                            d.append((char)codepoint);
                         }
-                        catch (NumberFormatException nex)
+                        catch (java.lang.NumberFormatException nex)
                         {
                            parser.reportErrorWithMarker("invalid unicode escape \\x"+mutilate+" - must be hex digits", si.getErrorToken());
                         }
@@ -593,7 +591,7 @@ public class CodeGenerator : ParserConstants
 
                   String[] ops = LexicalAnalyzer.CreateTerms(parser, new StringIterator(d.toString(), si.getLineNumber())).getStrings();
 
-                  if (ops.length == 3)
+                  if (ops.Length == 3)
                   {
                      // ^--- check if our varref has the form $[whatever]varname
                      // in which case we are taking advantage of the align operator inside
@@ -621,12 +619,12 @@ public class CodeGenerator : ParserConstants
                   ll.add(PLiteral.fragment(PLiteral.VAR_FRAGMENT, null));
 
                   isVar   = false;
-                  d       = new StringBuffer();
+                  d       = new java.lang.StringBuffer();
               }
               else if (current == '$' && !Checkers.isEndOfVar(si.peek()) && si.hasNext())
               {
                   ll.add(PLiteral.fragment(PLiteral.STRING_FRAGMENT, d.toString()));
-                  d = new StringBuffer();
+                  d = new java.lang.StringBuffer();
                   d.append('$');
 
                   isVar = true;
@@ -1044,7 +1042,7 @@ public class CodeGenerator : ParserConstants
            //
            // evaluate initial terms...           
            //
-           StringBuffer doThis = new StringBuffer();
+           java.lang.StringBuffer doThis = new java.lang.StringBuffer();
 
            TokenList initial_terms = ParserUtilities.groupByParameterTerm(parser, extracted_terms[0]);
 
@@ -1061,10 +1059,10 @@ public class CodeGenerator : ParserConstants
            // parse the final terms and save them...
            //
 
-           if (extracted_terms.length == 3)
+           if (extracted_terms.Length == 3)
            {
               backup();
-              doThis = new StringBuffer();
+              doThis = new java.lang.StringBuffer();
 
               TokenList final_terms = ParserUtilities.groupByParameterTerm(parser, extracted_terms[2]);
 
@@ -1081,7 +1079,7 @@ public class CodeGenerator : ParserConstants
            else
            {
               a = null;
-              doThis = new StringBuffer();
+              doThis = new java.lang.StringBuffer();
            }
 
            //
@@ -1114,7 +1112,7 @@ public class CodeGenerator : ParserConstants
                  parser.importPackage(strings[0], strings[1]);
               }
            }
-           catch (Exception ex)
+           catch (java.lang.Exception ex)
            {
               if (tokens.length == 2)
               {

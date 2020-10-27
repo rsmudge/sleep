@@ -28,9 +28,6 @@
  */
 using System;
 using java = biz.ritter.javapi;
-using  java.util;
-using  java.io;
-
 
 namespace sleep.parser{
 
@@ -66,7 +63,7 @@ public class LexicalAnalyzer
    // environment of the "built in" operator to resolve any ambiguity.  
    //
    // using this effectively removes the white space requirement for said built in operator.  
-   private static bool isBuiltInOperator(char f, StringBuffer aTerm, StringIterator iter)
+   private static bool isBuiltInOperator(char f, java.lang.StringBuffer aTerm, StringIterator iter)
    {
       if (f == '.' && (aTerm.length() <= 0 || !(Character.isDigit(aTerm.charAt(aTerm.length() - 1)) && aTerm.charAt(0) != '$')) && !iter.isNextChar('='))
       {

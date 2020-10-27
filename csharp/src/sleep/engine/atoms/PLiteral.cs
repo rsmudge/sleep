@@ -26,16 +26,12 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */ 
- using System;
- using java = biz.ritter.javapi;
+using System;
+using java = biz.ritter.javapi;
 
-
-using  java.util;
 using  sleep.interfaces;
 using  sleep.engine;
 using  sleep.runtime;
-
-using  java.io.Serializable;
 
 namespace sleep.engine.atoms{
 
@@ -84,16 +80,16 @@ public class PLiteral : Step
    public static readonly int VAR_FRAGMENT    = 3;
   
    [Serializable]
-   private static sealed class Fragment : Serializable
+   public sealed class Fragment : java.io.Serializable
    {
       public Object element;
       public int    type;
    }
 
-   private List fragments;
+   private java.util.List<Object> fragments;
 
    /** requires a list of parsed literal fragments to use when constructing the final string at runtime */
-   public PLiteral(List f)
+   public PLiteral(java.util.List<Object> f)
    {
       fragments = f;
    }

@@ -26,25 +26,24 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- using System;
- using java = biz.ritter.javapi;
-
-
-using  java.lang.reflect;
-using  java.util;
+using System;
+using java = biz.ritter.javapi;
 
 using  sleep.runtime;
-
 using  sleep.engine.types;
-using  sleep.interfaces.Function;
-
+using  sleep.interfaces;
 using  sleep.bridges;
+
+/// Vampire extension
+namespace biz.ritter.javapi.lang.reflect {
+   public class InvocationHandler {}
+}
 
 namespace sleep.engine{
 
 /** This class is used to mock an instance of a class that implements a specified Java interface 
     using a Sleep function. */
-public class ProxyInterface : InvocationHandler
+public class ProxyInterface : java.lang.reflect.InvocationHandler
 {
    protected ScriptInstance    script;
    protected Function          func;
@@ -84,7 +83,7 @@ public class ProxyInterface : InvocationHandler
 
    /** Constructs a new instance of the specified class that uses the passed block to respond
        to all method calls on this instance. */
-   public static Object BuildInterface(Class className, Block block, ScriptInstance script)
+   public static Object BuildInterface(Type className, Block block, ScriptInstance script)
    {
       return BuildInterface(className, new SleepClosure(script, block), script);
    } 
@@ -97,15 +96,15 @@ public class ProxyInterface : InvocationHandler
    } 
 
    /** This function invokes the contained Sleep closure with the specified arguments */
-   public Object invoke(Object proxy, Method method, Object[] args) //throws Throwable
+   public Object invoke(Object proxy, java.lang.reflect.Method method, Object[] args) //throws Throwable
    {
       lock (script.getScriptVariables())
       {
          script.getScriptEnvironment().pushSource("<Java>");
 
-         Stack temp = new Stack();
+         java.util.Stack<Object> temp = new java.util.Stack<Object>();
 
-         boolean isTrace = (script.getDebugFlags() & ScriptInstance.DEBUG_TRACE_CALLS) == ScriptInstance.DEBUG_TRACE_CALLS;
+         bool isTrace = (script.getDebugFlags() & ScriptInstance.DEBUG_TRACE_CALLS) == ScriptInstance.DEBUG_TRACE_CALLS;
          StringBuffer message = null;
 
          if (args != null)
@@ -124,7 +123,7 @@ public class ProxyInterface : InvocationHandler
          {
             if (!script.isProfileOnly())
             {
-               message = new StringBuffer("[" + func + " " + method.getName());
+               message = new java.lang.StringBuffer("[" + func + " " + method.getName());
 
                if (!temp.isEmpty())
                    message.append(": " + SleepUtils.describe(temp));
@@ -132,9 +131,9 @@ public class ProxyInterface : InvocationHandler
                message.append("]");
             }
 
-            long stat = System.currentTimeMillis();
+            long stat = java.lang.SystemJ.currentTimeMillis();
             value = func.evaluate(method.getName(), script, temp); 
-            stat = System.currentTimeMillis() - stat;
+            stat = java.lang.SystemJ.currentTimeMillis() - stat;
 
             if (func.getClass() == typeof(SleepClosure))
             {
@@ -165,13 +164,13 @@ public class ProxyInterface : InvocationHandler
 
             Object exvalue = (script.getScriptEnvironment().getExceptionMessage()).objectValue();
              
-            if (exvalue is Throwable)
+            if (exvalue is java.lang.Throwable)
             {
-               throw (Throwable)exvalue;
+               throw (java.lang.Throwable)exvalue;
             }
             else
             {
-               throw new RuntimeException(exvalue.toString());
+               throw new java.lang.RuntimeException(exvalue.toString());
             }
          }        
 

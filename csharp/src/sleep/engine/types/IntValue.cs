@@ -26,10 +26,10 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */ 
- using System;
- using java = biz.ritter.javapi;
+using System;
+using java = biz.ritter.javapi;
 
-using  sleep.runtime.ScalarType;
+using  sleep.runtime;
 
 namespace sleep.engine.types{
 
@@ -70,6 +70,10 @@ public class IntValue : ScalarType
    public Object objectValue()
    {
       return new Integer(value);
+   }
+
+   public Type getType() {
+      return this.value.GetType();
    }
 
 }

@@ -26,26 +26,24 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- using System;
- using java = biz.ritter.javapi;
+using System;
+using java = biz.ritter.javapi;
  
-using  sleep.runtime;
-using  java.io.File;
-using  sleep.interfaces;
-using  java.util;
-using  sleep.engine.types;
+using sleep.runtime;
+using sleep.interfaces;
+using sleep.engine.types;
 
 namespace sleep.bridges{
  
 /**
- * A bridge is a class that bridges your applications API and sleep.  Bridges are created using interfaces from the sleep.interfaces package.  Arguments are passed to bridges generally in a java.util.Stack form.  The Stack of arguments contains sleep Scalar objects.  The BridgeUtilities makes it safer and easier for you to extract Java types from arguments.
+ * A bridge is a class that bridges your applications API and sleep.  Bridges are created using interfaces from the sleep.interfaces package.  Arguments are passed to bridges generally in a java.util.Stack form.  The java.util.Stack of arguments contains sleep Scalar objects.  The BridgeUtilities makes it safer and easier for you to extract Java types from arguments.
  * 
  * <pre>
  * // some code to execute an internal add function, not a complete example
  * 
  * public class MyAddFunction implements Function
  * {
- *    public Scalar evaluate(String name, ScriptInstance script, Stack arguments) 
+ *    public Scalar evaluate(String name, ScriptInstance script, java.util.Stack arguments) 
  *    {
  *       if (name.equals("&add"))
  *       {
@@ -77,13 +75,13 @@ public class BridgeUtilities
    }
 
    /** grab an integer. if the stack is empty 0 will be returned. */
-   public static int getInt(Stack arguments)
+   public static int getInt(java.util.Stack<Object> arguments)
    {
       return getInt(arguments, 0);
    }
 
    /** grab an integer, if the stack is empty the default value will be returned */
-   public static int getInt(Stack arguments, int defaultValue)
+   public static int getInt(java.util.Stack<Object> arguments, int defaultValue)
    {
       if (arguments.isEmpty())
          return defaultValue;
@@ -92,21 +90,21 @@ public class BridgeUtilities
    }
 
    /** grab a class, if the stack is empty the default value will be returned */
-   public static Class getClass(Stack arguments, Class defaultValue)
+   public static Type getClass(java.util.Stack<Object> arguments, Type defaultValue)
    {
       Object obj = getObject(arguments);
       if (obj == null) { return defaultValue; }
-      return (Class)obj;
+      return (Type)obj;
    }
 
    /** grab a long.  if the stack is empty 0 will be returned. */
-   public static long getLong(Stack arguments)
+   public static long getLong(java.util.Stack<Object> arguments)
    {
       return getLong(arguments, 0L);
    }
 
    /** grab a long, if the stack is empty the default value will be returned */
-   public static long getLong(Stack arguments, long defaultValue)
+   public static long getLong(java.util.Stack<Object> arguments, long defaultValue)
    {
       if (arguments.isEmpty())
          return defaultValue;
@@ -115,13 +113,13 @@ public class BridgeUtilities
    }
 
    /** grab a double.  if the stack is empty a 0 will be returned */
-   public static double getDouble(Stack arguments)
+   public static double getDouble(java.util.Stack<Object> arguments)
    {
      return getDouble(arguments, 0.0); 
    }
 
    /** grab a double, if the stack is empty the default value will be returned */
-   public static double getDouble(Stack arguments, double defaultValue)
+   public static double getDouble(java.util.Stack<Object> arguments, double defaultValue)
    {
       if (arguments.isEmpty())
          return defaultValue;
@@ -131,10 +129,10 @@ public class BridgeUtilities
 
    /** extracts all named parameters from the argument stack.  this method returns a Map whose keys are strings
        and values are Scalars. */
-   public static Map extractNamedParameters(Stack args)
+   public static java.util.Map<Object,Object> extractNamedParameters(java.util.Stack<Object> args)
    {
-      Map rv = new HashMap();
-      Iterator i = args.iterator();
+      java.util.Map<Object,Object> rv = new java.util.HashMap<Object,Object>();
+      java.util.Iterator<Object> i = args.iterator();
       while (i.hasNext())
       {
          Scalar temp = (Scalar)i.next();
@@ -150,7 +148,7 @@ public class BridgeUtilities
    }
 
    /** grabs a scalar iterator, this can come from either an array or a closure called continuously until $null is returned. */
-   public static Iterator getIterator(Stack arguments, ScriptInstance script)
+   public static java.util.Iterator<Object> getIterator(java.util.Stack<Object> arguments, ScriptInstance script)
    {
       if (arguments.isEmpty())
         return getArray(arguments).scalarIterator();
@@ -160,7 +158,7 @@ public class BridgeUtilities
    }
 
    /** grab a sleep array, if the stack is empty a scalar array with no elements will be returned. */
-   public static ScalarArray getArray(Stack arguments)
+   public static ScalarArray getArray(java.util.Stack<Object> arguments)
    {
       Scalar s = getScalar(arguments);
       if (s.getArray() == null)
@@ -170,7 +168,7 @@ public class BridgeUtilities
    }
 
    /** grab a sleep hash, if the stack is empty a scalar hash with no members will be returned. */
-   public static ScalarHash getHash(Stack arguments)
+   public static ScalarHash getHash(java.util.Stack<Object> arguments)
    {
       if (arguments.isEmpty())
          return SleepUtils.getHashScalar().getHash();
@@ -180,7 +178,7 @@ public class BridgeUtilities
 
 
    /** grab a sleep array, if the grabbed array is a readonly array, a copy is returned.  if the stack is empty an array with no elements will be returned. */
-   public static ScalarArray getWorkableArray(Stack arguments)
+   public static ScalarArray getWorkableArray(java.util.Stack<Object> arguments)
    {
       if (arguments.isEmpty())
          return SleepUtils.getArrayScalar().getArray();
@@ -203,7 +201,7 @@ public class BridgeUtilities
    }
 
    /** grab an object, if the stack is empty then null will be returned. */
-   public static Object getObject(Stack arguments)
+   public static Object getObject(java.util.Stack<Object> arguments)
    {
       if (arguments.isEmpty())
          return null;
@@ -213,7 +211,7 @@ public class BridgeUtilities
 
    /** retrieves an executable Function object from the stack.  Functions can be passed as closures
        or as a reference to a built-in Sleep subroutine i.e. &my_func. */
-   public static SleepClosure getFunction(Stack arguments, ScriptInstance script)
+   public static SleepClosure getFunction(java.util.Stack<Object> arguments, ScriptInstance script)
    {
       Scalar temp = getScalar(arguments);
       SleepClosure func = SleepUtils.getFunctionFromScalar(temp, script);
@@ -227,7 +225,7 @@ public class BridgeUtilities
    }
 
    /** grab a scalar, if the stack is empty the empty/null scalar will be returned. */
-   public static Scalar getScalar(Stack arguments)
+   public static Scalar getScalar(java.util.Stack<Object> arguments)
    {
       if (arguments.isEmpty())
          return SleepUtils.getEmptyScalar();
@@ -236,7 +234,7 @@ public class BridgeUtilities
    }
 
    /** grab a string, if the stack is empty or if the value is null the default value will be returned. */
-   public static String getString(Stack arguments, String defaultValue)
+   public static String getString(java.util.Stack<Object> arguments, String defaultValue)
    {
       if (arguments.isEmpty())
          return defaultValue;
@@ -249,10 +247,10 @@ public class BridgeUtilities
       return temp;
    }
 
-   private static readonly boolean doReplace = File.separatorChar != '/';
+   private static readonly bool doReplace = File.separatorChar != '/';
 
    /** adjusts the file argument to accomodate for the current working directory */
-   public static File toSleepFile(String text, ScriptInstance i)
+   public static java.io.File toSleepFile(String text, ScriptInstance i)
    {
       if (text == null)
       {
@@ -278,7 +276,7 @@ public class BridgeUtilities
    /** returns a File object from a string argument, the path in the string argument is transformed such 
        that the character / will refer to the correct path separator for the current OS.  Returns null if
        no file is specified as an argument. */
-   public static File getFile(Stack arguments, ScriptInstance i)
+   public static java.io.File getFile(java.util.Stack<Object> arguments, ScriptInstance i)
    {
       return toSleepFile(arguments.isEmpty() ? null : arguments.pop().toString(), i);
    }
@@ -286,7 +284,7 @@ public class BridgeUtilities
    /** Pops a Key/Value pair object off of the argument stack.  A Key/Value pair is created using
        the => operator within Sleep scripts.  If the top argument on this stack was not created using
        =>, this function will try to parse a key/value pair using the pattern: [key]=[value] */
-   public static KeyValuePair getKeyValuePair(Stack arguments)
+   public static KeyValuePair getKeyValuePair(java.util.Stack<Object> arguments)
    {
       Scalar temps = getScalar(arguments);
 
@@ -316,7 +314,7 @@ public class BridgeUtilities
    }
 
    /** Flattens the specified arrays within the specified iterator.  The <var>toValue</var> field can be null. */
-   public static Scalar flattenIterator(Iterator i, Scalar toValue)
+   public static Scalar flattenIterator(java.util.Iterator<Object> i, Scalar toValue)
    {
       if (toValue == null) { toValue = SleepUtils.getArrayScalar(); }
 
@@ -338,7 +336,7 @@ public class BridgeUtilities
    }
 
    /** initializes local scope based on argument stack */
-   public static int initLocalScope(ScriptVariables vars, Variable localLevel, Stack locals)
+   public static int initLocalScope(ScriptVariables vars, Variable localLevel, java.util.Stack<Object> locals)
    {
       int name = 1;
 
@@ -374,7 +372,7 @@ public class BridgeUtilities
    }
 
    /** normalizes the index value based on the specified length */
-   public static sealed int normalize(int value, int length)
+   public static int normalize(int value, int length)
    {
       return value < 0 ? value + length : value;
    }
@@ -383,7 +381,7 @@ public class BridgeUtilities
     *  @param n the name of the &amp;function
     *  @param value the scalar to check
     */
-   public static boolean expectArray(String n, Scalar value)
+   public static bool expectArray(String n, Scalar value)
    {
       if (value.getArray() == null)
       {

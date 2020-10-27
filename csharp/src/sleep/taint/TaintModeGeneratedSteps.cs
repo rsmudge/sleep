@@ -26,16 +26,14 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- using System;
- using java = biz.ritter.javapi;
+using System;
+using java = biz.ritter.javapi;
+
 using  sleep.engine;
 using  sleep.engine.types;
 using  sleep.engine.atoms;
-
 using  sleep.runtime;
 using  sleep.interfaces;
-
-using  java.util;
 
 namespace sleep.taint{
 
@@ -45,32 +43,32 @@ public class TaintModeGeneratedSteps : GeneratedSteps
 {
    public Step Call(String function)
    {
-      return new TaintCall(function, super.Call(function));
+      return new TaintCall(function, base.Call(function));
    }
 
-   public Step PLiteral(List doit)
+   public Step PLiteral(java.util.List<Object> doit)
    {
-      return new PermeableStep(super.PLiteral(doit));
+      return new PermeableStep(base.PLiteral(doit));
    }
 
    public Step Operate(String oper)
    {
-      return new TaintOperate(oper, super.Operate(oper));
+      return new TaintOperate(oper, base.Operate(oper));
    }
 
-   public Step ObjectNew(Class name)
+   public Step ObjectNew(Type name)
    {
-      return new PermeableStep(super.ObjectNew(name));
+      return new PermeableStep(base.ObjectNew(name));
    }
 
    public Step ObjectAccess(String name)     
    {
-      return new TaintObjectAccess(super.ObjectAccess(name), name, null);
+      return new TaintObjectAccess(base.ObjectAccess(name), name, null);
    }
 
-   public Step ObjectAccessStatic(Class aClass, String name)
+   public override Step ObjectAccessStatic(Type aClass, String name)
    {
-      return new TaintObjectAccess(super.ObjectAccessStatic(aClass, name), name, aClass);
+      return new TaintObjectAccess(base.ObjectAccessStatic(aClass, name), name, aClass);
    }
 }
 }

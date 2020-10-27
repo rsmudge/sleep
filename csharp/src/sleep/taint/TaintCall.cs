@@ -26,16 +26,13 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- using System;
- using java = biz.ritter.javapi;
+using System;
+using java = biz.ritter.javapi;
 
 using  sleep.engine;
 using  sleep.engine.atoms;
 using  sleep.interfaces;
 using  sleep.runtime;
-
-using  java.util;
-
 
 namespace sleep.taint{
 
@@ -44,8 +41,8 @@ public class TaintCall : PermeableStep
    protected String function;
 
    public TaintCall(String _function, Step _wrapped)
-   {
-      super(_wrapped);
+   :
+      base(_wrapped){
       function = _function;
    }
 
@@ -59,7 +56,7 @@ public class TaintCall : PermeableStep
       }
       else
       {
-         return super.evaluate(e);
+         return base.evaluate(e);
       }
    }
 }

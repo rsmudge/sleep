@@ -26,13 +26,11 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- using System;
- using java = biz.ritter.javapi;
-
+using System;
+using java = biz.ritter.javapi;
 
 using  sleep.runtime;
-using  java.util;
-using  sleep.engine.ObjectUtilities;
+using  sleep.engine;
 
 namespace sleep.taint{
 
@@ -61,7 +59,7 @@ public class TaintArray : ScalarArray
       return TaintUtils.taintAll(source.pop());
    }
 
-   public void sort(Comparator compare)
+   public void sort(java.util.Comparator<Object> compare)
    {
       source.sort(compare);
    }
@@ -86,7 +84,7 @@ public class TaintArray : ScalarArray
       return TaintUtils.taintAll(source.getAt(index));
    }
 
-   public Iterator scalarIterator()
+   public java.util.Iterator<Object> scalarIterator()
    {
       return new TaintIterator(source.scalarIterator());
    }
@@ -101,16 +99,16 @@ public class TaintArray : ScalarArray
       source.remove(value);
    }
 
-   protected class TaintIterator : Iterator
+   protected class TaintIterator : java.util.Iterator<Object>
    {
-      protected Iterator realIterator;
+      protected java.util.Iterator<Object> realIterator;
 
-      public TaintIterator(Iterator iter)
+      public TaintIterator(java.util.Iterator<Object> iter)
       {
          realIterator = iter;
       }
 
-      public boolean hasNext()
+      public bool hasNext()
       {
          return realIterator.hasNext(); 
       }

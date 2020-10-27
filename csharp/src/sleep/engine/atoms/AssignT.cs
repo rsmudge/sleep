@@ -26,13 +26,12 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */ 
- using System;
- using java = biz.ritter.javapi;
+using System;
+using java = biz.ritter.javapi;
 
-using  java.util;
-using  sleep.interfaces;
-using  sleep.engine;
-using  sleep.runtime;
+using sleep.interfaces;
+using sleep.engine;
+using sleep.runtime;
 
 namespace sleep.engine.atoms{
 
@@ -114,8 +113,8 @@ public class AssignT : Step
       }
 
       try {
-      Iterator values = scalar.getArray().scalarIterator();
-      Iterator putvs  = variter;
+      java.util.Iterator<Object> values = scalar.getArray().scalarIterator();
+      java.util.Iterator<Object> putvs  = variter;
 
       while (putvs.hasNext())
       {

@@ -26,20 +26,14 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- using System;
- using java = biz.ritter.javapi;
-
-using  java.util;
+using System;
+using java = biz.ritter.javapi;
 
 using  sleep.engine;
 using  sleep.engine.types;
 using  sleep.interfaces;
 using  sleep.parser;
-
 using  sleep.runtime;
-
-using  java.io;
-
 using  sleep.bridges;
 
 namespace sleep.runtime{
@@ -58,10 +52,10 @@ namespace sleep.runtime{
 public class SleepUtils
 {
    /** A date stamp of this Sleep release in YYYYMMDD format */
-   public static const int    SLEEP_RELEASE = 20090430;
+   public const int    SLEEP_RELEASE = 20090430;
 
    /** A string description of this Sleep release */
-   public static const String SLEEP_VERSION = "Sleep 2.1";
+   public const String SLEEP_VERSION = "Sleep 2.1";
 
    /** registers "keyword" as a keyword with the parser.  This is a necessity if you have extra non standard
      bridges in sleep */
@@ -82,7 +76,7 @@ public class SleepUtils
     /** Iterates over the specified collection and removes all items that are the same as the specified scalar
         value.  Certain scalars (ints, doubles, etc.) are compared by string representation where as others 
         (Object, Hash, Array) are compared by reference. */
-    public static void removeScalar(Iterator collection, Scalar value)
+    public static void removeScalar(java.util.Iterator<Object> collection, Scalar value)
     {
         while (collection.hasNext())
         {
@@ -95,7 +89,7 @@ public class SleepUtils
      }
 
    /** utility function to handle the setup/teardown for a call request */
-   private static Scalar runCode(CallRequest request, ScriptInstance script, Stack locals)
+   private static Scalar runCode(CallRequest request, ScriptInstance script, java.util.Stack<Object> locals)
    {
        ScriptEnvironment environment = script.getScriptEnvironment();
 
@@ -154,7 +148,7 @@ public class SleepUtils
     *  @param locals a stack of scalars representing the arguments to this Function (first arg on top)
     *  @return the scalar returned by the executed code or the sleep empty scalar if there is no return value (never returns null)
     */
-   public static Scalar runCode(SleepClosure closure, String message, ScriptInstance script, Stack locals)
+   public static Scalar runCode(SleepClosure closure, String message, ScriptInstance script, java.util.Stack<Object> locals)
    {
        if (script == null)
        {
@@ -172,7 +166,7 @@ public class SleepUtils
     *  @param locals a stack of scalars representing the arguments to this Function (first arg on top)
     *  @return the scalar returned by the executed code or the sleep empty scalar if there is no return value (never returns null)
     */
-   public static Scalar runCode(Function func, String name, ScriptInstance script, Stack locals)
+   public static Scalar runCode(Function func, String name, ScriptInstance script, java.util.Stack<Object> locals)
    {
        CallRequest request = new CallRequest.FunctionCallRequest(script.getScriptEnvironment(), Integer.MIN_VALUE, name, func);
        return runCode(request, script, locals);
@@ -186,7 +180,7 @@ public class SleepUtils
     *  @param vars a hashmap containing Scalar objects that should be installed into the local scope.  The keys should be Strings representing the $names for each of the Scalar variables. This value can be null.
     *  @return the scalar returned by the executed code (if their is a return value), null otherwise.
     */
-   public static Scalar runCode(ScriptInstance script, Block code, HashMap vars)
+   public static Scalar runCode(ScriptInstance script, Block code, java.util.HashMap<Object,Object> vars)
    {
        CallRequest request = new CallRequest.InlineCallRequest(script.getScriptEnvironment(), Integer.MIN_VALUE, "eval", code);
        return runCode(request, script, getArgumentStack(vars));
@@ -209,7 +203,7 @@ public class SleepUtils
        Values your data structure returns are turned into Scalar strings using the toString() method of the object.   If you 
        need something more specific than this then take a look at the source code for sleep.runtime.SetWrapper which implements 
        sleep.runtime.ScalarArray.  */
-   public static Scalar getArrayWrapper(Collection dataStructure)
+   public static Scalar getArrayWrapper(java.util.Collection<Object> dataStructure)
    {
       Scalar temp = new Scalar();
       temp.setValue(new CollectionWrapper(dataStructure));
@@ -222,7 +216,7 @@ public class SleepUtils
        automatically turned into strings and values your data structure give back are turned into Scalar strings using the 
        toString() method of the object.   If you need something more specific than this then take a look at the source code for
        sleep.runtime.MapWrapper which implements sleep.runtime.ScalarHash.  */
-   public static Scalar getHashWrapper(Map dataStructure)
+   public static Scalar getHashWrapper(java.util.Map<Object,Object> dataStructure)
    {
       Scalar temp = new Scalar();
       temp.setValue(new MapWrapper(dataStructure));
@@ -259,20 +253,20 @@ public class SleepUtils
 
    /** Generate a java.util.Map from a scalar hash.  Keys will be Java strings.  Values will be
        the Java object equivalents of the data stored in the scalar hash. */
-   public static Map getMapFromHash(Scalar map)
+   public static java.util.Map<Object,Object> getMapFromHash(Scalar map)
    { 
       return getMapFromHash(map.getHash());
    }
 
    /** Generate a java.util.Map from a scalar hash.  Keys will be Java strings.  Values will be
        the Java object equivalents of the data stored in the scalar hash. */
-   public static Map getMapFromHash(ScalarHash map)
+   public static java.util.Map<Object,Object> getMapFromHash(ScalarHash map)
    {
-      HashMap dict = new HashMap();
+      java.util.HashMap dict = new java.util.HashMap();
 
       if (map != null)
       {
-         Iterator i = map.keys().scalarIterator();
+         java.util.Iterator i = map.keys().scalarIterator();
          while (i.hasNext())
          {
             Scalar key  = (Scalar)i.next();
@@ -296,10 +290,10 @@ public class SleepUtils
       return dict;
    }
 
-   /** Generate a java.util.Stack of sleep.bridges.KeyValuePair arguments from a Map.  Assumes the keys are Strings and the values are already Scalar values. */
-   public static Stack getArgumentStack(Map pairs)
+   /** Generate a java.util.Stack<Object> of sleep.bridges.KeyValuePair arguments from a Map.  Assumes the keys are Strings and the values are already Scalar values. */
+   public static java.util.Stack<Object> getArgumentStack(java.util.Map<Object,Object> pairs)
    {
-       Stack locals = new Stack();
+       java.util.Stack<Object> locals = new java.util.Stack<Object>();
 
        /* turn our hashmap into some acceptable local variables */
        if (pairs != null)
@@ -307,7 +301,7 @@ public class SleepUtils
           Iterator i = pairs.entrySet().iterator();
           while (i.hasNext())
           {
-             Map.Entry value = (Map.Entry)i.next();
+             java.util.Map.Entry value = (java.util.Map.Entry)i.next();
              locals.push(SleepUtils.getScalar(new KeyValuePair(SleepUtils.getScalar(value.getKey().toString()), (Scalar)value.getValue())));
           }
        }
@@ -316,7 +310,7 @@ public class SleepUtils
    }
 
    /** Returns a scalar iterator depending grabbed from the Scalar.  The scalar can contain an array, a function, or a java.util.Iterator object. */
-   public static Iterator getIterator(Scalar temp, ScriptInstance script)
+   public static java.util.Iterator<Object> getIterator(Scalar temp, ScriptInstance script)
    {
       if (temp.getArray() != null)
       {
@@ -336,14 +330,14 @@ public class SleepUtils
 
    /** Generate a java.util.List from a scalar array.  Values will be the Java object 
        equivalents of the data stored in the scalar array. */
-   public static List getListFromArray(Scalar array)
+   public static java.util.List<Object> getListFromArray(Scalar array)
    {
       return getListFromArray(array.getArray());
    }
 
    /** Generate a java.util.List from a scalar array.  Values will be the Java object 
        equivalents of the data stored in the scalar array. */
-   public static List getListFromArray(ScalarArray array)
+   public static java.util.List<Object> getListFromArray(ScalarArray array)
    {
       LinkedList list = new LinkedList();
        
@@ -418,14 +412,14 @@ public class SleepUtils
 
    /** creates an IO handle scalar suitable for use with the sleep IO API.  The passed in
        streams can each be null if necessary. */ 
-   public static Scalar getIOHandleScalar(InputStream inJ, OutputStream outJ)
+   public static Scalar getIOHandleScalar(java.io.InputStream inJ, java.io.OutputStream outJ)
    {
       return SleepUtils.getScalar(getIOHandle(inJ, outJ));
    }
 
    /** creates an IO handle scalar suitable for use with the sleep IO API.  The passed in
        streams can each be null if necessary. */ 
-   public static sleep.bridges.io.IOObject getIOHandle(InputStream inJ, OutputStream outJ)
+   public static sleep.bridges.io.IOObject getIOHandle(java.io.InputStream inJ, java.io.OutputStream outJ)
    {
       sleep.bridges.io.IOObject handle = new sleep.bridges.io.IOObject();
       handle.openRead(inJ);
@@ -435,13 +429,13 @@ public class SleepUtils
    }
 
    /** Creates a proxy instance of the specified class (limited to interfaces at this time) that is backed with the specified closure */
-   public static Object newInstance(Class initializeMe, SleepClosure closure, ScriptInstance owner)
+   public static Object newInstance(Type initializeMe, SleepClosure closure, ScriptInstance owner)
    {
       return ProxyInterface.BuildInterface(initializeMe, closure, owner != null ? owner : closure.getOwner());
    }
 
    /** Creates a proxy instance of the specified class (limited to interfaces at this time) that is backed with the specified block of code (made into a closure) */
-   public static Object newInstance(Class initializeMe, Block code, ScriptInstance owner)
+   public static Object newInstance(Type initializeMe, Block code, ScriptInstance owner)
    {
       return ProxyInterface.BuildInterface(initializeMe, new SleepClosure(owner, code), owner);
    }
@@ -449,7 +443,7 @@ public class SleepUtils
    /** returns a comma separated list of descriptions of the scalars in the specified argument
        stack.  This is used by the debugging mechanism to format arguments to strings based on
        their scalar type. */
-   public static String describe(Stack arguments)
+   public static String describe(java.util.Stack<Object> arguments)
    {
       StringBuffer values = new StringBuffer();
 
@@ -466,7 +460,7 @@ public class SleepUtils
       return values.toString();
    }
 
-   private static String describeEntries(List seen, Scalar scalar)
+   private static String describeEntries(java.util.List<Object> seen, Scalar scalar)
    {
       if (scalar.getArray() != null)
       {
@@ -731,7 +725,7 @@ public class SleepUtils
    }
 
    /** if x is true, the value will be 1, if x is false the value will be the empty scalar */
-   public static Scalar getScalar(boolean x)
+   public static Scalar getScalar(bool x)
    {
       if (x)
       {

@@ -26,15 +26,12 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- using System;
- using java = biz.ritter.javapi;
+using System;
+using java = biz.ritter.javapi;
 
 using  sleep.engine;
 using  sleep.interfaces;
 using  sleep.runtime;
-
-using  java.util;
-
 
 namespace sleep.taint{
 
@@ -47,14 +44,14 @@ public class Sanitizer : Function, Operator
       function = f;
    }
 
-   public Scalar operate(String name, ScriptInstance script, Stack arguments)
+   public Scalar operate(String name, ScriptInstance script, java.util.Stack<Object> arguments)
    {
       Scalar value = ((Operator)function).operate(name, script, arguments);
       TaintUtils.untaint(value);
       return value;
    }
 
-   public Scalar evaluate(String name, ScriptInstance script, Stack arguments)
+   public Scalar evaluate(String name, ScriptInstance script, java.util.Stack<Object> arguments)
    {
       Scalar value = ((Function)function).evaluate(name, script, arguments);
       TaintUtils.untaint(value);

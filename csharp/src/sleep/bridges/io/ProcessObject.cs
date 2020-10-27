@@ -26,18 +26,16 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- using System;
- using java = biz.ritter.javapi;
+using System;
+using java = biz.ritter.javapi;
 
- 
-using java.io;
 using sleep.runtime;
 
 namespace sleep.bridges.io{
 
 public class ProcessObject : IOObject
 {
-   protected Process process;
+   protected java.lang.Process process;
 
    /** returns the Process object used by this IO implementation */
    public Object getSource()
@@ -45,7 +43,7 @@ public class ProcessObject : IOObject
       return process;
    }
 
-   public void open(String[] command, String[] environment, File startDir, ScriptEnvironment env)
+   public void open(String[] command, String[] environment, java.io.File startDir, ScriptEnvironment env)
    {
       try
       {
@@ -70,7 +68,7 @@ public class ProcessObject : IOObject
    {
       if (getThread() != null && getThread().isAlive())
       {
-         super.wait(env, timeout);
+         base.wait(env, timeout);
       }
 
       try
@@ -88,7 +86,7 @@ public class ProcessObject : IOObject
 
    public void close()
    {
-      super.close();
+      base.close();
       process.destroy();
    }
 }

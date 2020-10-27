@@ -26,13 +26,10 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- using System;
- using java = biz.ritter.javapi;
-
-using  java.io;
+using System;
+using java = biz.ritter.javapi;
 
 using  sleep.taint;
-
 
 namespace sleep.runtime{
 
@@ -67,7 +64,7 @@ public class WatchScalar : Scalar
          flagChange(blah);
       }
       
-      super.setValue(_value);
+      base.setValue(_value);
    }
 
    /** set the value of this scalar container to a scalar array */
@@ -77,7 +74,7 @@ public class WatchScalar : Scalar
       blah.setValue(_array);
       flagChange(blah);
 
-      super.setValue(_array);
+      base.setValue(_array);
    }
 
    /** set the value of this scalar container to a scalar hash */
@@ -87,10 +84,10 @@ public class WatchScalar : Scalar
       blah.setValue(_hash);
       flagChange(blah);
 
-      super.setValue(_hash);
+      base.setValue(_hash);
    }
 
-   private void writeObject(ObjectOutputStream outJ) //throws IOException
+   private void writeObject(java.io.ObjectOutputStream outJ) //throws IOException
    {
        if (SleepUtils.isEmptyScalar(this))
        {
@@ -104,7 +101,7 @@ public class WatchScalar : Scalar
        outJ.writeObject(hash);
    }
 
-   private void readObject(ObjectInputStream inJ) //throws IOException, ClassNotFoundException
+   private void readObject(java.io.ObjectInputStream inJ) //throws IOException, ClassNotFoundException
    {
        value = (ScalarType)inJ.readObject();
        array = (ScalarArray)inJ.readObject();

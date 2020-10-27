@@ -29,7 +29,7 @@
  using System;
  using java = biz.ritter.javapi;
  
-using  sleep.runtime.Scalar;
+using  sleep.runtime;
 
 namespace sleep.bridges{
  

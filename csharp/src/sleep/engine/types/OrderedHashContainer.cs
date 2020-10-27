@@ -26,14 +26,10 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */ 
- using System;
- using java = biz.ritter.javapi;
-
+using System;
+using java = biz.ritter.javapi;
 
 using  sleep.runtime;
-
-using  java.util;
-
 using  sleep.bridges;
 
 namespace sleep.engine.types{
@@ -43,23 +39,23 @@ namespace sleep.engine.types{
    is called to determine if the last entry should be removed.  This is a powerful container for constructing caches out of the Sleep hash data structure. */  
 public class OrderedHashContainer : HashContainer 
 {
-   protected boolean shouldClean = false;
+   protected bool shouldClean = false;
 
-   private class OrderedHash : LinkedHashMap
+   private class OrderedHash : java.util.LinkedHashMap<Object,Object>
    {
-      public OrderedHash(int c, float l, boolean b)
-      {
-         super(c, l, b);
+      public OrderedHash(int c, float l, bool b)
+      :
+         base(c, l, b){
       }
 
-      protected boolean removeEldestEntry(Map.Entry eldest)
+      protected bool removeEldestEntry(java.util.MapNS.Entry<Object,Object> eldest)
       {
          return removeEldestEntryCheck(eldest); 
       }
    }
 
    /** constructs an ordered hash container based on the specified items */
-   public OrderedHashContainer(int capacity, float loadfactor, boolean type)
+   public OrderedHashContainer(int capacity, float loadfactor, bool type)
    {
        values = new OrderedHash(capacity, loadfactor, type);
    }
@@ -84,11 +80,11 @@ public class OrderedHashContainer : HashContainer
       missPolicy = policy;
    }
 
-   protected boolean removeEldestEntryCheck(Map.Entry eldest)
+   protected bool removeEldestEntryCheck(java.util.MapNS.Entry<Object,Object> eldest)
    {
       if (removalPolicy != null && eldest != null)
       {
-         Stack locals = new Stack();
+         java.util.Stack<Object> locals = new java.util.Stack<Object>();
          locals.push(eldest.getValue());
          locals.push(SleepUtils.getScalar(eldest.getKey().toString()));
          locals.push(SleepUtils.getHashScalar(this));

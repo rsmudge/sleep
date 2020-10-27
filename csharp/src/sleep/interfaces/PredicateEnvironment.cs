@@ -26,15 +26,13 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- using System;
- using java = biz.ritter.javapi;
+using System;
+using java = biz.ritter.javapi;
 
-using  java.util;
+using  sleep.runtime;
+using  sleep.engine;
 
-using  sleep.runtime.ScriptInstance;
-using  sleep.engine.Block;
-
-using  sleep.engine.atoms.Check;
+using  sleep.engine.atoms;
 
 namespace sleep.interfaces{
  

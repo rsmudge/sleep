@@ -29,8 +29,7 @@
 using System;
 using java=biz.ritter.javapi;
 
-using  sleep.runtime.ScriptInstance;
-using  java.util.Stack;
+using  sleep.runtime;
 
 namespace sleep.interfaces{
 
@@ -65,6 +64,6 @@ public interface Predicate
     *
     * @return a boolean, in the case of a predicate == and the terms [3, 4] we know 3 == 4 is false so return false.
     */
-   public boolean decide(String predicateName, ScriptInstance anInstance, Stack passedInTerms);   
+   public bool decide(String predicateName, ScriptInstance anInstance, java.util.Stack<Object> passedInTerms);   
 }
 }

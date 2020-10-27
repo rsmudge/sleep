@@ -26,11 +26,8 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- using System;
- using java = biz.ritter.javapi;
-
-using  java.util;
-using  java.io;
+using System;
+using java = biz.ritter.javapi;
 
 namespace sleep.error{
 
@@ -62,12 +59,12 @@ namespace sleep.error{
  * 
  * @see sleep.error.SyntaxError
  */
-public class YourCodeSucksException : RuntimeException
+public class YourCodeSucksException : java.lang.RuntimeException
 {
-    LinkedList allErrors;
+    java.util.LinkedList<Object> allErrors;
 
     /** Initialize the exception (sleep parser) */
-    public YourCodeSucksException(LinkedList myErrors)
+    public YourCodeSucksException(java.util.LinkedList<Object> myErrors)
     {
        allErrors = myErrors;
     }
@@ -75,9 +72,9 @@ public class YourCodeSucksException : RuntimeException
     /** Returns a minimal string representation of the errors within this exception */
     public String getMessage()
     {
-       StringBuffer buf = new StringBuffer(allErrors.size() + " error(s): ");
+       java.lang.StringBuffer buf = new java.lang.StringBuffer(allErrors.size() + " error(s): ");
 
-       Iterator i = getErrors().iterator();
+       java.util.Iterator<Object> i = getErrors().iterator();
        while (i.hasNext())
        {
           SyntaxError temp = (SyntaxError)i.next();
@@ -99,7 +96,7 @@ public class YourCodeSucksException : RuntimeException
     }
 
     /** print a nicely formatted version of the script errors to the specified stream */
-    public void printErrors(OutputStream outJ)
+    public void printErrors(java.io.OutputStream outJ)
     {
        PrintWriter pout = new PrintWriter(outJ);
        pout.print(formatErrors());
@@ -109,10 +106,10 @@ public class YourCodeSucksException : RuntimeException
     /** generate a nicely formatted string representation of the script errors in this exception */
     public String formatErrors()
     {
-       StringBuffer representation = new StringBuffer();
+       java.lang.StringBuffer representation = new java.lang.StringBuffer();
 
-       LinkedList errors = getErrors();
-       Iterator i = errors.iterator();
+       java.util.LinkedList<Object> errors = getErrors();
+       java.util.Iterator<Object> i = errors.iterator();
        while (i.hasNext())
        {
            SyntaxError anError = (SyntaxError)i.next();
@@ -127,7 +124,7 @@ public class YourCodeSucksException : RuntimeException
     }
 
     /** All of the errors are stored in a linked list.  The linked list contains {@link sleep.error.SyntaxError SyntaxError} objects. */
-    public LinkedList getErrors()
+    public java.util.LinkedList<Object> getErrors()
     {
        return allErrors;
     }

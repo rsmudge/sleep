@@ -29,7 +29,7 @@
  using System;
  using java = biz.ritter.javapi;
 
-using  sleep.runtime.ScalarType;
+using  sleep.runtime;
 
 namespace sleep.engine.types{
 
@@ -109,6 +109,10 @@ public class ObjectValue : ScalarType
    public Object objectValue()
    {
       return value;
+   }
+
+   public Type getType() {
+      return this.value.GetType();
    }
 
 }

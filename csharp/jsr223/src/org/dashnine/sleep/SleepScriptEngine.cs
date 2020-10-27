@@ -24,75 +24,82 @@
 */
 using System;
 using java = biz.ritter.javapi;
-
-using  javax.script; 
-using  java.lang.reflect; 
-using  java.io; 
-using  java.util;
+using javax = biz.ritter.javapix;
 
 using  sleep.bridges; 
 using  sleep.engine; 
 using  sleep.interfaces; 
 using  sleep.runtime;
-
 using  sleep.error;
+
+/// PORT to VampireApi
+namespace biz.ritter.javapix.script {
+
+    public interface ScriptEngineFactory {}
+    public interface ScriptEngine{}
+    public class AbstractScriptEngine : ScriptEngine {}
+    public interface ScriptContext{}
+
+    public interface Bindings{}
+    public class SimpleBindings : Bindings{}
+}
 
 namespace org.dashnine.sleep{
 
-public class SleepScriptEngine : AbstractScriptEngine
+public class SleepScriptEngine : javax.script.AbstractScriptEngine
 {
     // my factory, may be null
-    private ScriptEngineFactory factory;
+    private javax.script.ScriptEngineFactory factory;
 
     private ScriptLoader    loader;
-    private Hashtable       sharedEnvironment;
+    private java.util.Hashtable<Object,Object>       sharedEnvironment;
     private ScriptVariables variables;
 
     public SleepScriptEngine()
     {
         loader = new ScriptLoader();
-        sharedEnvironment = new Hashtable();
+        sharedEnvironment = new java.util.Hashtable<Object,Object>();
     }
 
     /** executes a console command */
-    public Object eval(String str, ScriptContext ctx) //throws ScriptException
+    public Object eval(String str, javax.script.ScriptContext ctx) //throws ScriptException
     {
         ScriptInstance script = compile(str, ctx);
         return evalScript(script, ctx);
     }
 
     /** executes a script */
-    public Object eval(Reader reader, ScriptContext ctx) //throws ScriptException
+    public Object eval(java.io.Reader reader, javax.script.ScriptContext ctx) //throws ScriptException
     {
         ScriptInstance script = compile(readFully(reader), ctx);
         return evalScript(script, ctx);
     }
 
-    private Object evalScript(ScriptInstance script, ScriptContext context)
+    private Object evalScript(ScriptInstance script, javax.script.ScriptContext context)
     {
         /* install global bindings */
-        Bindings global = context.getBindings(ScriptContext.GLOBAL_SCOPE);
+        Bindings global = context.getBindings(javax.script.ScriptContext.GLOBAL_SCOPE);
 
         if (global != null)
         {
-           Iterator i = global.entrySet().iterator();
+           java.util.Iterator<Object> i = global.entrySet().iterator();
            while (i.hasNext())
            {
-              Map.Entry value = (Map.Entry)i.next();
+              java.util.MapNS.Entry<Object,Object> value = (java.util.MapNS.Entry<Object,Object>)i.next();
               script.getScriptVariables().putScalar("$" + value.getKey().toString(), ObjectUtilities.BuildScalar(true, value.getValue()));
            }
         }
 
         /* install local bindings */
         Bindings local = context.getBindings(ScriptContext.ENGINE_SCOPE);
-        Map locals = new HashMap();
+        java.util.Map<Object,Object> locals = new java.util.HashMap<Object,Object>();
 
         if (local != null)
         {
-           Iterator i = local.entrySet().iterator();
+           java.util.Iterator<Object> i = local.entrySet().iterator();
            while (i.hasNext())
            {
-              Map.Entry value = (Map.Entry)i.next();
+              java.util.MapNS.Entry<Object,Object> value = (java.util.MapNS.Entry<Object,Object>)i.next();
               locals.put("$" + value.getKey().toString(), ObjectUtilities.BuildScalar(true, value.getValue())  );
            }
         }
@@ -110,11 +117,11 @@ public class SleepScriptEngine : AbstractScriptEngine
         return SleepUtils.runCode(script.getRunnableScript(), "eval", script, SleepUtils.getArgumentStack(locals)).objectValue();
     }
 
-    private static class WarningWatcher : RuntimeWarningWatcher
+    private class WarningWatcher : RuntimeWarningWatcher
     {
-        protected ScriptContext context;
+        protected javax.script.ScriptContext context;
 
-        public WarningWatcher(ScriptContext _context)
+        public WarningWatcher(javax.script.ScriptContext _context)
         {
            context = _context;
         }
@@ -125,7 +132,7 @@ public class SleepScriptEngine : AbstractScriptEngine
         }
     }
 
-    private ScriptInstance compile(String text, ScriptContext context) //throws ScriptException
+    private ScriptInstance compile(String text, javax.script.ScriptContext context) //throws ScriptException
     {
         try
         {
@@ -139,7 +146,7 @@ public class SleepScriptEngine : AbstractScriptEngine
         }
     }
 
-    public ScriptEngineFactory getFactory()
+    public javax.script. ScriptEngineFactory getFactory()
     {
 	lock (this)
         {
@@ -151,24 +158,24 @@ public class SleepScriptEngine : AbstractScriptEngine
 	return factory;
     }
 
-    public Bindings createBindings()
+    public javax.script.Bindings createBindings()
     {
-        return new SimpleBindings();
+        return new javax.script.SimpleBindings();
     }
 
     // package-private methods
-    void setFactory(ScriptEngineFactory factory)
+    void setFactory(javax.script.ScriptEngineFactory factory)
     {
         this.factory = factory;
     }
 
-    private String readFully(Reader reader) //throws ScriptException 
+    private String readFully(java.io.Reader reader) //throws ScriptException 
     {
-        StringBuffer code = new StringBuffer(8192);
+        java.lang.StringBuffer code = new java.lang.StringBuffer(8192);
 
         try
         { 
-           BufferedReader inJ = new BufferedReader(reader);
+           java.io.BufferedReader inJ = new java.io.BufferedReader(reader);
            String s = inJ.readLine();   
            while (s != null)
            {
@@ -179,7 +186,7 @@ public class SleepScriptEngine : AbstractScriptEngine
    
            inJ.close();
         }
-        catch (Exception ex) { }
+        catch (java.lang.Exception ex) { }
 
         return code.toString();
     }

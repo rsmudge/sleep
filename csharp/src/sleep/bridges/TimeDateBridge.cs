@@ -32,10 +32,6 @@
 using  sleep.engine;
 using  sleep.runtime;
 using  sleep.interfaces;
-using  sleep.bridges.BridgeUtilities;
-
-using  java.text;
-using  java.util;
 
 namespace sleep.bridges{
 
@@ -53,11 +49,11 @@ public class TimeDateBridge : Loadable
    {
    }
 
-   private static class formatDate : Function
+   private class formatDate : Function
    {
-      public Scalar evaluate(String f, ScriptInstance si, Stack locals)
+      public Scalar evaluate(String f, ScriptInstance si, java.util.Stack<Object> locals)
       {
-         long a = System.currentTimeMillis();
+         long a = java.lang.SystemJ.currentTimeMillis();
 
          if (locals.size() == 2)
             a = BridgeUtilities.getLong(locals);
@@ -67,13 +63,13 @@ public class TimeDateBridge : Loadable
          SimpleDateFormat format = new SimpleDateFormat(b);
          Date             adate  = new Date(a);
 
-         return SleepUtils.getScalar(format.format(adate, new StringBuffer(), new FieldPosition(0)).toString());
+         return SleepUtils.getScalar(format.format(adate, new java.lang.StringBuffer(), new FieldPosition(0)).toString());
       }
    }
 
-   private static class parseDate : Function
+   private class parseDate : Function
    {
-      public Scalar evaluate(String f, ScriptInstance si, Stack locals)
+      public Scalar evaluate(String f, ScriptInstance si, java.util.Stack<Object> locals)
       {
          String a = locals.pop().toString();
          String b = locals.pop().toString();
@@ -85,9 +81,9 @@ public class TimeDateBridge : Loadable
       }
    }
 
-   private static class ticks : Function
+   private class ticks : Function
    {
-      public Scalar evaluate(String f, ScriptInstance si, Stack locals)
+      public Scalar evaluate(String f, ScriptInstance si, java.util.Stack<Object> locals)
       {
          return SleepUtils.getScalar(System.currentTimeMillis());
       }

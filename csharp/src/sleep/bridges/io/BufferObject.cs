@@ -26,12 +26,12 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- using System;
- using java = biz.ritter.javapi;
+using System;
+using java = biz.ritter.javapi;
 
-using java.io;
-using sleep.bridges.BridgeUtilities;
-using sleep.runtime.ScriptEnvironment;
+using sleep.bridges;
+using sleep.runtime;
+
 namespace sleep.bridges.io{
 
 
@@ -41,10 +41,10 @@ namespace sleep.bridges.io{
 public class BufferObject : IOObject
 {
    /** The writeable source for this IO object */
-   protected ByteArrayOutputStream source;
+   protected java.io.ByteArrayOutputStream source;
 
    /** The readable source for this IO object */
-   protected ByteArrayInputStream  readme;
+   protected java.io.ByteArrayInputStream  readme;
 
    /** returns the stream referenced by this IOObject */
    public Object getSource()

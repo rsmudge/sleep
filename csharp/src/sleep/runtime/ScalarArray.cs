@@ -26,12 +26,8 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- using System;
- using java = biz.ritter.javapi;
-
-
-using  java.util;
-
+using System;
+using java = biz.ritter.javapi;
 
 namespace sleep.runtime{
 /**
@@ -45,7 +41,6 @@ namespace sleep.runtime{
  * <p>When implementing the following interface, keep in mind you are implementing an
  * interface to an array data structure.</p>
  */
- [Serializable]
 public interface ScalarArray : java.io.Serializable
 {
    /** remove the topmost element from the array */
@@ -61,7 +56,7 @@ public interface ScalarArray : java.io.Serializable
    public Scalar   getAt(int index);
 
    /** return an iterator */
-   public Iterator scalarIterator();
+   public java.util.Iterator<Object> scalarIterator();
 
    /** add an element to the array at the specified index */
    public Scalar   add(Scalar value, int index); 
@@ -73,7 +68,7 @@ public interface ScalarArray : java.io.Serializable
    public Scalar   remove(int index);
 
    /** sort this array with the specified comparator */
-   public void     sort(Comparator compare);
+   public void     sort(java.util.Comparator<Object> compare);
 
    /** return a view into the array, ideally one that uses the same backing store */
    public ScalarArray sublist(int start, int end);

@@ -26,10 +26,8 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- using System;
- using java = biz.ritter.javapi;
-
-using  java.io;
+using System;
+using java = biz.ritter.javapi;
 
 
 namespace sleep.runtime{
@@ -105,7 +103,7 @@ namespace sleep.runtime{
  * @see sleep.runtime.ScalarHash
  */
  [Serializable]
-public class Scalar : Serializable
+public class Scalar : java.io.Serializable
 {
    protected ScalarType  value = null;
    protected ScalarArray array = null;
@@ -261,7 +259,7 @@ public class Scalar : Serializable
       if (newValue.getValue() != null) { setValue(newValue.getValue()); return; }
    }
 
-   private void writeObject(ObjectOutputStream outJ) //throws IOException
+   private void writeObject(java.io.ObjectOutputStream outJ) //throws IOException
    {
        if (SleepUtils.isEmptyScalar(this))
        {
@@ -275,7 +273,7 @@ public class Scalar : Serializable
        outJ.writeObject(hash);       
    }
 
-   private void readObject(ObjectInputStream inJ) //throws IOException, ClassNotFoundException
+   private void readObject(java.io.ObjectInputStream inJ) //throws IOException, ClassNotFoundException
    {
        value = (ScalarType)inJ.readObject();
        array = (ScalarArray)inJ.readObject();

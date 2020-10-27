@@ -26,19 +26,16 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- using System;
- using java = biz.ritter.javapi;
+using System;
+using java = biz.ritter.javapi;
  
-using  java.util;
-using  java.io;
-
-using  sleep.engine;
-using  sleep.interfaces;
-using  sleep.runtime;
+using sleep.engine;
+using sleep.interfaces;
+using sleep.runtime;
 
 namespace sleep.bridges{
  
-public class DefaultEnvironment : Loadable, Environment
+public class DefaultEnvironment : Loadable, sleep.interfaces.Environment
 {
     public void scriptUnloaded (ScriptInstance si)
     {
@@ -46,14 +43,14 @@ public class DefaultEnvironment : Loadable, Environment
 
     public void scriptLoaded (ScriptInstance si)
     {
-        Hashtable env = si.getScriptEnvironment().getEnvironment(); 
+        java.util.Hashtable<Object,Object> env = si.getScriptEnvironment().getEnvironment(); 
         env.put("sub",    this);
         env.put("inline", this);
     }
 
     public void bindFunction(ScriptInstance si, String type, String name, Block code)
     {
-        Hashtable env = si.getScriptEnvironment().getEnvironment(); 
+        java.util.Hashtable<Object,Object> env = si.getScriptEnvironment().getEnvironment(); 
 
         if (type.equals("sub"))
         {

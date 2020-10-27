@@ -26,14 +26,12 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- using System;
- using java = biz.ritter.javapi;
+using System;
+using java = biz.ritter.javapi;
 
 using  sleep.engine;
 using  sleep.interfaces;
 using  sleep.runtime;
-
-using  java.util;
 
 
 namespace sleep.taint{
@@ -57,7 +55,7 @@ public class PermeableStep : Step
       return wrapped.getLineNumber();
    }
 
-   public String toString(String prefix)
+   public override String toString(String prefix)
    {
       return prefix + "[Taint Wrap]\n" + wrapped.toString(prefix + "   ");
    }

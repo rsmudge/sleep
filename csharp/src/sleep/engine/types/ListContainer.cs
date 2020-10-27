@@ -26,38 +26,37 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */ 
- using System;
- using java = biz.ritter.javapi;
+using System;
+using java = biz.ritter.javapi;
 
 using  sleep.runtime;
-using  java.util;
 
 namespace sleep.engine.types{
 
 /** A linked list backing for Sleep Arrays. Most array ops are better off with this type of backing */
 public class ListContainer : ScalarArray
 {
-   protected List values;
+   protected java.util.List<Object> values;
 
    public ListContainer()
    {
       values = new MyLinkedList();
    }
 
-   public ListContainer(List list)
+   public ListContainer(java.util.List<Object> list)
    {
       values = list;
    }
 
    public ScalarArray sublist(int from, int to)
    {
-      return new ListContainer((List)values.subList(from, to));
+      return new ListContainer((java.util.List<Object>)values.subList(from, to));
    }
 
    /** initial values must be a collection of Scalar's */
-   public ListContainer(Collection initialValues)
-   {
-      this();
+   public ListContainer(java.util.Collection<Object> initialValues)
+   
+     :this(){
       values.addAll(initialValues);
    }
 
@@ -77,7 +76,7 @@ public class ListContainer : ScalarArray
       return values.size();
    }
 
-   public void sort(Comparator compare)
+   public void sort(java.util.Comparator<Object> compare)
    {
       Collections.sort(values, compare);
    }
@@ -104,7 +103,7 @@ public class ListContainer : ScalarArray
       return (Scalar)values.remove(index);
    }
 
-   public Iterator scalarIterator()
+   public java.util.Iterator<Object> scalarIterator()
    {
       return values.iterator();
    }

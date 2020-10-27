@@ -29,16 +29,15 @@
  using System;
  using java = biz.ritter.javapi;
 
-using java.io;
-using sleep.bridges.BridgeUtilities;
-using sleep.runtime.ScriptEnvironment;
+using sleep.bridges;
+using sleep.runtime;
 
 
 namespace sleep.bridges.io{
 
 public class FileObject : IOObject
 {
-   protected File file;
+   protected java.io.File file;
 
    /** returns the file referenced by this IOObject */
    public Object getSource()
@@ -54,7 +53,7 @@ public class FileObject : IOObject
          if (descriptor.charAt(0) == '>' && descriptor.charAt(1) == '>')
          {
             file = BridgeUtilities.toSleepFile(descriptor.substring(2, descriptor.length()).trim(), env.getScriptInstance());
-            openWrite(new FileOutputStream(file, true));
+            openWrite(new java.io.FileOutputStream(file, true));
          }
          else if (descriptor.charAt(0) == '>')
          {

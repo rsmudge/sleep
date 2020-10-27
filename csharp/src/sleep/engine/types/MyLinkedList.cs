@@ -26,20 +26,17 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */ 
- using System;
- using java = biz.ritter.javapi;
-
-using  java.io.Serializable;
-using  java.util;
+using System;
+using java = biz.ritter.javapi;
 
 using  sleep.runtime;
 
 namespace sleep.engine.types{
 [Serializable]
-public class MyLinkedList : AbstractSequentialList , Cloneable, Serializable, List
+public class MyLinkedList : java.util.AbstractSequentialList<Object> , java.lang.Cloneable, java.io.Serializable, java.util.List<Object>
 {
    [Serializable]
-   private class MyListIterator : ListIterator, Serializable
+   private class MyListIterator : java.util.ListIterator<Object>, java.io.Serializable
    {
       protected int       index; 
       protected int       start;
@@ -75,12 +72,12 @@ public class MyLinkedList : AbstractSequentialList , Cloneable, Serializable, Li
          modCountCheck++;
       }
 
-      public boolean hasNext()
+      public bool hasNext()
       {
          return index != size;
       }
 
-      public boolean hasPrevious()
+      public bool hasPrevious()
       {
          return index != 0;
       }
@@ -139,7 +136,7 @@ public class MyLinkedList : AbstractSequentialList , Cloneable, Serializable, Li
    }
 
    [NonSerialized]
-   private int size = 0;
+   private int sizeJ = 0;
    [NonSerialized]
    private ListEntry header;
 
@@ -147,9 +144,9 @@ public class MyLinkedList : AbstractSequentialList , Cloneable, Serializable, Li
    [NonSerialized]
    private MyLinkedList parentList;
 
-   public int size()
+   public override int size()
    {
-      return size;
+      return sizeJ;
    }
 
    private MyLinkedList(MyLinkedList plist, ListEntry begin, ListEntry end, int _size)
@@ -168,7 +165,7 @@ public class MyLinkedList : AbstractSequentialList , Cloneable, Serializable, Li
       header.setPrevious(header);
    }   
 
-   public List subList(int beginAt, int endAt)
+   public java.util.List<Object> subList(int beginAt, int endAt)
    { 
       checkSafety();
 
@@ -260,15 +257,14 @@ public class MyLinkedList : AbstractSequentialList , Cloneable, Serializable, Li
       return entry;
    }
 
-   public ListIterator listIterator(int index)
+   public java.util.ListIterator<Object> listIterator(int index)
    {
       return new MyListIterator(getAt(index), index);
    }
 
    // code for the ListEntry //
 
-   [Serializable]
-   private interface ListEntry : Serializable
+   private interface ListEntry : java.io.Serializable
    {
       public ListEntry remove();
       public ListEntry addBefore(Object o);
@@ -482,45 +478,45 @@ public class MyLinkedList : AbstractSequentialList , Cloneable, Serializable, Li
 
    private class NormalListEntry : ListEntry
    {
-      public Object element;
-      public ListEntry previous;
-      public ListEntry next;
+      public Object elementObject;
+      public ListEntry previousEntry;
+      public ListEntry nextEntry;
 
       public NormalListEntry(Object _element, ListEntry _previous, ListEntry _next)
       {
-         element  = _element;
-         previous = _previous;
-         next     = _next;
+         elementObject  = _element;
+         previousEntry = _previous;
+         nextEntry     = _next;
 
-         if (previous != null)
+         if (previousEntry != null)
          {
-            previous.setNext(this);
+            previousEntry.setNext(this);
          }
 
-         if (next != null)
+         if (nextEntry != null)
          {
-            next.setPrevious(this);
+            nextEntry.setPrevious(this);
          }
       }
 
       public void setNext(ListEntry entry) 
       {
-         next = entry;
+         nextEntry = entry;
       }
 
       public void setPrevious(ListEntry entry)
       {
-         previous = entry;
+         previousEntry = entry;
       }
 
       public ListEntry next()
       {
-         return next;
+         return nextEntry;
       }
 
       public ListEntry previous()
       {
-         return previous;
+         return previousEntry;
       }
 
       public ListEntry remove()
@@ -538,12 +534,12 @@ public class MyLinkedList : AbstractSequentialList , Cloneable, Serializable, Li
 
       public void setElement(Object o)
       {
-         element = o;
+         elementObject = o;
       }
 
       public Object element()
       {
-         return element;
+         return elementObject;
       }
 
       public ListEntry addBefore(Object o)
@@ -558,7 +554,7 @@ public class MyLinkedList : AbstractSequentialList , Cloneable, Serializable, Li
 
       public ListEntry addAfter(Object o)
       {
-         ListEntry temp = new NormalListEntry(o, this, this.next);
+         ListEntry temp = new NormalListEntry(o, this, this.nextEntry);
 
          size++;
          modCount++;
@@ -594,9 +590,9 @@ public class MyLinkedList : AbstractSequentialList , Cloneable, Serializable, Li
    }
 
     /* save this list to the stream */
-    [MethodImpl(MethodImplOptions.Synchronized)]
     private void writeObject(java.io.ObjectOutputStream outJ) //throws java.io.IOException 
     {
+       lock (this) {
         /* grab any fields I missed */
 	outJ.defaultWriteObject();
       
@@ -609,12 +605,13 @@ public class MyLinkedList : AbstractSequentialList , Cloneable, Serializable, Li
         {
            outJ.writeObject(i.next());
         }
+       }
     }
 
     /* reconstitute this list from the stream */
-    [MethodImpl(MethodImplOptions.Synchronized)]
     private void readObject(java.io.ObjectInputStream inJ)// throws java.io.IOException, ClassNotFoundException 
     {
+       lock (this) {
         /* read any fields I missed */
 	inJ.defaultReadObject();
       
@@ -631,6 +628,11 @@ public class MyLinkedList : AbstractSequentialList , Cloneable, Serializable, Li
         {
            add(inJ.readObject());
         }
+    }
+    }
+
+    public Object clone () {
+       return this.MemberwiseClone();
     }
 }
 }

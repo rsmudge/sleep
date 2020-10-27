@@ -26,10 +26,9 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- using System;
+using System;
 using java = biz.ritter.javapi;
 
-using  java.util;
 namespace sleep.parser{
 
 public class Statement : TokenList
@@ -48,7 +47,7 @@ public class Statement : TokenList
 
    public String toString()
    {
-      return "[" + type + "] " + super.toString();
+      return "[" + type + "] " + base.toString();
    }
 }
 }

@@ -26,26 +26,16 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- using System;
- using java = biz.ritter.javapi;
+using System;
+using java = biz.ritter.javapi;
  
-using  java.util;
-
 using  sleep.engine;
 using  sleep.interfaces;
 using  sleep.runtime;
-
-using  java.io;
-using  java.net.URL;
-using  java.net.URLClassLoader;
-
 using  sleep.engine.types;
-using  java.lang.reflect; // for array casting stuff
-
 using  sleep.taint;
-
 using  sleep.parser;
-using  sleep.error.YourCodeSucksException;
+using  sleep.error;
 
 namespace sleep.bridges{
  
@@ -183,9 +173,9 @@ public class BasicUtilities : Function, Loadable, Predicate
         temp.put("=>",       new HashKeyValueOp());
     }
 
-    private static class SyncPrimitives : Function 
+    private class SyncPrimitives : Function 
     {
-       public Scalar evaluate(String n, ScriptInstance si, Stack l)
+       public Scalar evaluate(String n, ScriptInstance si, java.util.Stack<Object> l)
        {
           if (n.equals("&semaphore"))
           {
@@ -207,9 +197,9 @@ public class BasicUtilities : Function, Loadable, Predicate
        }
     }
 
-    private static class HashKeyValueOp : Operator
+    private class HashKeyValueOp : Operator
     {
-        public Scalar operate(String name, ScriptInstance script, Stack locals)
+        public Scalar operate(String name, ScriptInstance script, java.util.Stack<Object> locals)
         {
             Scalar identifier = (Scalar)locals.pop();
             Scalar value      = (Scalar)locals.pop();
@@ -218,7 +208,7 @@ public class BasicUtilities : Function, Loadable, Predicate
         }
     }
 
-    public boolean decide(String predName, ScriptInstance anInstance, Stack terms)
+    public bool decide(String predName, ScriptInstance anInstance, java.util.Stack<Object> terms)
     {
 
        if (predName.equals("isa"))
@@ -294,11 +284,11 @@ public class BasicUtilities : Function, Loadable, Predicate
        return false;
     }
 
-    private static class f_use : Function
+    private class f_use : Function
     {
-       private HashMap bridges = new HashMap();
+       private java.util.HashMap<Object,Object> bridges = new java.util.HashMap<Object,Object>();
 
-       public Scalar evaluate(String n, ScriptInstance si, Stack l)
+       public Scalar evaluate(String n, ScriptInstance si, java.util.Stack<Object> l)
        {
           File   parent    = null;
           String className = "";
@@ -419,9 +409,9 @@ public class BasicUtilities : Function, Loadable, Predicate
        }
     }
 
-    private static class array : Function
+    private class array : Function
     {
-       public Scalar evaluate(String n, ScriptInstance si, Stack l)
+       public Scalar evaluate(String n, ScriptInstance si, java.util.Stack<Object> l)
        {
           Scalar value = SleepUtils.getArrayScalar();
            
@@ -434,9 +424,9 @@ public class BasicUtilities : Function, Loadable, Predicate
        }
     }
 
-    private static class f_cast : Function
+    private class f_cast : Function
     {
-       public Scalar evaluate(String n, ScriptInstance si, Stack l)
+       public Scalar evaluate(String n, ScriptInstance si, java.util.Stack<Object> l)
        {
           Scalar value      = BridgeUtilities.getScalar(l);
           Scalar type       = BridgeUtilities.getScalar(l);
@@ -544,9 +534,9 @@ public class BasicUtilities : Function, Loadable, Predicate
        }
     }
 
-    private static class function : Function
+    private class function : Function
     {
-       public Scalar evaluate(String n, ScriptInstance si, Stack l)
+       public Scalar evaluate(String n, ScriptInstance si, java.util.Stack<Object> l)
        {
           if (n.equals("&function") || n.equals("function"))
           {
@@ -587,9 +577,9 @@ public class BasicUtilities : Function, Loadable, Predicate
        }
     }
 
-    private static class hash : Function
+    private class hash : Function
     {
-       public Scalar evaluate(String n, ScriptInstance si, Stack l)
+       public Scalar evaluate(String n, ScriptInstance si, java.util.Stack<Object> l)
        {
           Scalar value = null; 
           if (n.equals("&ohash"))
@@ -617,9 +607,9 @@ public class BasicUtilities : Function, Loadable, Predicate
        }
     }
 
-    private static class lambda : Function
+    private class lambda : Function
     {
-       public Scalar evaluate(String n, ScriptInstance si, Stack l)
+       public Scalar evaluate(String n, ScriptInstance si, java.util.Stack<Object> l)
        {
           SleepClosure value;
           SleepClosure temp;
@@ -672,15 +662,15 @@ public class BasicUtilities : Function, Loadable, Predicate
        }
     }
 
-    private static class map : Function
+    private class map : Function
     {
-       public Scalar evaluate(String n, ScriptInstance si, Stack l)
+       public Scalar evaluate(String n, ScriptInstance si, java.util.Stack<Object> l)
        {
           SleepClosure temp  = BridgeUtilities.getFunction(l, si);           
           Iterator     i     = BridgeUtilities.getIterator(l, si);
 
           Scalar       rv     = SleepUtils.getArrayScalar();
-          Stack        locals = new Stack();
+          java.util.Stack<Object>        locals = new Stack();
 
           while (i.hasNext())
           {
@@ -700,9 +690,9 @@ public class BasicUtilities : Function, Loadable, Predicate
        }
     }
 
-    private static class copy : Function
+    private class copy : Function
     {
-       public Scalar evaluate(String n, ScriptInstance si, Stack l)
+       public Scalar evaluate(String n, ScriptInstance si, java.util.Stack<Object> l)
        {
           Scalar doit = BridgeUtilities.getScalar(l);
 
@@ -738,9 +728,9 @@ public class BasicUtilities : Function, Loadable, Predicate
        }
     }
 
-    private static class removeAt : Function
+    private class removeAt : Function
     {
-       public Scalar evaluate(String n, ScriptInstance si, Stack l)
+       public Scalar evaluate(String n, ScriptInstance si, java.util.Stack<Object> l)
        {
           Scalar value = (Scalar)l.pop();
 
@@ -764,18 +754,18 @@ public class BasicUtilities : Function, Loadable, Predicate
        }
     }
 
-    private static class shift : Function
+    private class shift : Function
     {
-       public Scalar evaluate(String n, ScriptInstance si, Stack l)
+       public Scalar evaluate(String n, ScriptInstance si, java.util.Stack<Object> l)
        {
           ScalarArray value = BridgeUtilities.getArray(l);
           return value.remove(0);
        }
     }
 
-    private static class reverse : Function
+    private class reverse : Function
     {
-       public Scalar evaluate(String n, ScriptInstance si, Stack l)
+       public Scalar evaluate(String n, ScriptInstance si, java.util.Stack<Object> l)
        {
           Scalar value = SleepUtils.getArrayScalar();
           Iterator  i  = BridgeUtilities.getIterator(l, si);
@@ -789,11 +779,11 @@ public class BasicUtilities : Function, Loadable, Predicate
        }          
     }
 
-    private static class SetScope : Function
+    private class SetScope : Function
     {
        private java.util.regex.Pattern splitter = java.util.regex.Pattern.compile("\\s+");
 
-       public Scalar evaluate(String n, ScriptInstance i, Stack l)
+       public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
        {
           Variable level = null;
 
@@ -835,17 +825,17 @@ public class BasicUtilities : Function, Loadable, Predicate
        }
     }
 
-    private static class systemProperties : Function
+    private class systemProperties : Function
     {
-       public Scalar evaluate(String n, ScriptInstance i, Stack l)
+       public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
        {
-          return SleepUtils.getHashWrapper(SystemJ.getProperties());
+          return SleepUtils.getHashWrapper(java.lang.SystemJ.getProperties());
        }
     }
 
-    private static class eval : Function
+    private class eval : Function
     {
-       public Scalar evaluate(String n, ScriptInstance i, Stack l)
+       public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
        {
           String code  = l.pop().toString();
 
@@ -870,11 +860,11 @@ public class BasicUtilities : Function, Loadable, Predicate
        }
     }
 
-    public Scalar evaluate(String n, ScriptInstance i, Stack l)
+    public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
     {
        if (l.isEmpty() && n.equals("&remove"))
        {
-          Stack iterators = (Stack)(i.getScriptEnvironment().getContextMetadata("iterators"));
+          java.util.Stack<Object> iterators = (java.util.Stack<Object>)(i.getScriptEnvironment().getContextMetadata("iterators"));
 
           if (iterators == null || iterators.isEmpty())
           {
@@ -954,7 +944,7 @@ public class BasicUtilities : Function, Loadable, Predicate
           Map paramsJ = BridgeUtilities.extractNamedParameters(l);
 
           SleepClosure c    = BridgeUtilities.getFunction(l, i);
-          Stack        args = new Stack();
+          java.util.Stack<Object>        args = new Stack();
           Iterator iter     = BridgeUtilities.getIterator(l, i);
           while (iter.hasNext()) { args.add(0, iter.next()); }
 
@@ -1258,7 +1248,7 @@ public class BasicUtilities : Function, Loadable, Predicate
           SleepClosure f = BridgeUtilities.getFunction(l, i); 
           int start      = BridgeUtilities.normalize(BridgeUtilities.getInt(l, 0), value.getArray().size());
           int count      = 0;
-          Stack locals   = new Stack();
+          java.util.Stack<Object> locals   = new Stack();
 
           Iterator iter = value.getArray().scalarIterator();
           while (iter.hasNext())
@@ -1288,7 +1278,7 @@ public class BasicUtilities : Function, Loadable, Predicate
        else if (n.equals("&reduce") && SleepUtils.isFunctionScalar(value))
        {
           SleepClosure f    = SleepUtils.getFunctionFromScalar(value, i); 
-          Stack locals      = new Stack();
+          java.util.Stack<Object> locals      = new Stack();
 
           Iterator iter = BridgeUtilities.getIterator(l, i);
 

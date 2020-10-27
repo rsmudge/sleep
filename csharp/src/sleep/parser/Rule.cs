@@ -26,11 +26,8 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- using System;
- using java = biz.ritter.javapi;
-
-using  java.util;
-using  java.io;
+using System;
+using java = biz.ritter.javapi;
 
 using  sleep.error;
 
@@ -94,7 +91,7 @@ public class Rule
 
    public String wrap(String value)
    {
-      StringBuffer rv = new StringBuffer(value.length() + 2);
+      java.lang.StringBuffer rv = new java.lang.StringBuffer(value.length() + 2);
       if (type == PRESERVE_ENTITY)
       {
          rv.append(left);
@@ -111,14 +108,14 @@ public class Rule
       return rv.toString();
    }
 
-   public boolean isLeft(char n) { return (type == PRESERVE_ENTITY && left == n); }
-   public boolean isRight(char n) { return (type == PRESERVE_ENTITY && right == n); }
-   public boolean isMatch(char n) { return (type == PRESERVE_SINGLE && single == n); }
+   public bool isLeft(char n) { return (type == PRESERVE_ENTITY && left == n); }
+   public bool isRight(char n) { return (type == PRESERVE_ENTITY && right == n); }
+   public bool isMatch(char n) { return (type == PRESERVE_SINGLE && single == n); }
 
-   protected LinkedList open  = new LinkedList();
-   protected LinkedList close = new LinkedList();
+   protected java.util.LinkedList<Object> open  = new java.util.LinkedList<Object>();
+   protected java.util.LinkedList<Object> close = new java.util.LinkedList<Object>();
 
-   public boolean isBalanced()
+   public bool isBalanced()
    {
       if (open.size() == close.size())
       {

@@ -26,24 +26,22 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */ 
- using System;
- using java = biz.ritter.javapi;
+using System;
+using java = biz.ritter.javapi;
 
 using  sleep.runtime;
-
-using  java.util;
 
 namespace sleep.engine.types{
 
 /* Container for Sleep hashes.  *phEAR* */
 public class HashContainer : ScalarHash
 {
-   protected Map values;
+   protected java.util.Map<Object,Object> values;
 
    /* constructs this hash container using the specified Map compatible data structure as the
       backing.  this data structure will hold sleep.runtime.Scalar objects and should by empty
       when passed to this constructor */
-   public HashContainer(Map container)
+   public HashContainer(java.util.Map<Object,Object> container)
    {
       values = container;
    }
@@ -51,7 +49,7 @@ public class HashContainer : ScalarHash
    /* constructs this hash container backed by a HashMap data structure */
    public HashContainer()
    {
-      this(new HashMap());
+      this(new java.util.HashMap<Object,Object>());
    }
 
    public Scalar getAt(Scalar key)
@@ -68,7 +66,7 @@ public class HashContainer : ScalarHash
       return value;
    }
 
-   public Map getData()
+   public java.util.Map<Object,Object> getData()
    {
       return values;
    }

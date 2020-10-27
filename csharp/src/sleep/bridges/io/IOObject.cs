@@ -26,11 +26,9 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- using System;
- using java = biz.ritter.javapi;
+using System;
+using java = biz.ritter.javapi;
 
-
-using java.io;
 using sleep.runtime;
 
 
@@ -56,20 +54,20 @@ public class IOObject
 {
    /* input pipeline */ 
 
-   protected InputStreamReader   readeru = null; /* a buffered reader, pHEAR */
-   protected DataInputStream     readerb = null; /* used to support the binary read/write stuffz */
-   protected BufferedInputStream reader  = null; /* used to support mark and reset functionality y0 */
-   protected InputStream         inJ      = null; /* the original stream, love it, hold it... yeah right */
+   protected java.io.InputStreamReader   readeru = null; /* a buffered reader, pHEAR */
+   protected java.io.DataInputStream     readerb = null; /* used to support the binary read/write stuffz */
+   protected java.io.BufferedInputStream reader  = null; /* used to support mark and reset functionality y0 */
+   protected java.io.InputStream         inJ      = null; /* the original stream, love it, hold it... yeah right */
 
    /* output pipeline */
 
-   protected OutputStreamWriter  writeru = null;
-   protected DataOutputStream    writerb = null; /* high level method for writing stuff out, fun fun fun */
-   protected OutputStream        outJ     = null; /* original output stream */
+   protected java.io.OutputStreamWriter  writeru = null;
+   protected java.io.DataOutputStream    writerb = null; /* high level method for writing stuff out, fun fun fun */
+   protected java.io.OutputStream        outJ     = null; /* original output stream */
 
    /* other fun stuff <3 */  
 
-   protected Thread           thread  = null;
+   protected java.lang.Thread           thread  = null;
    protected Scalar           token   = null;
 
    /** return the actual source of this IO for scripters to query using HOES */
@@ -83,24 +81,24 @@ public class IOObject
    {
       if (writerb != null)
       {
-         writeru = new OutputStreamWriter(writerb, name);
+         writeru = new java.io.OutputStreamWriter(writerb, name);
       }
 
       if (readerb != null)
       {
-         readeru = new InputStreamReader(readerb, name);
+         readeru = new java.io.InputStreamReader(readerb, name);
       }
    }
 
 
    /** set the thread used for this IOObject (currently used to allow a script to wait() on the threads completion) */
-   public void setThread(Thread t)
+   public void setThread(java.lang.Thread t)
    {
       thread = t;
    }
 
    /** returns the thread associated with this IOObject */
-   public Thread getThread()
+   public java.lang.Thread getThread()
    {
       return thread;
    }
@@ -166,19 +164,19 @@ public class IOObject
    }
 
    /** Returns the latest hooking point into the input stream */
-   public InputStream getInputStream()
+   public java.io.InputStream getInputStream()
    {
       return inJ;
    }
 
    /** Returns the latest hooking point into the output stream */
-   public OutputStream getOutputStream()
+   public java.io.OutputStream getOutputStream()
    {
       return outJ;
    }
 
    /** Initializes a binary reader (a DataInputStream) and a text reader (a BufferedReader) against this input stream.  Calling this effectively makes this IOObject useable with Sleep's IO read* functions. */
-   public void openRead(InputStream _in)
+   public void openRead(java.io.InputStream _in)
    {
       inJ = _in;
       
@@ -191,14 +189,14 @@ public class IOObject
    }
 
    /** Initializes a binary writer (a DataOutputStream) and a text writer (a PrintWriter) against this input stream.  Calling this effectively makes this IOObject useable with Sleep's IO print* functions. */
-   public void openWrite(OutputStream _out)
+   public void openWrite(java.io.OutputStream _out)
    {
       outJ = _out;
 
       if (outJ != null)
       {
-         writerb = new DataOutputStream(outJ);
-         writeru = new OutputStreamWriter(writerb);
+         writerb = new java.io.DataOutputStream(outJ);
+         writeru = new java.io.OutputStreamWriter(writerb);
       }
    }
 
@@ -259,7 +257,7 @@ public class IOObject
       {
          if (readeru != null)
          {
-            StringBuffer rv = new StringBuffer(8192);
+            java.lang.StringBuffer rv = new java.lang.StringBuffer(8192);
             
             int temp = readeru.read();
          
@@ -338,7 +336,7 @@ public class IOObject
    }
 
    /** Returns true if the reader is closed */
-   public boolean isEOF()
+   public bool isEOF()
    {
       return (reader == null);
    }
@@ -358,24 +356,24 @@ public class IOObject
    }
  
    /** Returns the ascii data reader */
-   public BufferedInputStream getInputBuffer()
+   public java.io.BufferedInputStream getInputBuffer()
    {
        return reader;
    }
 
    /** Returns the binary data reader */
-   public DataInputStream getReader()
+   public java.io.DataInputStream getReader()
    {
        return readerb;
    }
  
    /** Returns the binary data writer */
-   public DataOutputStream getWriter()
+   public java.io.DataOutputStream getWriter()
    {
        return writerb;
    }
 
-   private static readonly String lineSeparator = SystemJ.getProperty("line.separator");
+   private static readonly String lineSeparator = java.lang.SystemJ.getProperty("line.separator");
 
    /** Prints out a line of text with a newline character appended */
    public void printLine(String text)

@@ -29,19 +29,14 @@
  using System;
  using java = biz.ritter.javapi;
 
-using java.io;
-using java.net;
 using sleep.runtime;
-using sleep.bridges.SleepClosure;
-
-using java.util;
-
+using sleep.bridges;
 
 namespace sleep.bridges.io{
 
 public class SocketObject : IOObject
 {
-   protected Socket socket;
+   protected java.net.Socket socket;
 
    /** returns the socket used for this connection */
    public Object getSource()
@@ -53,7 +48,7 @@ public class SocketObject : IOObject
    {
       try
       {
-         socket = new Socket();
+         socket = new java.net.Socket();
          
          if (paramsJ.laddr != null)
          {
@@ -95,18 +90,19 @@ public class SocketObject : IOObject
       }
    }
 
-   private static Map servers;
+   private static java.util.Map<Object,Object> servers;
 
-   private static ServerSocket getServerSocket(int port, SocketHandler paramsJ) //throws Exception
+   private static java.net.ServerSocket getServerSocket(int port, SocketHandler paramsJ) //throws Exception
    {
       String key = port + "";
 
       if (servers == null)
       {
-         servers = Collections.synchronizedMap(new HashMap());
+         servers = java.util.Collections.synchronizedMap(new java.util.HashMap<Object,Object>
+         ());
       }
 
-      ServerSocket server = null;
+      java.net.ServerSocket server = null;
 
       if (servers.containsKey(key))
       {
@@ -160,7 +156,7 @@ public class SocketObject : IOObject
     public static readonly int LISTEN_FUNCTION  = 1;
     public static readonly int CONNECT_FUNCTION = 2;
 
-    public static class SocketHandler : Runnable
+    public class SocketHandler : java.lang.Runnable
     {
        public ScriptInstance script;
        public SleepClosure   function;

@@ -26,21 +26,19 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */ 
- using System;
- using java = biz.ritter.javapi;
+using System;
+using java = biz.ritter.javapi;
 
-using  java.util;
 using  sleep.interfaces;
 using  sleep.engine;
 using  sleep.runtime;
-
-using  sleep.bridges.SleepClosure;
+using  sleep.bridges;
 
 namespace sleep.engine.atoms{
 
 public class Iterate : Step
 {
-   public static class IteratorData
+   public class IteratorData
    {
       public String   key      = null;
       public Variable kenv     = null;
@@ -49,7 +47,7 @@ public class Iterate : Step
       public Variable venv     = null;
 
       public Scalar   source   = null;
-      public Iterator iterator = null;
+      public java.util.Iterator<Object> iterator = null;
       public int      count    = 0;
    }
 

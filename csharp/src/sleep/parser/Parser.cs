@@ -26,36 +26,30 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- using System;
- using java = biz.ritter.javapi;
+using System;
+using java = biz.ritter.javapi;
 
-using  java.util;
-using  sleep.error;
-using  sleep.engine.Block;
-
-using  sleep.engine.GeneratedSteps;
-
-using  java.io;
-using  java.net;
+using sleep.error;
+using sleep.engine;
 
 namespace sleep.parser{
 
 public class Parser
 {
-   private static sealed bool DEBUG_ITER     = false;
-   private static sealed bool DEBUG_LEX      = false;
-   private static sealed bool DEBUG_COMMENTS = false;
-   private static sealed bool DEBUG_TPARSER  = false;
+   private static readonly bool DEBUG_ITER     = false;
+   private static readonly bool DEBUG_LEX      = false;
+   private static readonly bool DEBUG_COMMENTS = false;
+   private static readonly bool DEBUG_TPARSER  = false;
 
    protected String     code; /** the actual "code" for the script file. */
    protected String     name; /** an identifier for the script file. */
 
-   protected LinkedList comments   = new LinkedList(); /** a list of all of the comments from the script file */
-   protected LinkedList errors     = new LinkedList(); /** a list of all of the parser errors */
-   protected LinkedList warnings   = new LinkedList(); /** a list of all of the parser warnings */
+   protected java.util.LinkedList<Object> comments   = new java.util.LinkedList<Object>(); /** a list of all of the comments from the script file */
+   protected java.util.LinkedList<Object> errors     = new java.util.LinkedList<Object>(); /** a list of all of the parser errors */
+   protected java.util.LinkedList<Object> warnings   = new java.util.LinkedList<Object>(); /** a list of all of the parser warnings */
 
    protected TokenList  tokens     = new TokenList();
-   protected LinkedList statements = new LinkedList(); /** a list of all of the statements */
+   protected java.util.LinkedList<Object> statements = new java.util.LinkedList<Object>(); /** a list of all of the statements */
 
    protected Block      executeMe;  // runnable block   
  
@@ -86,7 +80,7 @@ public class Parser
 
    /** Attempts to find a class, starts out with the passed in string itself, if that doesn't resolve then the string is
        appended to each imported package to see where the class might exist */
-   public Class findImportedClass(String name)
+   public Type findImportedClass(String name)
    {
       return imports.findImportedClass(name);
    }
@@ -130,7 +124,7 @@ public class Parser
       statements.add(state);
    }
 
-   public LinkedList getStatements()
+   public java.util.LinkedList<Object> getStatements()
    {
       return statements;
    }

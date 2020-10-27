@@ -29,31 +29,12 @@
  using System;
  using java = biz.ritter.javapi;
 
-
-using  java.io.Serializable;
-
-using  sleep.runtime.Scalar;
-using  sleep.engine.Block;
-using  sleep.engine.Step;
-
-using  sleep.bridges.BasicNumbers;
-using  sleep.bridges.BasicStrings;
-using  sleep.bridges.BasicUtilities;
-using  sleep.bridges.DefaultEnvironment;
-
+using  sleep.engine;
+using  sleep.bridges;
 using  sleep.interfaces;
-
-using  sleep.parser.Parser;
-using  sleep.parser.ParserUtilities;
-
-using  java.util;
-using  java.util.Hashtable;
-using  java.util.Stack;
-
-using  sleep.runtime.SleepUtils;
-
-using  sleep.error.YourCodeSucksException;
-
+using  sleep.parser;
+using  sleep.runtime;
+using  sleep.error;
 
 namespace sleep.runtime{
 /**
@@ -76,17 +57,17 @@ namespace sleep.runtime{
  * @see sleep.runtime.ScriptInstance
  */
  [Serializable]
-public class ScriptEnvironment : Serializable
+public class ScriptEnvironment : java.io.Serializable
 {
     /** the script instance that this is the environment for */
     protected ScriptInstance  self;  
 
     /** the runtime data stack for this environment */
-    protected Stack           environmentStack;
+    protected java.util.Stack<Object>           environmentStack;
 
     /** the environment hashtable that contains all of the functions, predicates, operators, and "environment keywords" this 
         script has access to. */
-    protected Hashtable       environment;
+    protected java.util.Hashtable<Object,Object>       environment;
 
     /** Not recommended that you instantiate a script environment in this way */
     public ScriptEnvironment()
@@ -97,7 +78,7 @@ public class ScriptEnvironment : Serializable
     }
 
     /** Instantiate a new script environment with the specified environment (can be shared), and the specified ScriptInstance */
-    public ScriptEnvironment(Hashtable env, ScriptInstance myscript)
+    public ScriptEnvironment(java.util.Hashtable<Object,Object> env, ScriptInstance myscript)
     {
        self        = myscript;
        environment = env;
@@ -169,9 +150,9 @@ public class ScriptEnvironment : Serializable
        return (Function)(getEnvironment().get(func));
     }
 
-    public Environment getFunctionEnvironment(String env)
+    public sleep.interfaces.Environment getFunctionEnvironment(String env)
     {
-       return (Environment)(getEnvironment().get(env));
+       return (sleep.interfaces.Environment)(getEnvironment().get(env));
     }
 
     public PredicateEnvironment getPredicateEnvironment(String env)
@@ -184,9 +165,9 @@ public class ScriptEnvironment : Serializable
        return (FilterEnvironment)(getEnvironment().get(env));
     }
 
-    public Predicate getPredicate(String name)
+    public sleep.interfaces.Predicate getPredicate(String name)
     {
-       return (Predicate)(getEnvironment().get(name));
+       return (sleep.interfaces.Predicate)(getEnvironment().get(name));
     }
 
     public Operator getOperator(String oper)
@@ -201,7 +182,7 @@ public class ScriptEnvironment : Serializable
      * -[keyname] - assumed to be a unary predicate
      * [keyname]  - assumed to be an environment binding, predicate, or operator
      */
-    public Hashtable getEnvironment()
+    public java.util.Hashtable<Object,Object> getEnvironment()
     {
        return environment;
     }
@@ -209,13 +190,13 @@ public class ScriptEnvironment : Serializable
     /** Sets the environment Hashtable this script is to use.  Sharing an instance of this Hashtable allows scripts to share 
         common environment data like functions, subroutines, etc.   Also useful for bridge writers as their information can be
         stored in this hashtable as well */
-    public void setEnvironment(Hashtable h)
+    public void setEnvironment(java.util.Hashtable<Object,Object> h)
     {
        environment = h;
     }
  
     /** returns the environment stack used for temporary calculations and such. */
-    public Stack getEnvironmentStack()
+    public java.util.Stack<Object> getEnvironmentStack()
     {
        return environmentStack;
     }
@@ -238,21 +219,21 @@ public class ScriptEnvironment : Serializable
     //
     
    [Serializable]
-    protected static class Context : Serializable
+    protected class Context : java.io.Serializable
     {
        public Block            block;
        public Step             last;       
        public ExceptionContext handler;
-       public boolean          moreHandlers;
+       public bool          moreHandlers;
     }
 
-    protected Stack    context      = new Stack();
-    protected Stack    contextStack = new Stack();
+    protected java.util.Stack<Object>    context      = new java.util.Stack<Object>();
+    protected java.util.Stack<Object>    contextStack = new java.util.Stack<Object>();
 
-    protected HashMap  metadata     = new HashMap();
-    protected Stack    metaStack    = new Stack();
+    protected java.util.HashMap<Object,Object>  metadata     = new java.util.HashMap<Object,Object>();
+    protected java.util.Stack<Object>    metaStack    = new java.util.Stack<Object>();
 
-    public void loadContext(Stack _context, HashMap _metadata)
+    public void loadContext(java.util.Stack<Object> _context, java.util.HashMap<Object,Object> _metadata)
     {
        contextStack.push(context);
        metaStack.push(metadata); 
@@ -326,7 +307,7 @@ public class ScriptEnvironment : Serializable
     {
        Scalar rv = SleepUtils.getEmptyScalar();
 
-       Stack cstack = context;
+       java.util.Stack<Object> cstack = context;
        context      = new Stack();
 
        Iterator i = cstack.iterator();
@@ -354,9 +335,9 @@ public class ScriptEnvironment : Serializable
        return rv;
     }
 
-    public Stack saveContext()
+    public java.util.Stack<Object> saveContext()
     {
-       Stack cstack = context;
+       java.util.Stack<Object> cstack = context;
 
        context  = (Stack)(contextStack.pop());
        metadata = (HashMap)(metaStack.pop());
@@ -368,7 +349,7 @@ public class ScriptEnvironment : Serializable
     // ******** Exception Management **********
     //
 [Serializable]
-    protected static class ExceptionContext : Serializable
+    public class ExceptionContext : java.io.Serializable
     {
        public Block  owner;
        public String varname;
@@ -376,15 +357,15 @@ public class ScriptEnvironment : Serializable
     }
 
     protected ExceptionContext currentHandler = null;
-    protected Stack            exhandlers     = new Stack(); /* exception handlers */
-    protected boolean          moreHandlers   = false;
+    protected java.util.Stack<Object>            exhandlers     = new java.util.Stack<Object>(); /* exception handlers */
+    protected bool          moreHandlers   = false;
 
-    public boolean isExceptionHandlerInstalled()
+    public bool isExceptionHandlerInstalled()
     {
        return currentHandler != null || moreHandlers;
     }
 
-    public boolean isResponsible(Block block)
+    public bool isResponsible(Block block)
     {
        return currentHandler != null && currentHandler.owner == block;
     }
@@ -486,27 +467,27 @@ public class ScriptEnvironment : Serializable
     protected Scalar rv      = null;
     protected int    request = 0;
 
-    public boolean isThrownValue()
+    public bool isThrownValue()
     {
        return (request & FLOW_CONTROL_THROW) == FLOW_CONTROL_THROW;
     }
 
-    public boolean isDebugInterrupt()
+    public bool isDebugInterrupt()
     {
        return (request & FLOW_CONTROL_DEBUG) == FLOW_CONTROL_DEBUG;
     }
 
-    public boolean isYield()
+    public bool isYield()
     {
        return (request & FLOW_CONTROL_YIELD) == FLOW_CONTROL_YIELD;
     }
 
-    public boolean isCallCC()
+    public bool isCallCC()
     {
        return (request & FLOW_CONTROL_CALLCC) == FLOW_CONTROL_CALLCC;
     }
 
-    public boolean isPassControl()
+    public bool isPassControl()
     {
        return (request & FLOW_CONTROL_PASS) == FLOW_CONTROL_PASS;
     }
@@ -516,7 +497,7 @@ public class ScriptEnvironment : Serializable
        return rv;
     }
 
-    public boolean isReturn()
+    public bool isReturn()
     {
        return request != FLOW_CONTROL_NONE;
     }
@@ -566,7 +547,7 @@ public class ScriptEnvironment : Serializable
     }
 
     /** how many stacks does this damned class include? */
-    protected Stack sources = new Stack(); 
+    protected java.util.Stack<Object> sources = new Stack(); 
 
     /** push source information onto the source stack */
     public void pushSource(String s) 
@@ -592,7 +573,7 @@ public class ScriptEnvironment : Serializable
     //
     // stuff related to frame management
     //
-    protected ArrayList frames = new ArrayList(10);
+    protected java.util.ArrayList<Object> frames = new java.util.ArrayList<Object>(10);
     protected int       findex = -1;
 
     /** markFrame and cleanFrame are used to keep the sleep stack in good order after certain error conditions */
@@ -610,7 +591,7 @@ public class ScriptEnvironment : Serializable
         }
     } 
 
-    public Stack getCurrentFrame()
+    public java.util.Stack<Object> getCurrentFrame()
     {
        return (Stack)frames.get(findex);    
     }
@@ -625,7 +606,7 @@ public class ScriptEnvironment : Serializable
        }
     }
 
-    public boolean hasFrame() { return findex >= 0; }
+    public bool hasFrame() { return findex >= 0; }
 
     public void KillFrame()
     {
@@ -633,11 +614,11 @@ public class ScriptEnvironment : Serializable
        findex--;
     }
     
-    public void CreateFrame(Stack frame)
+    public void CreateFrame(java.util.Stack<Object> frame)
     {
        if (frame == null) 
        { 
-          frame = new Stack(); 
+          frame = new java.util.Stack<Object>(); 
        }
 
        if ((findex + 1) >= frames.size())
@@ -656,7 +637,7 @@ public class ScriptEnvironment : Serializable
     {
        if ((findex + 1) >= frames.size())
        {
-          frames.add(new Stack());
+          frames.add(new java.util.Stack<Object>());
        } 
 
        findex++;
@@ -669,7 +650,7 @@ public class ScriptEnvironment : Serializable
     }
 
     /** evaluates a predicate condition */
-    public boolean evaluatePredicate(String code) //throws YourCodeSucksException
+    public bool evaluatePredicate(String code) //throws YourCodeSucksException
     {
        code = "if (" + code + ") { return 1; } else { return $null; }";
        return (SleepUtils.runCode(SleepUtils.ParseCode(code), this).intValue() == 1);

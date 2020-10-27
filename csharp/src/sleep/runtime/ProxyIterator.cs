@@ -26,35 +26,33 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- using System;
- using java = biz.ritter.javapi;
+using System;
+using java = biz.ritter.javapi;
 
-using  java.util;
-using  sleep.engine.ObjectUtilities;
-
+using  sleep.engine;
 
 namespace sleep.runtime{
 
 /* An iterator wrapper that constructs Sleep compatible Scalars for 
    each iterator. */
-public class ProxyIterator : Iterator
+public class ProxyIterator : java.util.Iterator<Object>
 {
-   protected Iterator realIterator;
+   protected java.util.Iterator<Object> realIterator;
    protected bool  modifyAllow;
 
-   public ProxyIterator(Iterator iter, boolean _modifyAllow)
+   public ProxyIterator(java.util.Iterator<Object> iter, bool _modifyAllow)
    {
       realIterator = iter;
       modifyAllow  = _modifyAllow;
    }
 
    /** Check if the Scalar contains a Java iterator value */
-   public static boolean isIterator(Scalar value)
+   public static bool isIterator(Scalar value)
    {
-      return value.getActualValue() != null && value.objectValue() is Iterator;
+      return value.getActualValue() != null && value.objectValue() is java.util.Iterator<Object>;
    }
 
-   public boolean hasNext()
+   public bool hasNext()
    {
       return realIterator.hasNext(); 
    }
@@ -73,7 +71,7 @@ public class ProxyIterator : Iterator
       }
       else
       {
-         throw new RuntimeException("iterator is read-only");
+         throw new java.lang.RuntimeException("iterator is read-only");
       }
    }
 }

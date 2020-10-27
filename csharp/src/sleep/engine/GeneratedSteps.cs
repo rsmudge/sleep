@@ -25,15 +25,13 @@
  * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
- */ using System;
- using java = biz.ritter.javapi;
+ */
+using System;
+using java = biz.ritter.javapi;
 
-using  java.util;
 using  sleep.interfaces;
 using  sleep.engine.atoms;
 using  sleep.runtime;
-
-using  java.io.Serializable;
 
 namespace sleep.engine{
 
@@ -119,7 +117,7 @@ public class GeneratedSteps
        return temp;
     }
  
-    public Step PLiteral(List doit)
+    public Step PLiteral(java.util.List<Object> doit)
     {
        Step temp = new PLiteral(doit);
        return temp;
@@ -197,7 +195,7 @@ public class GeneratedSteps
        return temp;
     }
 
-    public Step ObjectNew(Class name)
+    public Step ObjectNew(Type name)
     {
        Step temp = new ObjectNew(name);
        return temp;
@@ -209,7 +207,7 @@ public class GeneratedSteps
        return temp;
     }
 
-    public Step ObjectAccessStatic(Class aClass, String name)
+    public virtual Step ObjectAccessStatic(Type aClass, String name)
     {
        Step temp = new ObjectAccess(name, aClass);
        return temp;

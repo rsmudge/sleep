@@ -29,11 +29,6 @@
 using System;
 using java = biz.ritter.javapi;
 
-using  java.util;
-using  java.lang.reflect;
-using  java.net;
-using  java.io;
-
 namespace sleep.parser{
 
 /** This class mantains a cache of imported package names and resolve classes for a Sleep parser.
@@ -42,8 +37,8 @@ namespace sleep.parser{
     information. */
 public class ImportManager
 {
-   protected List       imports   = new LinkedList();
-   protected HashMap    classes   = new HashMap();
+   protected java.util.List<Object>       imports   = new java.util.LinkedList<Object>();
+   protected java.util.HashMap<Object,Object>    classes   = new java.util.HashMap<Object,Object>();
 
    /** Used by Sleep to using  statement to save an imported package name. */
    public void importPackage(String packagez, String from)
@@ -96,14 +91,14 @@ public class ImportManager
           classes.put(clas, found);
 
           if (found == null)
-             throw new RuntimeException("imported class was not found");
+             throw new java.lang.RuntimeException("imported class was not found");
        }
    }
 
    /** This method is used by Sleep to resolve a specific class (or at least try) */
-   private Class resolveClass(String pack, String clas)
+   private Type resolveClass(String pack, String clas)
    {
-       StringBuffer name = new StringBuffer();
+       java.lang.StringBuffer name = new java.lang.StringBuffer();
        if (pack != null) { name.append(pack); name.append("."); }
        name.append(clas);
 
@@ -111,13 +106,13 @@ public class ImportManager
        {
           return Class.forName(name.toString());
        }
-       catch (Exception ex) { }
+       catch (java.lang.Exception ex) { }
 
        return null;
    }
 
    /** A hack to add a jar to the system classpath courtesy of Ralph Becker. */
-   private void addFile(File f)
+   private void addFile(java.io.File f)
    {
         try
         {
@@ -139,11 +134,11 @@ public class ImportManager
 
    /** Attempts to find a class, starts out with the passed in string itself, if that doesn't resolve then the string is 
        appended to each imported package to see where the class might exist */
-   public Class findImportedClass(String name)
+   public Type findImportedClass(String name)
    {
        if (classes.get(name) == null)
        {
-          Class rv = null;
+          Type rv = null;
           String clas, pack;
 
           if (name.indexOf(".") > -1)

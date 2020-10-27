@@ -5,6 +5,6 @@
     <RootNamespace>Sleep</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="VampireApi" Version="*"/>
+    <PackageReference Include="VampireApi" Version="0.10.0" />
   </ItemGroup>
 </Project>

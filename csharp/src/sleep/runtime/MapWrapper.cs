@@ -26,12 +26,10 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- using System;
- using java = biz.ritter.javapi;
+using System;
+using java = biz.ritter.javapi;
 
-using  java.util;
-using  sleep.engine.ObjectUtilities;
-
+using  sleep.engine;
 
 namespace sleep.runtime{
 
@@ -39,9 +37,9 @@ namespace sleep.runtime{
 data structure uses strings for keys.  Accessed values will be marshalled into Sleep scalars */
 public class MapWrapper : ScalarHash
 {
-   protected Map values;
+   protected java.util.Map<Object,Object> values;
 
-   public MapWrapper(Map _values)
+   public MapWrapper(java.util.Map<Object,Object> _values)
    {
       values = _values;
    }
@@ -63,13 +61,13 @@ public class MapWrapper : ScalarHash
       throw new RuntimeException("hash is read-only");
    }
 
-   public Map getData()
+   public java.util.Map<Object,Object> getData()
    {
-      Map temp = new HashMap();
-      Iterator i = values.entrySet().iterator();
+      java.util.Map<Object,object> temp = new java.util.HashMap<Object,Object>();
+      java.util.Iterator<Object> i = values.entrySet().iterator();
       while (i.hasNext())
       {
-         Map.Entry next = (Map.Entry)i.next();
+         java.util.MapNS.Entry<Object,Object> next = (java.util.MapNS.Entry<Object,Object>)i.next();
 
          if (next.getValue() != null && next.getKey() != null)
          {

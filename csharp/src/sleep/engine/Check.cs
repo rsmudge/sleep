@@ -28,10 +28,8 @@
  */ using System;
  using java = biz.ritter.javapi;
 
-using  java.util;
 using  sleep.interfaces;
 using  sleep.engine;
-using  java.io.Serializable;
 using  sleep.runtime;
 
 
@@ -39,7 +37,7 @@ namespace sleep.engine{
 
 public interface Check
 {
-   public boolean check(ScriptEnvironment env);
+   public bool check(ScriptEnvironment env);
    public String toString(String prefix);
    public void setInfo(int _hint);
 }
