@@ -75,9 +75,9 @@ public class ObjectValue : ScalarType
 
       try
       {
-         return Long.decode(str).longValue();
+         return java.lang.Long.decode(str).longValue();
       }
-      catch (Exception ex)
+      catch (java.lang.Exception ex)
       {
          return 0L;
       }

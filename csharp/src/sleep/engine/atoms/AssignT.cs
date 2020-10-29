@@ -45,13 +45,13 @@ public class AssignT : Step
    }
 
    public AssignT()
-   {
-      this(null);
+   :
+      this(null){
    }
 
    public String toString(String prefix)
    {
-      StringBuffer temp = new StringBuffer();
+      java.lang.StringBuffer temp = new java.lang.StringBuffer();
 
       temp.append(prefix);
       temp.append("[AssignT]:\n");
@@ -71,7 +71,7 @@ public class AssignT : Step
    {
       Scalar   putv;
       Scalar   value;
-      Iterator variter = null;
+      java.util.Iterator<Object> variter = null;
 
       Scalar scalar    = (Scalar)e.getCurrentFrame().pop(); /* source of our values */
       Scalar check     = (Scalar)e.getCurrentFrame().peek();
@@ -87,7 +87,7 @@ public class AssignT : Step
 
       if (scalar.getArray() == null)
       {
-         Iterator i = variter;
+         java.util.Iterator<Object> i = variter;
          while (i.hasNext())
          {
             putv = (Scalar)i.next();
@@ -144,7 +144,7 @@ public class AssignT : Step
       }
 
       e.FrameResult(scalar);
-      } catch (Exception ex) { ex.printStackTrace(); }
+      } catch (java.lang.Exception ex) { ex.printStackTrace(); }
       return null;
    }
 }

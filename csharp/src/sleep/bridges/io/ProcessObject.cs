@@ -47,13 +47,13 @@ public class ProcessObject : IOObject
    {
       try
       {
-         if (command.length > 0)
+         if (command.Length > 0)
          {
             String args;
-            command[0] = command[0].replace('/', File.separatorChar);
+            command[0] = command[0].replace('/', java.io.File.separatorChar);
          }
 
-         process = Runtime.getRuntime().exec(command, environment, startDir);
+         process = java.lang.Runtime.getRuntime().exec(command, environment, startDir);
 
          openRead(process.getInputStream());
          openWrite(process.getOutputStream());

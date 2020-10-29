@@ -92,14 +92,14 @@ public class Parser
 
    /** initialize the parser with the code you want me to work with */
    public Parser(String _code)
-   {
-      this("unknown", _code);
+   :
+      this("unknown", _code){
    }
 
    /** initialize the parser with the code you want me to work with */
    public Parser(String _name, String _code)
-   {
-      this(_name, _code, null);
+   :
+      this(_name, _code, null){
    }
 
    /** initialize the parser with the code you want me to work with plus a shared using  manager */
@@ -148,9 +148,9 @@ public class Parser
       if (DEBUG_LEX)
       {
          Token[] all = tokens.getTokens();
-         for (int x = 0; x < all.length; x++)
+         for (int x = 0; x < all.Length; x++)
          {
-            SystemJ.outJ.println(x + ": " + all[x].toString() + " at " + all[x].getHint());
+            java.lang.SystemJ.outJ.println(x + ": " + all[x].toString() + " at " + all[x].getHint());
          }
       }
 
@@ -160,14 +160,14 @@ public class Parser
          throw new YourCodeSucksException(errors);      
       }
 
-      LinkedList statements = TokenParser.ParseBlocks(this, tokens);
+      java.util.LinkedList<Object> statements = TokenParser.ParseBlocks(this, tokens);
 
       if (DEBUG_TPARSER && statements != null)
       {
-         Iterator i = statements.iterator();
+         java.util.Iterator<Object> i = statements.iterator();
          while (i.hasNext())
          {
-            SystemJ.outJ.println("Block\n"+i.next());
+            java.lang.SystemJ.outJ.println("Block\n"+i.next());
          }
       }
 
@@ -190,8 +190,8 @@ public class Parser
 
       if (DEBUG_COMMENTS)
       {
-         Iterator i = comments.iterator();
-         while (i.hasNext()) { SystemJ.outJ.print("Comment: " + i.next()); }
+         java.util.Iterator<Object> i = comments.iterator();
+         while (i.hasNext()) { java.lang.SystemJ.outJ.print("Comment: " + i.next()); }
       }
    }
 
@@ -239,10 +239,10 @@ public class Parser
    {
       try
       {
-         File afile = new File(args[0]);
-         BufferedReader temp = new BufferedReader(new InputStreamReader(new FileInputStream(afile)));
+         java.io.File afile = new java.io.File(args[0]);
+         java.io.BufferedReader temp = new java.io.BufferedReader(new java.io.InputStreamReader(new java.io.FileInputStream(afile)));
 
-         StringBuffer data = new StringBuffer();
+         java.lang.StringBuffer data = new java.lang.StringBuffer();
 
          String text;
          while ((text = temp.readLine()) != null)
@@ -253,22 +253,22 @@ public class Parser
 
          Parser p = new Parser(data.toString());
          p.parse();
-         SystemJ.outJ.println(p.getRunnableBlock());
+         java.lang.SystemJ.outJ.println(p.getRunnableBlock());
       }
       catch (YourCodeSucksException yex)
       {
-         LinkedList errors = yex.getErrors();
-         Iterator i = errors.iterator();
+         java.util.LinkedList<Object> errors = yex.getErrors();
+         java.util.Iterator<Object> i = errors.iterator();
          while (i.hasNext())
          {
             SyntaxError anError = (SyntaxError)i.next();
-            SystemJ.outJ.println("Error: " + anError.getDescription() + " at line " + anError.getLineNumber());
-            SystemJ.outJ.println("       " + anError.getCodeSnippet());
+            java.lang.SystemJ.outJ.println("Error: " + anError.getDescription() + " at line " + anError.getLineNumber());
+            java.lang.SystemJ.outJ.println("       " + anError.getCodeSnippet());
             if (anError.getMarker() != null)
-               SystemJ.outJ.println("       " + anError.getMarker());
+               java.lang.SystemJ.outJ.println("       " + anError.getMarker());
          }
       }
-      catch (Exception ex)
+      catch (java.lang.Exception ex)
       {
          ex.printStackTrace();
       }

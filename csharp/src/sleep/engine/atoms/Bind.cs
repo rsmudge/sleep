@@ -42,7 +42,7 @@ public class Bind : Step
  
    public String toString(String prefix)
    {
-      StringBuffer temp = new StringBuffer();
+      java.lang.StringBuffer temp = new java.lang.StringBuffer();
 
       temp.append(prefix);
       temp.append("[Bind Function]: \n");
@@ -75,7 +75,7 @@ public class Bind : Step
 
    public Scalar evaluate(ScriptEnvironment e)
    {
-      Environment temp = e.getFunctionEnvironment(funcenv);
+      sleep.interfaces.Environment temp = e.getFunctionEnvironment(funcenv);
       
       if (temp != null)
       { 

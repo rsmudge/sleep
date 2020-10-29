@@ -75,7 +75,7 @@ public class HashContainer : ScalarHash
    {
       ScalarType ntype = SleepUtils.getEmptyScalar().getValue();
 
-      Iterator i = values.values().iterator();
+      java.util.Iterator<Object> i = values.values().iterator();
       while (i.hasNext())
       {
          Scalar next = (Scalar)i.next();

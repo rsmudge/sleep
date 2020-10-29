@@ -29,14 +29,13 @@
 using System;
 using java = biz.ritter.javapi;
 
-using  sleep.engine;
-using  sleep.interfaces;
-using  sleep.runtime;
-using  sleep.bridges;
-using  sleep.engine.types;
+using sleep.engine;
+using sleep.interfaces;
+using sleep.runtime;
+using sleep.bridges;
+using sleep.engine.types;
 
 namespace sleep.taint{
-
 
 /** <p>Sleep supports a mode where variables received from external sources are considered tainted.  This is a security mechanism to help educate
     scripters when they may be using tainted data within dangerous operations.</p>
@@ -89,7 +88,7 @@ public class TaintUtils
     public static bool isTaintMode()
     {
 //       return true;
-       return this._isTaintMode;
+       return TaintUtils._isTaintMode;
     }
 
     /** taints the specified scalar (if it is a value scalar only).  returns the original container.  If tainting is disabled the original bridge is returned. */
@@ -108,7 +107,7 @@ public class TaintUtils
     {
        if (isTaintMode())
        {
-          Iterator i = values.iterator();
+          java.util.Iterator<Object> i = values.iterator();
           while (i.hasNext())
           {
              taintAll((Scalar)i.next());
@@ -126,7 +125,7 @@ public class TaintUtils
        }
        else if (value.getArray() != null)
        {
-          Iterator i = value.getArray().scalarIterator();
+          java.util.Iterator<Object> i = value.getArray().scalarIterator();
           while (i.hasNext())
           {
              taintAll((Scalar)i.next());
@@ -138,10 +137,10 @@ public class TaintUtils
        }
        else if (value.getHash() != null)
        {
-          Iterator i = value.getHash().getData().entrySet().iterator();
+          java.util.Iterator<java.util.MapNS.Entry<Object,Object>> i = value.getHash().getData().entrySet().iterator();
           while (i.hasNext())
           {
-             Map.Entry tempe = (Map.Entry)i.next();
+             java.util.MapNS.Entry<Object,Object> tempe = (java.util.MapNS.Entry<Object,Object>)i.next();
              taintAll((Scalar)tempe.getValue());
           }
        }
@@ -177,7 +176,7 @@ public class TaintUtils
           {
              seen.add(value.getHash());
 
-             Iterator i = value.getHash().getData().values().iterator();
+             java.util.Iterator<Object> i = value.getHash().getData().values().iterator();
              while (i.hasNext())
              {
                 if (isTainted(seen, (Scalar)i.next()))
@@ -218,7 +217,7 @@ public class TaintUtils
     {
        if (value.getActualValue() == null)
        {
-          return isTainted(new HashSet(), value);
+          return isTainted(new java.util.HashSet<Object>(), value);
        }
        else
        {

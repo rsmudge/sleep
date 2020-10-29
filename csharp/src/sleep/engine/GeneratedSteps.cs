@@ -161,7 +161,7 @@ public class GeneratedSteps
 
     public Step Index(String value, Block index)
     {
-       Step temp = new Index(value, index);
+       Step temp = new sleep.engine.atoms.Index(value, index);
        return temp;
     }
 

@@ -108,7 +108,7 @@ public class SleepClosure : Function, java.lang.Runnable
        }
        else if (localLevel.size() != 1)
        {
-          throw new RuntimeException((localLevel.size() - 1) + " unaccounted local stack frame(s) in " + toString() + " (perhaps you forgot to &popl?)");
+          throw new java.lang.RuntimeException((localLevel.size() - 1) + " unaccounted local stack frame(s) in " + toString() + " (perhaps you forgot to &popl?)");
        }
     }
 
@@ -152,8 +152,8 @@ public class SleepClosure : Function, java.lang.Runnable
     {
        code      = _code;
        owner     = si;
-       context   = new Stack();
-       metadata  = new HashMap();
+       context   = new java.util.Stack<Object>();
+       metadata  = new java.util.HashMap<Object,Object>();
 
        _var.putScalar("$this", SleepUtils.getScalar(this));
        setVariables(_var);
@@ -207,7 +207,7 @@ public class SleepClosure : Function, java.lang.Runnable
            si = getOwner();
 
        if (locals == null)
-           locals = new Stack();
+           locals = new java.util.Stack<Object>();
 
        si.getScriptEnvironment().pushSource("<internal>");
        si.getScriptEnvironment().CreateFrame();
@@ -312,7 +312,7 @@ public class SleepClosure : Function, java.lang.Runnable
        code      = (Block)inJ.readObject();
        context   = (java.util.Stack<Object>)inJ.readObject();
        metadata  = new java.util.HashMap<Object,Object>();
-/*       metadata  = (HashMap)in.readObject(); */
+/*       metadata  = (java.util.HashMap<Object,Object>)in.readObject(); */
        variables = (Variable)inJ.readObject();
        owner     = null;
     }

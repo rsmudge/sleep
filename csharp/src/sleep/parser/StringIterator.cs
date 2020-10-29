@@ -60,13 +60,13 @@ public class StringIterator
    /** check that there is another character out there for us to get */
    public bool hasNext()
    {
-      return position < text.length;
+      return position < text.Length;
    }
 
    /** check that there are at least n chars we can still get */
    public bool hasNext(int n)
    {
-      return (position + n - 1) < text.length;
+      return (position + n - 1) < text.Length;
    }
 
    public int getLineNumber()
@@ -82,7 +82,7 @@ public class StringIterator
    public String getEntireLine()
    {
       int temp = position;
-      while (temp < text.length && text[temp] != '\n')
+      while (temp < text.Length && text[temp] != '\n')
       {
          temp++;
       }
@@ -97,7 +97,7 @@ public class StringIterator
 
    public bool isNextString(String n)
    {
-      return ((position + n.length()) <= text.length) && texts.substring(position, position + n.length()).equals(n);
+      return ((position + n.length()) <= text.Length) && texts.substring(position, position + n.length()).equals(n);
    }
 
    public bool isNextChar(char n)
@@ -119,7 +119,7 @@ public class StringIterator
    /** returns the string consisting of the next n characters. */
    public String next(int n)
    {
-      StringBuffer buffer = new StringBuffer();
+      java.lang.StringBuffer buffer = new java.lang.StringBuffer();
 
       for (int x = 0; x < n; x++)
       {
@@ -147,14 +147,14 @@ public class StringIterator
 
    public void mark()
    {
-      mark1.add(0, new Integer(position));
-      mark2.add(0, new Integer(lineNo));
+      mark1.add(0, new java.lang.Integer(position));
+      mark2.add(0, new java.lang.Integer(lineNo));
    }
 
    public String reset()
    {
-      Integer temp1 = (Integer)mark1.removeFirst();
-      Integer temp2 = (Integer)mark2.removeFirst();
+      java.lang.Integer temp1 = (java.lang.Integer)mark1.removeFirst();
+      java.lang.Integer temp2 = (java.lang.Integer)mark2.removeFirst();
 //      position = temp1.intValue();
 //      lineNo   = temp2.intValue();
 
@@ -169,15 +169,15 @@ public class StringIterator
    {
       StringIterator temp = new StringIterator(args[0]);
       
-      StringBuffer blah = new StringBuffer();
+      java.lang.StringBuffer blah = new java.lang.StringBuffer();
       while (temp.hasNext())
       {
          char t = temp.next();
          blah.append(t);
          if (t == '\n')
          {
-            SystemJ.outJ.print(temp.getLineNumber() + ": " + blah.toString());
-            blah = new StringBuffer();
+            java.lang.SystemJ.outJ.print(temp.getLineNumber() + ": " + blah.toString());
+            blah = new java.lang.StringBuffer();
          }
       }
    }

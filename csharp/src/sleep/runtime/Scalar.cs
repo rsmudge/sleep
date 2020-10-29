@@ -72,7 +72,7 @@ namespace sleep.runtime{
  * <p>To iterate through all of the values in a Scalar array:</p>
  * 
  * <pre>
- * Iterator i = arrayScalar.getArray().scalarIterator();
+ * java.util.Iterator<Object> i = arrayScalar.getArray().scalarIterator();
  * while (i.hasNext())
  * {
  *     Scalar temp = (Scalar)i.next();

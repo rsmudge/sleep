@@ -75,7 +75,7 @@ public class Block : java.io.Serializable
 
     public String toString(String prefix)
     { 
-       StringBuffer tempz = new StringBuffer();
+       java.lang.StringBuffer tempz = new java.lang.StringBuffer();
        Step temp = first;
        while (temp != null)
        {
@@ -129,7 +129,7 @@ public class Block : java.io.Serializable
     /** return the lowest line number associated with this block */
     public int getLowLineNumber()
     {
-       int low = Integer.MAX_VALUE;
+       int low = java.lang.Integer.MAX_VALUE;
  
        int m;
        Step temp = first;
@@ -161,7 +161,7 @@ public class Block : java.io.Serializable
     /** Returns a string representation of where in the source code this block originated from */
     public String getSourceLocation()
     {
-       return (new File(source).getName()) + ":" + getApproximateLineRange();
+       return (new java.io.File(source).getName()) + ":" + getApproximateLineRange();
     }
 
     public void add(Step n)
@@ -236,13 +236,13 @@ public class Block : java.io.Serializable
            {
               temp.evaluate(environment);
            }
-           catch (Exception ex)
+           catch (java.lang.Exception ex)
            {
-              if (ex is IllegalArgumentException)
+              if (ex is java.lang.IllegalArgumentException)
               {
                  environment.getScriptInstance().fireWarning(ex.getMessage(), temp.getLineNumber());
               }
-              else if (ex is IndexOutOfBoundsException)
+              else if (ex is java.lang.IndexOutOfBoundsException)
               {
                  if (ex.getMessage() != null)
                  {
@@ -253,15 +253,15 @@ public class Block : java.io.Serializable
                     environment.getScriptInstance().fireWarning("attempted an invalid index", temp.getLineNumber());
                  }
               }
-              else if (ex is ClassCastException)
+              else if (ex is java.lang.ClassCastException)
               {
                  environment.getScriptInstance().fireWarning("attempted an invalid cast: " + ex.getMessage(), temp.getLineNumber());
               }
-              else if (ex is NullPointerException)
+              else if (ex is java.lang.NullPointerException)
               {
                  environment.getScriptInstance().fireWarning("null value error", temp.getLineNumber());
               }
-              else if (ex is ConcurrentModificationException)
+              else if (ex is java.util.ConcurrentModificationException)
               {
                  if (ex.getMessage()  != null)
                  {
@@ -272,7 +272,7 @@ public class Block : java.io.Serializable
                     environment.getScriptInstance().fireWarning("detected unsafe data modification", temp.getLineNumber());
                  }
               }    
-              else if (ex is RuntimeException)
+              else if (ex is java.lang.RuntimeException)
               {
                  if (ex.getMessage() == null)
                  {
@@ -293,7 +293,7 @@ public class Block : java.io.Serializable
               cleanupEnvironment(environment);
               return SleepUtils.getEmptyScalar();
            } 
-           catch (Error th)
+           catch (java.lang.Error th)
            {
               environment.getScriptInstance().fireWarning("critical internal error - " + th.toString(), temp.getLineNumber());
               cleanupEnvironment(environment);
@@ -317,7 +317,7 @@ public class Block : java.io.Serializable
               if (environment.isCallCC())
               {
                  environment.getCurrentFrame().push(source);
-                 environment.getCurrentFrame().push(new Integer(temp.getLineNumber()));
+                 environment.getCurrentFrame().push(new java.lang.Integer(temp.getLineNumber()));
               }
 
               if (environment.isThrownValue())

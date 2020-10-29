@@ -137,9 +137,9 @@ public class CheckEval : Check, java.io.Serializable
    {
       env.CreateFrame();
       setup.evaluate(env);
-      Predicate choice = env.getPredicate(name);
+      sleep.interfaces.Predicate choice = env.getPredicate(name);
  
-      boolean temp;
+      bool temp;
 
       if (choice == null)
       {

@@ -113,7 +113,7 @@ public class IOObject
 
             if (getThread().isAlive())
             {
-               env.flagError(new IOException("wait on object timed out"));
+               env.flagError(new java.io.IOException("wait on object timed out"));
                return SleepUtils.getEmptyScalar();
             }
          }
@@ -155,8 +155,8 @@ public class IOObject
       if (console == null)
       {
          console = new IOObject();
-         console.openRead(System.inJ);
-         console.openWrite(System.outJ);
+         console.openRead(java.lang.SystemJ.inJ);
+         console.openWrite(java.lang.SystemJ.outJ);
          setConsole(environment, console);
       }
 
@@ -182,9 +182,9 @@ public class IOObject
       
       if (inJ != null)
       {
-         reader  = new BufferedInputStream(inJ, 8192);
-         readerb = new DataInputStream(reader);
-         readeru = new InputStreamReader(readerb);
+         reader  = new java.io.BufferedInputStream(inJ, 8192);
+         readerb = new java.io.DataInputStream(reader);
+         readeru = new java.io.InputStreamReader(readerb);
       }
    }
 

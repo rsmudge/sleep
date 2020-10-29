@@ -43,7 +43,7 @@ public class Index : Step
 
    public String toString(String prefix)
    {
-      StringBuffer temp = new StringBuffer();
+      java.lang.StringBuffer temp = new java.lang.StringBuffer();
 
       temp.append(prefix);
       temp.append("[Scalar index]: "+value+"\n");
@@ -122,7 +122,7 @@ public class Index : Step
       else 
       { 
          e.KillFrame();
-         throw new IllegalArgumentException("invalid use of index operator: " + SleepUtils.describe(structure) + "[" + SleepUtils.describe(pos) + "]");
+         throw new java.lang.IllegalArgumentException("invalid use of index operator: " + SleepUtils.describe(structure) + "[" + SleepUtils.describe(pos) + "]");
       } 
 
       e.FrameResult(rv);

@@ -77,8 +77,8 @@ public class ProxyInterface : java.lang.reflect.InvocationHandler
        to all method calls on this instance. */
    public static Object BuildInterface(Type[] classes, Function subroutine, ScriptInstance script)
    {
-      InvocationHandler temp = new ProxyInterface(subroutine, script);
-      return Proxy.newProxyInstance(classes[0].getClassLoader(), classes, temp);
+      java.lang.reflect.InvocationHandler temp = new ProxyInterface(subroutine, script);
+      return java.lang.reflect.Proxy.newProxyInstance(classes[0].getClassLoader(), classes, temp);
    } 
 
    /** Constructs a new instance of the specified class that uses the passed block to respond
@@ -105,11 +105,11 @@ public class ProxyInterface : java.lang.reflect.InvocationHandler
          java.util.Stack<Object> temp = new java.util.Stack<Object>();
 
          bool isTrace = (script.getDebugFlags() & ScriptInstance.DEBUG_TRACE_CALLS) == ScriptInstance.DEBUG_TRACE_CALLS;
-         StringBuffer message = null;
+         java.lang.StringBuffer message = null;
 
          if (args != null)
          {
-            for (int z = args.length - 1; z >= 0; z--)
+            for (int z = args.Length - 1; z >= 0; z--)
             { 
                temp.push(ObjectUtilities.BuildScalar(true, args[z]));
             }

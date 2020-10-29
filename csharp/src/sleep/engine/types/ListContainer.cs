@@ -78,7 +78,7 @@ public class ListContainer : ScalarArray
 
    public void sort(java.util.Comparator<Object> compare)
    {
-      Collections.sort(values, compare);
+      java.util.Collections<Object>.sort(values, compare);
    }
 
    public Scalar getAt(int index)
@@ -117,6 +117,10 @@ public class ListContainer : ScalarArray
    public String toString()
    {
       return values.toString();
+   }
+
+   public Type getType() {
+      return GetType();
    }
 }
 }

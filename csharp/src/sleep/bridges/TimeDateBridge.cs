@@ -60,8 +60,8 @@ public class TimeDateBridge : Loadable
 
          String b = locals.pop().toString();
 
-         SimpleDateFormat format = new SimpleDateFormat(b);
-         Date             adate  = new Date(a);
+         java.text.SimpleDateFormat format = new java.text.SimpleDateFormat(b);
+         java.util.Date             adate  = new java.util.Date(a);
 
          return SleepUtils.getScalar(format.format(adate, new java.lang.StringBuffer(), new FieldPosition(0)).toString());
       }
@@ -74,8 +74,8 @@ public class TimeDateBridge : Loadable
          String a = locals.pop().toString();
          String b = locals.pop().toString();
 
-         SimpleDateFormat format = new SimpleDateFormat(a);
-         Date             pdate  = format.parse(b, new ParsePosition(0));
+         java.text.SimpleDateFormat format = new java.text.SimpleDateFormat(a);
+         java.util.Date             pdate  = format.parse(b, new javatext.ParsePosition(0));
 
          return SleepUtils.getScalar(pdate.getTime());
       }
@@ -85,7 +85,7 @@ public class TimeDateBridge : Loadable
    {
       public Scalar evaluate(String f, ScriptInstance si, java.util.Stack<Object> locals)
       {
-         return SleepUtils.getScalar(System.currentTimeMillis());
+         return SleepUtils.getScalar(java.lang.SystemJ.currentTimeMillis());
       }
    }
 }

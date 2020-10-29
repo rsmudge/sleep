@@ -48,7 +48,7 @@ public class Decide : Step
 
    public String toString(String prefix)
    {
-      StringBuffer temp = new StringBuffer();
+      java.lang.StringBuffer temp = new java.lang.StringBuffer();
       temp.append(prefix);
       temp.append("[Decide]:\n");
       temp.append(prefix);

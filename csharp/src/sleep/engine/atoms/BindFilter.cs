@@ -44,7 +44,7 @@ public class BindFilter : Step
  
    public String toString()
    {
-      StringBuffer temp = new StringBuffer();
+      java.lang.StringBuffer temp = new java.lang.StringBuffer();
       temp.append("[Bind Filter]: "+name+"\n");
       temp.append("   [Filter]:       \n");
       temp.append("      " + filter.toString());

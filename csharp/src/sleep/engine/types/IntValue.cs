@@ -69,7 +69,7 @@ public class IntValue : ScalarType
 
    public Object objectValue()
    {
-      return new Integer(value);
+      return new java.lang.Integer(value);
    }
 
    public Type getType() {

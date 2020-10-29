@@ -47,23 +47,23 @@ public class Iterate : Step
       public Variable venv     = null;
 
       public Scalar   source   = null;
-      public java.util.Iterator<Object> iterator = null;
+      public java.util.Iterator<biz.ritter.javapi.util.MapNS.Entry<object, object>> iterator = null;
       public int      count    = 0;
    }
 
-   public static readonly int ITERATOR_CREATE   = 1;
-   public static readonly int ITERATOR_DESTROY  = 2;
-   public static readonly int ITERATOR_NEXT     = 3;
+   public const int ITERATOR_CREATE   = 1;
+   public const int ITERATOR_DESTROY  = 2;
+   public const int ITERATOR_NEXT     = 3;
 
-   public String toString(String prefix)
+   public override String toString(String prefix)
    {
       switch (type)
       { 
-         case ITERATOR_CREATE:
+         case Iterate.ITERATOR_CREATE:
             return prefix + "[Create Iterator]\n";
-         case ITERATOR_DESTROY:
+         case Iterate.ITERATOR_DESTROY:
             return prefix + "[Destroy Iterator]\n";
-         case ITERATOR_NEXT:
+         case Iterate.ITERATOR_NEXT:
             return prefix + "[Iterator next]\n";
       }
 
@@ -83,13 +83,13 @@ public class Iterate : Step
 
    private void iterator_destroy(ScriptEnvironment e)
    {
-      Stack iterators = (Stack)(e.getContextMetadata("iterators"));
+      java.util.Stack<Object> iterators = (java.util.Stack<Object>)(e.getContextMetadata("iterators"));
       iterators.pop();      
    }
 
    private void iterator_create(ScriptEnvironment e)
    {
-      Stack temp = e.getCurrentFrame();
+      java.util.Stack<Object> temp = e.getCurrentFrame();
       
       //
       // grab our values off of the current frame...
@@ -147,7 +147,7 @@ public class Iterate : Step
       }
       else if (ProxyIterator.isIterator(data.source))
       {
-         data.iterator = new ProxyIterator((Iterator)data.source.objectValue(), true);
+         data.iterator = new ProxyIterator((java.util.Iterator<Object>)data.source.objectValue(), true);
       }
       else
       {
@@ -158,11 +158,11 @@ public class Iterate : Step
       //
       // save the iterator
       //
-      Stack iterators   = (Stack)(e.getContextMetadata("iterators"));
+      java.util.Stack<Object> iterators   = (java.util.Stack<Object>)(e.getContextMetadata("iterators"));
 
       if (iterators == null)
       {
-         iterators = new Stack();
+         iterators = new java.util.Stack<Object>();
          e.setContextMetadata("iterators", iterators);
       }
 
@@ -171,7 +171,7 @@ public class Iterate : Step
 
    private void iterator_next(ScriptEnvironment e)
    {
-      Stack iterators   = (Stack)(e.getContextMetadata("iterators"));
+      java.util.Stack<Object> iterators   = (java.util.Stack<Object>)(e.getContextMetadata("iterators"));
       IteratorData data = (IteratorData)(iterators.peek());
 
       if (data.iterator != null && data.iterator.hasNext())
@@ -189,7 +189,7 @@ public class Iterate : Step
       {
          next = data.iterator.next();
       }
-      catch (ConcurrentModificationException cmex)
+      catch (java.util.ConcurrentModificationException cmex)
       {
          data.iterator = null; /* force a break out of the loop */
          throw (cmex);
@@ -197,7 +197,7 @@ public class Iterate : Step
 
       if (data.source.getHash() != null)
       {
-         if (SleepUtils.isEmptyScalar((Scalar)((Map.Entry)next).getValue()))
+         if (SleepUtils.isEmptyScalar((Scalar)((java.util.MapNS.Entry<Object,Object>)next).getValue()))
          {
             e.getCurrentFrame().pop(); /* consume the old value true/false value */
             iterator_next(e);
@@ -206,12 +206,12 @@ public class Iterate : Step
 
          if (data.key != null)
          {  
-            data.kenv.putScalar(data.key, SleepUtils.getScalar(((Map.Entry)next).getKey()));
-            data.venv.putScalar(data.value, (Scalar)((Map.Entry)next).getValue());
+            data.kenv.putScalar(data.key, SleepUtils.getScalar(((java.util.MapNS.Entry<Object,Object>)next).getKey()));
+            data.venv.putScalar(data.value, (Scalar)((java.util.MapNS.Entry<Object,Object>)next).getValue());
          }
          else
          {
-            data.venv.putScalar(data.value, SleepUtils.getScalar(((Map.Entry)next).getKey()));
+            data.venv.putScalar(data.value, SleepUtils.getScalar(((java.util.MapNS.Entry<Object,Object>)next).getKey()));
          }
       }
       else

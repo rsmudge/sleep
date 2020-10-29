@@ -44,7 +44,7 @@ namespace sleep.bridges{
  /** Provides a bridge between Java's regex API and sleep.  Rock on */
 public class RegexBridge : Loadable
 {
-    private static java.util.Map<Object,Object> patternCache = java.util.Collections.synchronizedMap(new Cache(128));
+    private static java.util.Map<Object,Object> patternCache = java.util.Collections<Object>.synchronizedMap(new Cache(128));
 
     private class Cache : java.util.LinkedHashMap<Object,Object>
     {
@@ -90,7 +90,7 @@ public class RegexBridge : Loadable
 
     public void scriptLoaded (ScriptInstance aScript)
     {
-        Hashtable temp = aScript.getScriptEnvironment().getEnvironment();
+        java.util.Hashtable<Object,Object> temp = aScript.getScriptEnvironment().getEnvironment();
 
         isMatch matcher = new isMatch();
 
@@ -114,9 +114,9 @@ public class RegexBridge : Loadable
           String stringJ = BridgeUtilities.getString(l, "");
           String patterns = BridgeUtilities.getString(l, "");
 
-          Pattern pattern  = RegexBridge.getPattern(patterns);
-          Matcher matchit  = pattern.matcher(stringJ);
-          int     start    = BridgeUtilities.normalize(BridgeUtilities.getInt(l, 0), string.length());
+          java.util.regex.Pattern pattern  = RegexBridge.getPattern(patterns);
+          java.util.regex.Matcher matchit  = pattern.matcher(stringJ);
+          int     start    = BridgeUtilities.normalize(BridgeUtilities.getInt(l, 0), stringJ.length());
           
           bool check    = matchit.find(start);
 
@@ -135,7 +135,7 @@ public class RegexBridge : Loadable
 
     private static String key(String text, java.util.regex.Pattern p)
     {
-       StringBuffer buffer = new StringBuffer(text.length() + p.pattern().length() + 1);
+       java.lang.StringBuffer buffer = new java.lang.StringBuffer(text.length() + p.pattern().length() + 1);
        buffer.append(text);
        buffer.append(p.pattern());
 
@@ -179,7 +179,7 @@ public class RegexBridge : Loadable
     {
        public bool decide(String n, ScriptInstance i, java.util.Stack<Object> l)
        {
-          boolean rv;
+          bool rv;
 
           /* do some tainter checking plz */
           Scalar bb = (Scalar)l.pop(); // PATTERN
@@ -188,20 +188,20 @@ public class RegexBridge : Loadable
           java.util.regex.Pattern pattern = RegexBridge.getPattern(bb.toString());
 
           Scalar  container = null;
-          Matcher matcher   = null;
+          java.util.regex.Matcher matcher   = null;
 
           if (n.equals("hasmatch"))
           {
-              String key = key(aa.toString(), pattern);
+              String key_ = key(aa.toString(), pattern);
 
-              container = getMatcher(i.getScriptEnvironment(), key, aa.toString(), pattern);
-              matcher  = (Matcher)container.objectValue();
+              container = getMatcher(i.getScriptEnvironment(), key_, aa.toString(), pattern);
+              matcher  = (java.util.regex.Matcher)container.objectValue();
 
               rv = matcher.find();
 
               if (!rv)
               {
-                 Map matchers = (Map)i.getScriptEnvironment().getContextMetadata("matchers");
+                 java.util.Map<Object,Object> matchers = (java.util.Map<Object,Object>)i.getScriptEnvironment().getContextMetadata("matchers");
                  if (matchers != null) { matchers.remove(key); }
               }
           }
@@ -234,7 +234,7 @@ public class RegexBridge : Loadable
 
           if (!SleepUtils.isEmptyScalar(container))
           {
-             Matcher matcher = (Matcher)container.objectValue();
+             java.util.regex.Matcher matcher = (java.util.regex.Matcher)container.objectValue();
 
              int count = matcher.groupCount();  
 
@@ -257,8 +257,8 @@ public class RegexBridge : Loadable
           int    c = BridgeUtilities.getInt(l, -1);
           int    d = BridgeUtilities.getInt(l, c);
 
-          Pattern pattern = RegexBridge.getPattern(b);
-          Matcher matcher = pattern.matcher(a);
+          java.util.regex.Pattern pattern = RegexBridge.getPattern(b);
+          java.util.regex.Matcher matcher = pattern.matcher(a);
    
           Scalar value = SleepUtils.getArrayScalar();            
 
@@ -297,7 +297,7 @@ public class RegexBridge : Loadable
           
           Scalar array = SleepUtils.getArrayScalar();
 
-          for (int x = 0; x < results.length; x++)
+          for (int x = 0; x < results.Length; x++)
           {
              array.getArray().push(SleepUtils.getScalar(results[x]));
           }
@@ -311,9 +311,9 @@ public class RegexBridge : Loadable
        public Scalar evaluate(String n, ScriptInstance script, java.util.Stack<Object> l)
        {
           String      a = ((Scalar)l.pop()).toString();
-          Iterator    i = BridgeUtilities.getIterator(l, script);
+          java.util.Iterator<Object>    i = BridgeUtilities.getIterator(l, script);
 
-          StringBuffer result = new StringBuffer();
+          java.lang.StringBuffer result = new java.lang.StringBuffer();
 
           if (i.hasNext())
           {
@@ -339,7 +339,7 @@ public class RegexBridge : Loadable
           String c = BridgeUtilities.getString(l, ""); // new
           int    d = BridgeUtilities.getInt(l, -1);
 
-          StringBuffer rv = new StringBuffer();
+          java.lang.StringBuffer rv = new java.lang.StringBuffer();
 
           java.util.regex.Pattern pattern = RegexBridge.getPattern(b);
           java.util.regex.Matcher matcher = pattern.matcher(a);

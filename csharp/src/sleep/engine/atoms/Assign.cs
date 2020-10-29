@@ -53,7 +53,7 @@ public class Assign : Step
 
    public String toString(String prefix)
    {
-      StringBuffer temp = new StringBuffer();
+      java.lang.StringBuffer temp = new java.lang.StringBuffer();
 
       temp.append(prefix);
       temp.append("[Assign]:\n");
@@ -75,7 +75,7 @@ public class Assign : Step
 
       if (e.getCurrentFrame().size() > 1)
       {
-         throw new RuntimeException("assignment is corrupted, did you forget a semicolon?");
+         throw new java.lang.RuntimeException("assignment is corrupted, did you forget a semicolon?");
       }
 
       // evaluate our left hand side (assign to) value

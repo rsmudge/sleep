@@ -40,7 +40,7 @@ public class DataPattern
    public int         size  = 0;
    public java.nio.ByteOrder   order = java.nio.ByteOrder.BIG_ENDIAN;
 
-   private static java.util.HashMap<Object,Object> patternCache = new Hjava.utilashMap<Object,Object>();
+   private static java.util.HashMap<Object,Object> patternCache = new java.util.HashMap<Object,Object>();
 
    public static int EstimateSize(String format)
    {
@@ -65,16 +65,16 @@ public class DataPattern
           return (DataPattern)patternCache.get(format);
 
       DataPattern head   = null, temp = null;
-      StringBuffer count = null;
+      java.lang.StringBuffer count = null;
 
       for (int x = 0; x < format.length(); x++)
       {
-         if (Character.isLetter(format.charAt(x)))
+         if (java.lang.Character.isLetter(format.charAt(x)))
          {
             if (temp != null)
             {
                if (count.length() > 0)
-                  temp.count = Integer.parseInt(count.toString());
+                  temp.count = java.lang.Integer.parseInt(count.toString());
 
                temp.next = new DataPattern();
                temp      = temp.next;
@@ -86,7 +86,7 @@ public class DataPattern
                temp      = head;
             }
 
-            count = new StringBuffer(3);
+            count = new java.lang.StringBuffer(3);
             temp.value = format.charAt(x);
 
             switch (temp.value)
@@ -132,24 +132,24 @@ public class DataPattern
          }
          else if (format.charAt(x) == '!')
          {
-            temp.order = ByteOrder.nativeOrder();
+            temp.order = java.nio.ByteOrder.nativeOrder();
          }
          else if (format.charAt(x) == '-')
          {
-            temp.order = ByteOrder.LITTLE_ENDIAN;
+            temp.order = java.nio.ByteOrder.LITTLE_ENDIAN;
          }
          else if (format.charAt(x) == '+')
          {
-            temp.order = ByteOrder.BIG_ENDIAN;
+            temp.order = java.nio.ByteOrder.BIG_ENDIAN;
          }
-         else if (Character.isDigit(format.charAt(x)))
+         else if (java.lang.Character.isDigit(format.charAt(x)))
          {
             count.append(format.charAt(x));
          }
       }
 
       if (count.length() > 0)
-         temp.count = Integer.parseInt(count.toString());
+         temp.count = java.lang.Integer.parseInt(count.toString());
 
       patternCache.put(format, head);
       return head;

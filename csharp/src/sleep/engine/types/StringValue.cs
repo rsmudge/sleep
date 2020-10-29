@@ -57,7 +57,7 @@ public class StringValue : ScalarType
    {
       try
       {
-         return Integer.parseInt(numberOnlyString());
+         return java.lang.Integer.parseInt(numberOnlyString());
       }
       catch (Exception ex)
       {
@@ -69,7 +69,7 @@ public class StringValue : ScalarType
    {
       try
       {
-         return Long.parseLong(numberOnlyString());
+         return java.lang.Long.parseLong(numberOnlyString());
       }
       catch (Exception ex)
       {

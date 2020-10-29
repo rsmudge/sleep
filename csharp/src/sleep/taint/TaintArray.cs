@@ -122,6 +122,10 @@ public class TaintArray : ScalarArray
       {
          realIterator.remove();
       }
+
    }
+      public Type getType() {
+         return this.GetType();
+      }
 }
 }

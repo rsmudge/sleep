@@ -54,7 +54,7 @@ public class BasicNumbers : sleep.interfaces.Predicate, Operator, Loadable, Func
        String[] funcs = new String[] { "&abs", "&acos", "&asin", "&atan", "&atan2", "&ceil", "&cos", "&log", "&round", 
                                        "&sin", "&sqrt", "&tan", "&radians", "&degrees", "&exp", "&floor", "&sum" };
 
-       for (int x = 0; x < funcs.length; x++)
+       for (int x = 0; x < funcs.Length; x++)
        {
           temp.put(funcs[x], sanitized);
        }
@@ -104,20 +104,20 @@ public class BasicNumbers : sleep.interfaces.Predicate, Operator, Loadable, Func
 
     public Scalar evaluate(String name, ScriptInstance si, java.util.Stack<Object> args)
     {
-       if (name.equals("&abs")) { return SleepUtils.getScalar(Math.abs(BridgeUtilities.getDouble(args, 0.0))); }
-       else if (name.equals("&acos")) { return SleepUtils.getScalar(Math.acos(BridgeUtilities.getDouble(args, 0.0))); }
-       else if (name.equals("&asin")) { return SleepUtils.getScalar(Math.asin(BridgeUtilities.getDouble(args, 0.0))); }
-       else if (name.equals("&atan")) { return SleepUtils.getScalar(Math.atan(BridgeUtilities.getDouble(args, 0.0))); }
-       else if (name.equals("&atan2")) { return SleepUtils.getScalar(Math.atan2(BridgeUtilities.getDouble(args, 0.0), BridgeUtilities.getDouble(args, 0.0))); }
-       else if (name.equals("&ceil")) { return SleepUtils.getScalar(Math.ceil(BridgeUtilities.getDouble(args, 0.0))); }
-       else if (name.equals("&floor")) { return SleepUtils.getScalar(Math.floor(BridgeUtilities.getDouble(args, 0.0))); }
-       else if (name.equals("&cos")) { return SleepUtils.getScalar(Math.cos(BridgeUtilities.getDouble(args, 0.0))); }
-       else if (name.equals("&log") && args.size() == 1) { return SleepUtils.getScalar(Math.log(BridgeUtilities.getDouble(args, 0.0))); }
-       else if (name.equals("&log") && args.size() == 2) { return SleepUtils.getScalar(Math.log(BridgeUtilities.getDouble(args, 0.0)) / Math.log(BridgeUtilities.getDouble(args, 0.0))); }
+       if (name.equals("&abs")) { return SleepUtils.getScalar(java.lang.Math.abs(BridgeUtilities.getDouble(args, 0.0))); }
+       else if (name.equals("&acos")) { return SleepUtils.getScalar(java.lang.Math.acos(BridgeUtilities.getDouble(args, 0.0))); }
+       else if (name.equals("&asin")) { return SleepUtils.getScalar(java.lang.Math.asin(BridgeUtilities.getDouble(args, 0.0))); }
+       else if (name.equals("&atan")) { return SleepUtils.getScalar(java.lang.Math.atan(BridgeUtilities.getDouble(args, 0.0))); }
+       else if (name.equals("&atan2")) { return SleepUtils.getScalar(java.lang.Math.atan2(BridgeUtilities.getDouble(args, 0.0), BridgeUtilities.getDouble(args, 0.0))); }
+       else if (name.equals("&ceil")) { return SleepUtils.getScalar(java.lang.Math.ceil(BridgeUtilities.getDouble(args, 0.0))); }
+       else if (name.equals("&floor")) { return SleepUtils.getScalar(java.lang.Math.floor(BridgeUtilities.getDouble(args, 0.0))); }
+       else if (name.equals("&cos")) { return SleepUtils.getScalar(java.lang.Math.cos(BridgeUtilities.getDouble(args, 0.0))); }
+       else if (name.equals("&log") && args.size() == 1) { return SleepUtils.getScalar(java.lang.Math.log(BridgeUtilities.getDouble(args, 0.0))); }
+       else if (name.equals("&log") && args.size() == 2) { return SleepUtils.getScalar(java.lang.Math.log(BridgeUtilities.getDouble(args, 0.0)) / Math.log(BridgeUtilities.getDouble(args, 0.0))); }
        else if (name.equals("&round")) { 
            if (args.size() == 1)
            {
-              return SleepUtils.getScalar(Math.round(BridgeUtilities.getDouble(args, 0.0))); 
+              return SleepUtils.getScalar(java.lang.Math.round(BridgeUtilities.getDouble(args, 0.0))); 
            }
            else
            {
@@ -130,21 +130,21 @@ public class BasicNumbers : sleep.interfaces.Predicate, Operator, Loadable, Func
               return SleepUtils.getScalar(number);
            }
        }
-       else if (name.equals("&sin")) { return SleepUtils.getScalar(Math.sin(BridgeUtilities.getDouble(args, 0.0))); }
-       else if (name.equals("&sqrt")) { return SleepUtils.getScalar(Math.sqrt(BridgeUtilities.getDouble(args, 0.0))); }
-       else if (name.equals("&tan")) { return SleepUtils.getScalar(Math.tan(BridgeUtilities.getDouble(args, 0.0))); }
-       else if (name.equals("&radians")) { return SleepUtils.getScalar(Math.toRadians(BridgeUtilities.getDouble(args, 0.0))); }
-       else if (name.equals("&degrees")) { return SleepUtils.getScalar(Math.toDegrees(BridgeUtilities.getDouble(args, 0.0))); }
-       else if (name.equals("&exp")) { return SleepUtils.getScalar(Math.exp(BridgeUtilities.getDouble(args, 0.0))); }
+       else if (name.equals("&sin")) { return SleepUtils.getScalar(java.lang.Math.sin(BridgeUtilities.getDouble(args, 0.0))); }
+       else if (name.equals("&sqrt")) { return SleepUtils.getScalar(java.lang.Math.sqrt(BridgeUtilities.getDouble(args, 0.0))); }
+       else if (name.equals("&tan")) { return SleepUtils.getScalar(java.lang.Math.tan(BridgeUtilities.getDouble(args, 0.0))); }
+       else if (name.equals("&radians")) { return SleepUtils.getScalar(java.lang.Math.toRadians(BridgeUtilities.getDouble(args, 0.0))); }
+       else if (name.equals("&degrees")) { return SleepUtils.getScalar(java.lang.Math.toDegrees(BridgeUtilities.getDouble(args, 0.0))); }
+       else if (name.equals("&exp")) { return SleepUtils.getScalar(java.lang.Math.exp(BridgeUtilities.getDouble(args, 0.0))); }
        else if (name.equals("&sum"))
        {
-           Iterator i = BridgeUtilities.getIterator(args, si);
+           java.util.Iterator<Object> i = BridgeUtilities.getIterator(args, si);
 
-           List iterators = null;
+           java.util.List<Object> iterators = null;
            if (args.size() >= 1)
            {
               /* auxillary iterators */
-              iterators = new LinkedList();
+              iterators = new java.util.LinkedList<Object>();
               while (!args.isEmpty())
               {
                  iterators.add(BridgeUtilities.getIterator(args, si));
@@ -169,10 +169,10 @@ public class BasicNumbers : sleep.interfaces.Predicate, Operator, Loadable, Func
               {
                  temp = ((Scalar)i.next()).doubleValue();
 
-                 Iterator j = iterators.iterator();
+                 java.util.Iterator<Object> j = iterators.iterator();
                  while (j.hasNext())
                  {
-                    Iterator tempi = (Iterator)j.next();
+                    java.util.Iterator<Object> tempi = (java.util.Iterator<Object>)j.next();
                     if (tempi.hasNext())
                     {
                        temp *= ((Scalar)tempi.next()).doubleValue();
@@ -225,7 +225,7 @@ public class BasicNumbers : sleep.interfaces.Predicate, Operator, Loadable, Func
           String number = BridgeUtilities.getString(args, "0");
           int    radix  = BridgeUtilities.getInt(args, 10);
 
-          BigInteger temp = new BigInteger(number, radix);
+          java.math.BigInteger temp = new java.math.BigInteger(number, radix);
           return SleepUtils.getScalar(temp.longValue());
        }
        else if (name.equals("&formatNumber"))
@@ -241,21 +241,21 @@ public class BasicNumbers : sleep.interfaces.Predicate, Operator, Loadable, Func
 
           to = BridgeUtilities.getInt(args, 10);
 
-          BigInteger temp = new BigInteger(number, from);
+          java.math.BigInteger temp = new java.math.BigInteger(number, from);
           return SleepUtils.getScalar(temp.toString(to));
        }
        else if (name.equals("&srand"))
        {
           long seed = BridgeUtilities.getLong(args);
-          si.getMetadata().put("__RANDOM__", new Random(seed));
+          si.getMetadata().put("__RANDOM__", new java.util.Random(seed));
        }
        else if (name.equals("&rand"))
        {
           if (si.getMetadata().get("__RANDOM__") == null) 
           { 
-             si.getMetadata().put("__RANDOM__", new Random()); 
+             si.getMetadata().put("__RANDOM__", new java.util.Random()); 
           }
-          Random r = (Random)si.getMetadata().get("__RANDOM__");
+          java.util.Random r = (java.util.Random)si.getMetadata().get("__RANDOM__");
 
           if (! args.isEmpty())
           {
@@ -280,7 +280,7 @@ public class BasicNumbers : sleep.interfaces.Predicate, Operator, Loadable, Func
 
     public bool decide(String n, ScriptInstance i, java.util.Stack<Object> l)
     {
-       Stack env = i.getScriptEnvironment().getEnvironmentStack();
+       java.util.Stack<Object> env = i.getScriptEnvironment().getEnvironmentStack();
        Scalar vb = (Scalar)l.pop();
        Scalar va = (Scalar)l.pop();
 
@@ -345,7 +345,7 @@ public class BasicNumbers : sleep.interfaces.Predicate, Operator, Loadable, Func
           if (o.equals("*")) { return SleepUtils.getScalar(a * b); }
           if (o.equals("/")) { return SleepUtils.getScalar(a / b); }
           if (o.equals("% ")) { return SleepUtils.getScalar(a % b); }
-          if (o.equals("**")) { return SleepUtils.getScalar(Math.pow((double)a, (double)b)); }
+          if (o.equals("**")) { return SleepUtils.getScalar(java.lang.Math.pow((double)a, (double)b)); }
        }
        else if (right.getType() == typeof(LongValue) || left.getType() == typeof(LongValue))
        {
@@ -357,7 +357,7 @@ public class BasicNumbers : sleep.interfaces.Predicate, Operator, Loadable, Func
           if (o.equals("*")) { return SleepUtils.getScalar(a * b); }
           if (o.equals("/")) { return SleepUtils.getScalar(a / b); }
           if (o.equals("% ")) { return SleepUtils.getScalar(a % b); }
-          if (o.equals("**")) { return SleepUtils.getScalar(Math.pow((double)a, (double)b)); }
+          if (o.equals("**")) { return SleepUtils.getScalar(java.lang.Math.pow((double)a, (double)b)); }
           if (o.equals(">>"))  { return SleepUtils.getScalar(a >> b); }
           if (o.equals("<<"))  { return SleepUtils.getScalar(a << b); }
           if (o.equals("&"))  { return SleepUtils.getScalar(a & b); }
@@ -374,7 +374,7 @@ public class BasicNumbers : sleep.interfaces.Predicate, Operator, Loadable, Func
           if (o.equals("*")) { return SleepUtils.getScalar(a * b); }
           if (o.equals("/")) { return SleepUtils.getScalar(a / b); }
           if (o.equals("% ")) { return SleepUtils.getScalar(a % b); }
-          if (o.equals("**")) { return SleepUtils.getScalar(Math.pow((double)a, (double)b)); }
+          if (o.equals("**")) { return SleepUtils.getScalar(java.lang.Math.pow((double)a, (double)b)); }
           if (o.equals(">>"))  { return SleepUtils.getScalar(a >> b); }
           if (o.equals("<<"))  { return SleepUtils.getScalar(a << b); }
           if (o.equals("&"))  { return SleepUtils.getScalar(a & b); }

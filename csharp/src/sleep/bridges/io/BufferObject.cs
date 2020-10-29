@@ -65,7 +65,7 @@ public class BufferObject : IOObject
 
       if (source != null)
       {
-         readme = new ByteArrayInputStream(source.toByteArray());
+         readme = new java.io.ByteArrayInputStream(source.toByteArray());
          openRead(readme);
          source = null;
       }
@@ -74,7 +74,7 @@ public class BufferObject : IOObject
    /** allocates a writeable buffer with the specified initial capacity */
    public void allocate(int initialSize)
    {
-      source = new ByteArrayOutputStream(initialSize);
+      source = new java.io.ByteArrayOutputStream(initialSize);
       openWrite(source);
    }
 }

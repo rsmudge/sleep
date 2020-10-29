@@ -69,10 +69,10 @@ public class SleepScriptEngineFactory : javax.script.ScriptEngineFactory
         buf.append(' ');
         buf.append(m);
         buf.append(':');
-        if (args.length != 0) 
+        if (args.Length != 0) 
         {
             int i = 0;
-            for (; i < args.length - 1; i++) 
+            for (; i < args.Length - 1; i++) 
             {
                 buf.append(args[i] + ", ");
             }
@@ -116,15 +116,15 @@ public class SleepScriptEngineFactory : javax.script.ScriptEngineFactory
 
     public String getParameter(String key) 
     {
-        if (key.equals(ScriptEngine.ENGINE)) {
+        if (key.equals(javax.script.ScriptEngine.ENGINE)) {
             return getEngineName();
-        } else if (key.equals(ScriptEngine.ENGINE_VERSION)) {
+        } else if (key.equals(javax.script.ScriptEngine.ENGINE_VERSION)) {
             return getEngineVersion();
-        } else if (key.equals(ScriptEngine.NAME)) {
+        } else if (key.equals(javax.script.ScriptEngine.NAME)) {
             return getEngineName();
-        } else if (key.equals(ScriptEngine.LANGUAGE)) {
+        } else if (key.equals(javax.script.ScriptEngine.LANGUAGE)) {
             return getLanguageName();
-        } else if (key.equals(ScriptEngine.LANGUAGE_VERSION)) {
+        } else if (key.equals(javax.script.ScriptEngine.LANGUAGE_VERSION)) {
             return getLanguageVersion();
         } else if (key.equals("THREADING")) {
             return "MULTITHREADED";
@@ -136,7 +136,7 @@ public class SleepScriptEngineFactory : javax.script.ScriptEngineFactory
     public String getProgram(String statements = "") 
     {
         java.lang.StringBuilder buf = new java.lang.StringBuilder();
-        for (int i = 0; i < statements.length; i++) {
+        for (int i = 0; i < statements.Length; i++) {
             buf.append(statements[i]);
             buf.append(";\n");
         }

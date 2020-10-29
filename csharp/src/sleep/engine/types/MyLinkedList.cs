@@ -47,7 +47,7 @@ public class MyLinkedList : java.util.AbstractSequentialList<Object> , java.lang
       {
          if (modCountCheck != modCount)
          {
-            throw new ConcurrentModificationException("@array changed during iteration");
+            throw new java.util.ConcurrentModificationException("@array changed during iteration");
          }
       }
 
@@ -74,7 +74,7 @@ public class MyLinkedList : java.util.AbstractSequentialList<Object> , java.lang
 
       public bool hasNext()
       {
-         return index != size;
+         return index != sizeJ;
       }
 
       public bool hasPrevious()
@@ -112,7 +112,7 @@ public class MyLinkedList : java.util.AbstractSequentialList<Object> , java.lang
       {
          if (current == header)
          {
-            throw new IllegalStateException("list is empty");
+            throw new java.lang.IllegalStateException("list is empty");
          }
 
          checkSafety();
@@ -127,7 +127,7 @@ public class MyLinkedList : java.util.AbstractSequentialList<Object> , java.lang
       {
          if (current == header)
          {
-            throw new IllegalStateException("list is empty");
+            throw new java.lang.IllegalStateException("list is empty");
          }
 
          checkSafety();
@@ -155,7 +155,7 @@ public class MyLinkedList : java.util.AbstractSequentialList<Object> , java.lang
       modCount = parentList.modCount;
 
       header = new SublistHeaderEntry(begin, end);
-      size = _size;
+      sizeJ = _size;
    }
 
    public MyLinkedList()
@@ -207,8 +207,8 @@ public class MyLinkedList : java.util.AbstractSequentialList<Object> , java.lang
    /** get an object from the linked list */
    public Object get(int index)
    {
-      if (index >= size)
-         throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+      if (index >= sizeJ)
+         throw new java.lang.IndexOutOfBoundsException("Index: " + index + ", Size: " + sizeJ);
 
       return getAt(index).next().element();
    }
@@ -216,8 +216,8 @@ public class MyLinkedList : java.util.AbstractSequentialList<Object> , java.lang
    /** remove an object at the specified index */
    public Object remove(int index)
    {
-      if (index >= size)
-         throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+      if (index >= sizeJ)
+         throw new java.lang.IndexOutOfBoundsException("Index: " + index + ", Size: " + sizeJ);
 
       ListEntry entry = getAt(index).next();
       Object value = entry.element();
@@ -229,16 +229,16 @@ public class MyLinkedList : java.util.AbstractSequentialList<Object> , java.lang
    /** returns the entry at the specified index */
    private ListEntry getAt(int index)
    {
-      if (index < 0 || index > size)
-        throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+      if (index < 0 || index > sizeJ)
+        throw new java.lang.IndexOutOfBoundsException("Index: " + index + ", Size: " + sizeJ);
 
       ListEntry entry = header;
 
-      if (index == size)
+      if (index == sizeJ)
       {
          return header.previous();
       }
-      else if (index < (size / 2))
+      else if (index < (sizeJ / 2))
       {
          for (int x = 0; x < index; x++)
          {
@@ -248,7 +248,7 @@ public class MyLinkedList : java.util.AbstractSequentialList<Object> , java.lang
       else
       {
          entry = entry.previous();
-         for (int x = size; x > index; x--)
+         for (int x = sizeJ; x > index; x--)
          {
             entry = entry.previous();
          }
@@ -301,7 +301,7 @@ public class MyLinkedList : java.util.AbstractSequentialList<Object> , java.lang
 
       public ListEntry remove() 
       {
-         throw new UnsupportedOperationException("remove");
+         throw new java.lang.UnsupportedOperationException("remove");
       }
 
       public ListEntry previous() 
@@ -343,7 +343,7 @@ public class MyLinkedList : java.util.AbstractSequentialList<Object> , java.lang
 
       public void setElement(Object o)
       {
-         throw new UnsupportedOperationException("setElement");
+         throw new java.lang.UnsupportedOperationException("setElement");
       }
    }
 
@@ -362,10 +362,10 @@ public class MyLinkedList : java.util.AbstractSequentialList<Object> , java.lang
 
          ListEntry temp = parent.remove();
 
-         size--;
+         sizeJ--;
          modCount++;
 
-         if (size == 0)
+         if (sizeJ == 0)
          {
             return header;
          }
@@ -391,10 +391,10 @@ public class MyLinkedList : java.util.AbstractSequentialList<Object> , java.lang
 
          ListEntry temp = parent.addBefore(o);
 
-         size++;
+         sizeJ++;
          modCount++;
 
-         if (size == 1)
+         if (sizeJ == 1)
          {
             header.setNext(temp);
             header.setPrevious(temp);
@@ -413,10 +413,10 @@ public class MyLinkedList : java.util.AbstractSequentialList<Object> , java.lang
 
          ListEntry temp = parent.addAfter(o);
 
-         size++;
+         sizeJ++;
          modCount++;
 
-         if (size == 1)
+         if (sizeJ == 1)
          {
             header.setNext(temp);
             header.setPrevious(temp);
@@ -431,12 +431,12 @@ public class MyLinkedList : java.util.AbstractSequentialList<Object> , java.lang
 
       public void setNext(ListEntry entry)
       {
-         throw new UnsupportedOperationException("ListEntryWrapper::setNext");
+         throw new java.lang.UnsupportedOperationException("ListEntryWrapper::setNext");
       }
 
       public void setPrevious(ListEntry entry)
       {
-         throw new UnsupportedOperationException("ListEntryWrapper::setPrevious");
+         throw new java.lang.UnsupportedOperationException("ListEntryWrapper::setPrevious");
       }
 
       public Object element()
@@ -527,7 +527,7 @@ public class MyLinkedList : java.util.AbstractSequentialList<Object> , java.lang
          nxt.setPrevious(prev);
          prev.setNext(nxt);
 
-         size--;
+         sizeJ--;
          modCount++;
          return nxt;
       }
@@ -546,7 +546,7 @@ public class MyLinkedList : java.util.AbstractSequentialList<Object> , java.lang
       {
          ListEntry temp = new NormalListEntry(o, this.previous, this);
 
-         size++;
+         sizeJ++;
          modCount++;
 
          return temp;
@@ -556,7 +556,7 @@ public class MyLinkedList : java.util.AbstractSequentialList<Object> , java.lang
       {
          ListEntry temp = new NormalListEntry(o, this, this.nextEntry);
 
-         size++;
+         sizeJ++;
          modCount++;
 
          return temp;
@@ -564,11 +564,11 @@ public class MyLinkedList : java.util.AbstractSequentialList<Object> , java.lang
 
       public String toString()
       {
-         StringBuffer buffer = new StringBuffer(":[" + element() + "]:");
+         java.lang.StringBuffer buffer = new java.lang.StringBuffer(":[" + element() + "]:");
 
          if (this == header)
          {
-             buffer = new StringBuffer(":[HEADER]:");
+             buffer = new java.lang.StringBuffer(":[HEADER]:");
          }
 
          ListEntry entry = this.previous();
@@ -594,13 +594,13 @@ public class MyLinkedList : java.util.AbstractSequentialList<Object> , java.lang
     {
        lock (this) {
         /* grab any fields I missed */
-	outJ.defaultWriteObject();
+	     outJ.defaultWriteObject();
       
-        /* write out the size */
-        outJ.writeInt(size);
+        /* write out the sizeJ */
+        outJ.writeInt(sizeJ);
 
         /* blah blah blah */
-        Iterator i = iterator();
+        java.util.Iterator<Object> i = iterator();
         while (i.hasNext())
         {
            outJ.writeObject(i.next());
@@ -615,8 +615,8 @@ public class MyLinkedList : java.util.AbstractSequentialList<Object> , java.lang
         /* read any fields I missed */
 	inJ.defaultReadObject();
       
-        /* read in the size */
-        int size = inJ.readInt();
+        /* read in the sizeJ */
+        int sizeJ = inJ.readInt();
 
         /* create the header */
         header = new NormalListEntry(SleepUtils.getScalar("[:HEADER:]"), null, null);
@@ -624,7 +624,7 @@ public class MyLinkedList : java.util.AbstractSequentialList<Object> , java.lang
         header.setPrevious(header);
 
         /* populate the list */
-        for (int x = 0; x < size; x++)
+        for (int x = 0; x < sizeJ; x++)
         {
            add(inJ.readObject());
         }

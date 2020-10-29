@@ -43,8 +43,8 @@ public class SyntaxError
 
    /** construct a syntax error object, but enough about me... how about you? */
    public SyntaxError(String _description, String _code, int _lineNo)
-   {
-      this(_description, _code, _lineNo, null);
+   :
+      this(_description, _code, _lineNo, null){
    }
 
    /** construct a syntax error object, but enough about me... how about you? */

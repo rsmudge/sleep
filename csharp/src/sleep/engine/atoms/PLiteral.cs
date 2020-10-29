@@ -39,11 +39,11 @@ public class PLiteral : Step
 {
    public String toString(String prefix)
    {
-      StringBuffer temp = new StringBuffer();
+      java.lang.StringBuffer temp = new java.lang.StringBuffer();
       temp.append(prefix);
       temp.append("[Parsed Literal] ");
 
-      Iterator i = fragments.iterator();
+      java.util.Iterator<Object> i = fragments.iterator();
 
       while (i.hasNext())
       {
@@ -75,9 +75,9 @@ public class PLiteral : Step
       return value;
    }
 
-   public static readonly int STRING_FRAGMENT = 1;
-   public static readonly int ALIGN_FRAGMENT  = 2;
-   public static readonly int VAR_FRAGMENT    = 3;
+   public const int STRING_FRAGMENT = 1;
+   public const int ALIGN_FRAGMENT  = 2;
+   public const int VAR_FRAGMENT    = 3;
   
    [Serializable]
    public sealed class Fragment : java.io.Serializable
@@ -106,11 +106,11 @@ public class PLiteral : Step
 
    private String buildString(ScriptEnvironment e)
    {
-      StringBuffer result = new StringBuffer();
+      java.lang.StringBuffer result = new java.lang.StringBuffer();
       int          align  = 0;
 
       String       temp;
-      Iterator i = fragments.iterator();
+      java.util.Iterator<Object> i = fragments.iterator();
 
       while (i.hasNext())
       {

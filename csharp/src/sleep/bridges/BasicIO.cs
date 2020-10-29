@@ -47,7 +47,7 @@ public class BasicIO : Loadable, Function
 
     public void scriptLoaded (ScriptInstance aScript)
     {
-        Hashtable temp = aScript.getScriptEnvironment().getEnvironment();
+        java.util.Hashtable<Object,object> temp = aScript.getScriptEnvironment().getEnvironment();
 
         temp.put("__EXEC__", TaintUtils.Tainter(TaintUtils.Sensitive(this)));
 
@@ -119,8 +119,8 @@ public class BasicIO : Loadable, Function
 
     private static java.util.zip.Checksum getChecksum(String algorithm)
     {
-       if (algorithm.equals("Adler32")) { return new Adler32(); }
-       if (algorithm.equals("CRC32")) { return new CRC32(); }
+       if (algorithm.equals("Adler32")) { return new java.util.zip.Adler32(); }
+       if (algorithm.equals("CRC32")) { return new java.util.zip.CRC32(); }
        return null;
     }
 
@@ -204,7 +204,7 @@ public class BasicIO : Loadable, Function
                 return value;
              }
           }
-          catch (Ejava.io.OFException eofex)
+          catch (java.io.EOFException eofex)
           {
              a.close();
           }
@@ -242,25 +242,25 @@ public class BasicIO : Loadable, Function
              try
              {
                 if (isRead)             {
-                   java.security.DigestInputStream cis = new Djava.securityigestInputStream(io.getInputStream(), MessageDigest.getInstance(temp));
+                   java.security.DigestInputStream cis = new java.security.DigestInputStream(io.getInputStream(), java.security.MessageDigest.getInstance(temp));
                    io.openRead(cis);
                    return SleepUtils.getScalar(cis.getMessageDigest());
                 }
                 else
                 {
-                   java.security.DigestOutputStream cos = new java.securityDigestOutputStream(io.getOutputStream(), MessageDigest.getInstance(temp));
+                   java.security.DigestOutputStream cos = new java.security.DigestOutputStream(io.getOutputStream(), java.security.MessageDigest.getInstance(temp));
                    io.openWrite(cos);
                    return SleepUtils.getScalar(cos.getMessageDigest());
                 }
              }
-             catch (NoSuchAlgorithmException ex)
+             catch (java.security.NoSuchAlgorithmException ex)
              {
                 i.getScriptEnvironment().flagError(ex);
              }
           }
-          else if (s.objectValue() != null && s.objectValue() is MessageDigest)
+          else if (s.objectValue() != null && s.objectValue() is java.security.MessageDigest)
           {
-             MessageDigest sum = (MessageDigest)s.objectValue();
+             java.security.MessageDigest sum = (java.security.MessageDigest)s.objectValue();
              return SleepUtils.getScalar(sum.digest());
           }
           else
@@ -270,11 +270,11 @@ public class BasicIO : Loadable, Function
              try
              {
 
-                MessageDigest doit = MessageDigest.getInstance(algo);
+                java.security.MessageDigest doit = java.security.MessageDigest.getInstance(algo);
                 doit.update(BridgeUtilities.toByteArrayNoConversion(temp), 0, temp.length());
                 return SleepUtils.getScalar(doit.digest());
              }
-             catch (NoSuchAlgorithmException ex)
+             catch (java.security.NoSuchAlgorithmException ex)
              {
                 i.getScriptEnvironment().flagError(ex);
              }
@@ -297,7 +297,7 @@ public class BasicIO : Loadable, Function
           }
           catch (Exception ex)
           {
-             throw new IllegalArgumentException("&setEncoding: specified a non-existent encoding '" + name + "'");
+             throw new java.lang.IllegalArgumentException("&setEncoding: specified a non-existent encoding '" + name + "'");
           }
        }
        else if (n.equals("&readc"))
@@ -312,7 +312,7 @@ public class BasicIO : Loadable, Function
           {
              /* do our fun stuff to setup a checksum object */
 
-             boolean isRead  = true;
+             bool isRead  = true;
 
              String temp = BridgeUtilities.getString(l, "CRC32");
              if (temp.charAt(0) == '>')
@@ -325,20 +325,20 @@ public class BasicIO : Loadable, Function
 
              if (isRead)
              {
-                CheckedInputStream cis = new CheckedInputStream(io.getInputStream(), getChecksum(temp));
+                java.util.zip.CheckedInputStream cis = new java.util.zip.CheckedInputStream(io.getInputStream(), getChecksum(temp));
                 io.openRead(cis);
                 return SleepUtils.getScalar(cis.getChecksum());
              }
              else
              {
-                CheckedOutputStream cos = new CheckedOutputStream(io.getOutputStream(), getChecksum(temp));
+                java.util.zip.CheckedOutputStream cos = new java.util.zip.CheckedOutputStream(io.getOutputStream(), getChecksum(temp));
                 io.openWrite(cos);
                 return SleepUtils.getScalar(cos.getChecksum());
              }
           }
-          else if (s.objectValue() != null && s.objectValue() is Checksum)
+          else if (s.objectValue() != null && s.objectValue() is java.util.zip.Checksum)
           {
-             Checksum sum = (Checksum)s.objectValue();
+             java.util.zip.Checksum sum = (java.util.zip.Checksum)s.objectValue();
              return SleepUtils.getScalar(sum.getValue());
           }
           else
@@ -346,7 +346,7 @@ public class BasicIO : Loadable, Function
              String temp = s.toString();
              String algo = BridgeUtilities.getString(l, "CRC32");
 
-             Checksum doit = getChecksum(algo);
+             java.util.zip.Checksum doit = getChecksum(algo);
              doit.update(BridgeUtilities.toByteArrayNoConversion(temp), 0, temp.length());
              return SleepUtils.getScalar(doit.getValue());
           }
@@ -385,7 +385,7 @@ public class BasicIO : Loadable, Function
           }
 
           String[] envp      = null;
-          File     start     = null;
+          java.io.File     start     = null;
 
           if (!l.isEmpty())
           {
@@ -396,9 +396,9 @@ public class BasicIO : Loadable, Function
              else
              {
                 ScalarHash env  = BridgeUtilities.getHash(l);
-                Iterator   keys = env.keys().scalarIterator();
+                java.util.Iterator<Object>   keys = env.keys().scalarIterator();
                 envp = new String[env.keys().size()];
-                for (int x = 0; x < envp.length; x++)
+                for (int x = 0; x < envp.Length; x++)
                 {
                    Scalar key = (Scalar)keys.next();
                    envp[x] = key.toString() + "=" + env.getAt(key);
@@ -431,7 +431,7 @@ public class BasicIO : Loadable, Function
        {
           try
           {
-             Thread.currentThread().sleep(BridgeUtilities.getLong(l, 0));
+             java.lang.Thread.currentThread().sleep(BridgeUtilities.getLong(l, 0));
           }
           catch (Exception ex) { }
 
@@ -463,12 +463,12 @@ public class BasicIO : Loadable, Function
 
           try
           {
-             PipedInputStream  parent_in  = new PipedInputStream();
-             PipedOutputStream parent_out = new PipedOutputStream();
+             java.io.PipedInputStream  parent_in  = new java.io.PipedInputStream();
+             java.io.PipedOutputStream parent_out = new java.io.PipedOutputStream();
              parent_in.connect(parent_out);
 
-             PipedInputStream  child_in   = new PipedInputStream();
-             PipedOutputStream child_out  = new PipedOutputStream();
+             java.io.PipedInputStream  child_in   = new java.io.PipedInputStream();
+             java.io.PipedOutputStream child_out  = new java.io.PipedOutputStream();
              child_in.connect(child_out);
 
              parent_io.openRead(child_in);
@@ -479,7 +479,7 @@ public class BasicIO : Loadable, Function
           
              child.getScriptVariables().putScalar("$source", SleepUtils.getScalar(child_io));
 
-             Thread temp = new Thread(child, "fork of " + child.getRunnableBlock().getSourceLocation());
+             java.lang.Thread temp = new java.lang.Thread(child, "fork of " + child.getRunnableBlock().getSourceLocation());
 
              parent_io.setThread(temp);
              child_io.setThread(temp);
@@ -488,7 +488,7 @@ public class BasicIO : Loadable, Function
 
              temp.start();
           }
-          catch (Exception ex)
+          catch (java.lang.Exception ex)
           {
              i.getScriptEnvironment().flagError(ex);
           }
@@ -501,7 +501,7 @@ public class BasicIO : Loadable, Function
     {
        public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
        {
-          Map options = BridgeUtilities.extractNamedParameters(l);
+          java.util.Map<Object,Object> options = BridgeUtilities.extractNamedParameters(l);
 
           SocketObject.SocketHandler handler = new SocketObject.SocketHandler();
           handler.socket        = new SocketObject();
@@ -611,7 +611,7 @@ public class BasicIO : Loadable, Function
        {
           IOObject a       = chooseSource(l, 2, inst);
 
-          Iterator i = BridgeUtilities.getIterator(l, inst);
+          java.util.Iterator<Object> i = BridgeUtilities.getIterator(l, inst);
           while (i.hasNext())
           {
              a.printLine(i.next().toString());
@@ -664,7 +664,7 @@ public class BasicIO : Loadable, Function
 
           if (!(b.objectValue() is IOObject))
           {
-             throw new IllegalArgumentException("expected I/O handle argument, received: " + SleepUtils.describe(b));
+             throw new java.lang.IllegalArgumentException("expected I/O handle argument, received: " + SleepUtils.describe(b));
           }
 
           return (IOObject)b.objectValue();
@@ -727,13 +727,13 @@ public class BasicIO : Loadable, Function
 
                    if (pattern.value == 'h')
                    {
-                      temps.append(Integer.toHexString(later));
-                      temps.append(Integer.toHexString(early));
+                      temps.append(java.lang.Integer.toHexString(later));
+                      temps.append(java.lang.Integer.toHexString(early));
                    }
                    else
                    {
-                      temps.append(Integer.toHexString(early));
-                      temps.append(Integer.toHexString(later));
+                      temps.append(java.lang.Integer.toHexString(early));
+                      temps.append(java.lang.Integer.toHexString(later));
                    }
                 }
              }
@@ -901,6 +901,7 @@ public class BasicIO : Loadable, Function
 
                       default:
                         env.showDebugMessage("unknown file pattern character: " + pattern.value);
+                        break;
                    }
                 }
                 catch (java.lang.Exception ex) 
@@ -938,7 +939,7 @@ public class BasicIO : Loadable, Function
        }
 
        byte[]        bdata = new byte[8]; 
-       ByteBuffer  buffer  = ByteBuffer.wrap(bdata);
+       java.nio.ByteBuffer  buffer  = java.nio.ByteBuffer.wrap(bdata);
 
        while (pattern != null)
        {
@@ -950,7 +951,7 @@ public class BasicIO : Loadable, Function
              {
                 char[] tempchars = BridgeUtilities.getString(arguments, "").toCharArray();
 
-                for (int y = 0; y < tempchars.length; y++)
+                for (int y = 0; y < tempchars.Length; y++)
                 {
                    if (pattern.value == 'u' || pattern.value == 'U')
                    {
@@ -965,7 +966,7 @@ public class BasicIO : Loadable, Function
 
                 // handle padding... 
 
-                for (int z = tempchars.length; z < pattern.count; z++)
+                for (int z = tempchars.Length; z < pattern.count; z++)
                 {
                    switch (pattern.value)
                    {
@@ -991,7 +992,7 @@ public class BasicIO : Loadable, Function
                    outJ.write(0);
                 }
              }
-             catch (Exception ex)
+             catch (java.lang.Exception ex)
              {
                 if (control != null) control.close();
                 return;
@@ -1011,7 +1012,7 @@ public class BasicIO : Loadable, Function
 
                 char[] tempchars = argzz.toCharArray();
 
-                for (int y = 0; y < tempchars.length; y += 2)
+                for (int y = 0; y < tempchars.Length; y += 2)
                 {
                    if (pattern.value == 'H')
                    {
@@ -1024,7 +1025,7 @@ public class BasicIO : Loadable, Function
                       number.setCharAt(1, tempchars[y]);
                    }
 
-                   buffer.putInt(0, Integer.parseInt(number.toString(), 16));
+                   buffer.putInt(0, java.lang.Integer.parseInt(number.toString(), 16));
                    outJ.write(bdata, 3, 1);
                 }
              }
@@ -1100,13 +1101,15 @@ public class BasicIO : Loadable, Function
                            java.io.ObjectOutputStream oos = new java.io.ObjectOutputStream(outJ);
                            oos.writeObject(temp);
                         }
-                        catch (Exception ex)
+                        catch (java.lang.Exception ex)
                         {
                            env.flagError(ex);
                            if (control != null) control.close();
                            return;
                         }
+                        break;
                       default:
+                      break;
                    }
                 }
                 catch (java.lang.Exception ex) 
@@ -1158,7 +1161,7 @@ public class BasicIO : Loadable, Function
 
           if (a.getInputBuffer() == null)
           {
-             throw new RuntimeException("&mark: input buffer for " + SleepUtils.describe(SleepUtils.getScalar(a)) + " is closed");
+             throw new java.lang.RuntimeException("&mark: input buffer for " + SleepUtils.describe(SleepUtils.getScalar(a)) + " is closed");
           }
 
           a.getInputBuffer().mark(BridgeUtilities.getInt(l, 1024 * 10 * 10));
@@ -1183,7 +1186,7 @@ public class BasicIO : Loadable, Function
              {
                 String delim = BridgeUtilities.getString(l, "\n");
 
-                StringBuffer temp = new StringBuffer();
+                java.lang.StringBuffer temp = new java.lang.StringBuffer();
 
                 int x = 0;
                 int y = a.getInputBuffer().available();
@@ -1246,7 +1249,7 @@ public class BasicIO : Loadable, Function
        {
           String    pattern = BridgeUtilities.getString(l, "");
 
-          java.io.ByteArrayOutputStream temp = new Bjava.io.yteArrayOutputStream(DataPattern.EstimateSize(pattern) + 128);
+          java.io.ByteArrayOutputStream temp = new java.io.ByteArrayOutputStream(DataPattern.EstimateSize(pattern) + 128);
          
           WriteFormatted(pattern, new java.io.DataOutputStream(temp), i.getScriptEnvironment(), l, null);
 
@@ -1401,7 +1404,7 @@ public class BasicIO : Loadable, Function
           IOObject     a = chooseSource(l, 2, i);
           SleepClosure b = BridgeUtilities.getFunction(l, i);
 
-          Thread fred = new Thread(new CallbackReader(a, i, b, BridgeUtilities.getInt(l, 0)));
+          java.lang.Thread fred = new java.lang.Thread(new CallbackReader(a, i, b, BridgeUtilities.getInt(l, 0)));
           a.setThread(fred);
           fred.start();
 
@@ -1435,7 +1438,7 @@ public class BasicIO : Loadable, Function
 
        public void run()
        {
-          java.util.Stack  args = new Stack();
+          java.util.Stack<Object>  args = new java.util.Stack<Object>();
           String temp;
 
           if (bytes <= 0)
@@ -1450,13 +1453,13 @@ public class BasicIO : Loadable, Function
           }
           else
           {
-             StringBuffer tempb = null;
+             java.lang.StringBuffer tempb = null;
 
              try
              {
                 while (script.isLoaded() && !source.isEOF())
                 {
-                   tempb = new StringBuffer(bytes);
+                   tempb = new java.lang.StringBuffer(bytes);
 
                    for (int x = 0; x < bytes; x++)
                    {

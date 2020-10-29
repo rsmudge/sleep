@@ -80,7 +80,7 @@ public class ObjectAccess : Step
 
       public override String formatCall(String args)
       {
-         StringBuffer trace = new StringBuffer("[");
+         java.lang.StringBuffer trace = new java.lang.StringBuffer("[");
 
          if (args != null && args.length() > 0) { args = ": " + args; }
 
@@ -104,19 +104,19 @@ public class ObjectAccess : Step
          {
             return ObjectUtilities.BuildScalar(true, theMethod.invoke(scalar != null ? scalar.objectValue() : null, parameters));
          }
-         catch (InvocationTargetException ite)
+         catch (java.lang.reflect.InvocationTargetException ite)
          {
             if (ite.getCause() != null)
                getScriptEnvironment().flagError(ite.getCause());
 
-            throw new RuntimeException(ite);
+            throw new java.lang.RuntimeException(ite);
          }
-         catch (IllegalArgumentException aex)
+         catch (java.lang.IllegalArgumentException aex)
          {
             aex.printStackTrace();
             getScriptEnvironment().getScriptInstance().fireWarning(ObjectUtilities.buildArgumentErrorMessage(theClass, name, theMethod.getParameterTypes(), parameters), getLineNumber());
          }
-         catch (IllegalAccessException iax)
+         catch (java.lang.IllegalAccessException iax)
          {
             getScriptEnvironment().getScriptInstance().fireWarning("cannot access " + name + " in " + theClass + ": " + iax.getMessage(), getLineNumber());
          }
@@ -137,7 +137,7 @@ public class ObjectAccess : Step
    public Scalar evaluate(ScriptEnvironment e)
    {
       Object accessMe = null;
-      Class  theClass = null;
+      Type  theClass = null;
       Scalar scalar   = null;
 
       if (classRef == null)
@@ -191,15 +191,15 @@ public class ObjectAccess : Step
       // try to invoke stuff on the object...
       //
 
-      Method theMethod = ObjectUtilities.findMethod(theClass, name, e.getCurrentFrame());
+      java.lang.reflect.Method theMethod = ObjectUtilities.findMethod(theClass, name, e.getCurrentFrame());
 
-      if (theMethod != null && (classRef == null || (theMethod.getModifiers() & Modifier.STATIC) == Modifier.STATIC))
+      if (theMethod != null && (classRef == null || (theMethod.getModifiers() & java.lang.reflect.Modifier.STATIC) == java.lang.reflect.Modifier.STATIC))
       {  
          try
          {
             theMethod.setAccessible(true);
          }
-         catch (Exception ex) { }
+         catch (java.lang.Exception ex) { }
 
          MethodCallRequest request = new MethodCallRequest(e, getLineNumber(), theMethod, scalar, name, theClass);
          request.CallFunction();
@@ -213,13 +213,13 @@ public class ObjectAccess : Step
       {
          try
          {
-            Field aField;
+            java.lang.reflect.Field aField;
 
             try
             {
                aField = theClass.getDeclaredField(name);
             }
-            catch (NoSuchFieldException nsfe)
+            catch (java.lang.NoSuchFieldException nsfe)
             {
                aField = theClass.getField(name);
             }
@@ -230,7 +230,7 @@ public class ObjectAccess : Step
                {
                   aField.setAccessible(true);
                }
-               catch (Exception ex) { }
+               catch (java.lang.Exception ex) { }
 
                result = ObjectUtilities.BuildScalar(true, aField.get(accessMe));
             }
@@ -239,11 +239,11 @@ public class ObjectAccess : Step
                result = SleepUtils.getEmptyScalar();
             }
          }
-         catch (NoSuchFieldException fex)
+         catch (java.lang.NoSuchFieldException fex)
          {
             e.getScriptInstance().fireWarning("no field/method named " + name + " in " + theClass, getLineNumber());
          }
-         catch (IllegalAccessException iax)
+         catch (java.lang.IllegalAccessException iax)
          {
             e.getScriptInstance().fireWarning("cannot access " + name + " in " + theClass + ": " + iax.getMessage(), getLineNumber());
          }

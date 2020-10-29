@@ -65,7 +65,7 @@ public class LexicalAnalyzer
    // using this effectively removes the white space requirement for said built in operator.  
    private static bool isBuiltInOperator(char f, java.lang.StringBuffer aTerm, StringIterator iter)
    {
-      if (f == '.' && (aTerm.length() <= 0 || !(Character.isDigit(aTerm.charAt(aTerm.length() - 1)) && aTerm.charAt(0) != '$')) && !iter.isNextChar('='))
+      if (f == '.' && (aTerm.length() <= 0 || !(java.lang.Character.isDigit(aTerm.charAt(aTerm.length() - 1)) && aTerm.charAt(0) != '$')) && !iter.isNextChar('='))
       {
          return true;
       }
@@ -103,12 +103,12 @@ public class LexicalAnalyzer
 
       TokenList value  = new TokenList();
 
-      StringBuffer rhs = new StringBuffer();
+      java.lang.StringBuffer rhs = new java.lang.StringBuffer();
       int          tok = 0;
  
-      for (int x = 0; x < terms.length; x++)
+      for (int x = 0; x < terms.Length; x++)
       {
-         if ((x + 1) < terms.length)
+         if ((x + 1) < terms.Length)
          {
             String a, b;
             a = terms[x].toString();
@@ -116,12 +116,12 @@ public class LexicalAnalyzer
 
             tok = x;
 
-            if ((x + 2) < terms.length && Checkers.isClassLiteral(a) && b.equals("."))
+            if ((x + 2) < terms.Length && Checkers.isClassLiteral(a) && b.equals("."))
             {
                rhs.append(terms[x]);
 
                /** collapse a literal class string plz */
-               while ((x + 2) < terms.length && terms[x+1].toString().equals(".") && Checkers.isClassPiece(terms[x+2].toString()))
+               while ((x + 2) < terms.Length && terms[x+1].toString().equals(".") && Checkers.isClassPiece(terms[x+2].toString()))
                {
                   rhs.append(".");
                   rhs.append(terms[x+2]);
@@ -135,7 +135,7 @@ public class LexicalAnalyzer
 
                x++;
 
-               while ((x + 1) < terms.length && Checkers.isIndex(terms[x+1].toString()))
+               while ((x + 1) < terms.Length && Checkers.isIndex(terms[x+1].toString()))
                {
                   rhs.append(terms[x+1].toString());
                   x++;
@@ -146,7 +146,7 @@ public class LexicalAnalyzer
          if (rhs.length() > 0)
          {
             value.add(ParserUtilities.makeToken(rhs.toString(), terms[tok]));
-            rhs = new StringBuffer();
+            rhs = new java.lang.StringBuffer();
          }
          else if (! Checkers.isComment(terms[x].toString()))
          {
@@ -192,7 +192,7 @@ public class LexicalAnalyzer
    {
       term.witnessOpen(new Token(iterator.getEntireLine(), iterator.getLineNumber(), iterator.getLineMarker()));
 
-      StringBuffer value = new StringBuffer();
+      java.lang.StringBuffer value = new java.lang.StringBuffer();
 
       int initialLine = iterator.getLineNumber();
 
@@ -221,7 +221,7 @@ public class LexicalAnalyzer
          {
             bool match = false;
 
-            for (int x = 0; x < rules.length; x++)
+            for (int x = 0; x < rules.Length; x++)
             {
                if (rules[x].isLeft(temp) || rules[x].isMatch(temp))
                {
@@ -264,7 +264,7 @@ public class LexicalAnalyzer
 
       Token newTerm;
 
-      StringBuffer aTerm = new StringBuffer();
+      java.lang.StringBuffer aTerm = new java.lang.StringBuffer();
 
       while (iterator.hasNext())
       {
@@ -272,7 +272,7 @@ public class LexicalAnalyzer
 
          char temp = iterator.next();
 
-         for (int x = 0; x < rules.length; x++)
+         for (int x = 0; x < rules.Length; x++)
          {
             if (rules[x].isLeft(temp) || rules[x].isMatch(temp))
             {
@@ -280,7 +280,7 @@ public class LexicalAnalyzer
                { 
                   newTerm = new Token(trim(parser, aTerm.toString()), iterator.getLineNumber());
                   terms.add(newTerm);
-                  aTerm = new StringBuffer();
+                  aTerm = new java.lang.StringBuffer();
                }
  
                int curLine = iterator.getLineNumber(); // lets get the current line not the line at the "end" of the term
@@ -311,7 +311,7 @@ public class LexicalAnalyzer
              {
                 newTerm = new Token(trim(parser, aTerm.toString()), iterator.getLineNumber());
                 terms.add(newTerm);
-                aTerm = new StringBuffer();
+                aTerm = new java.lang.StringBuffer();
              }
 
              newTerm = new Token("EOT", iterator.getLineNumber());
@@ -323,7 +323,7 @@ public class LexicalAnalyzer
              {
                 newTerm = new Token(trim(parser, aTerm.toString()), iterator.getLineNumber());
                 terms.add(newTerm);
-                aTerm = new StringBuffer();
+                aTerm = new java.lang.StringBuffer();
              }
 
              terms.add(new Token(temp+"", iterator.getLineNumber())); // add the built in operator as a token...
@@ -346,7 +346,7 @@ public class LexicalAnalyzer
                    newTerm = new Token(trim(parser, aTerm.toString()), iterator.getLineNumber());
                 }
                 terms.add(newTerm);
-                aTerm = new StringBuffer();
+                aTerm = new java.lang.StringBuffer();
              }
          }
          else
@@ -361,7 +361,7 @@ public class LexicalAnalyzer
          terms.add(newTerm);
       }
 
-      for (int x = 0; x < rules.length; x++)
+      for (int x = 0; x < rules.Length; x++)
       {
           if (!rules[x].isBalanced())
             parser.reportError(rules[x].getSyntaxError());

@@ -82,8 +82,8 @@ public class ScriptVariables : java.io.Serializable
     /** called when a closure is exited, returns local var scope for later restoration if desired */
     public java.util.LinkedList<Object> leaveToplevel()
     {
-       java.util.LinkedList scopes = locals;
-       locals = (java.util.LinkedList)marks.pop(); 
+       java.util.LinkedList<Object> scopes = locals;
+       locals = (java.util.LinkedList<Object>)marks.pop(); 
        return scopes;
     }
 

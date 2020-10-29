@@ -60,7 +60,7 @@ public class BasicStrings : Loadable, sleep.interfaces.Predicate
 
     public void scriptLoaded (ScriptInstance aScript)
     {
-        Hashtable temp = aScript.getScriptEnvironment().getEnvironment();
+        java.util.Hashtable<Object,Object> temp = aScript.getScriptEnvironment().getEnvironment();
 
         // functions
         temp.put("&left",   new func_left());
@@ -136,7 +136,7 @@ public class BasicStrings : Loadable, sleep.interfaces.Predicate
 
               for (int x = 0; x < a.length(); x++)
               {
-                 if (! Character.isLetter(a.charAt(x)) )
+                 if (! java.lang.Character.isLetter(a.charAt(x)) )
                  {
                     return false;
                  }
@@ -154,7 +154,7 @@ public class BasicStrings : Loadable, sleep.interfaces.Predicate
    
               for (int x = 0; x < a.length(); x++)
               {
-                 if (! Character.isDigit(a.charAt(x)) && (a.charAt(x) != '.' || (x+1) >= a.length()) )
+                 if (! java.lang.Character.isDigit(a.charAt(x)) && (a.charAt(x) != '.' || (x+1) >= a.length()) )
                  {
                     return false;
                  }
@@ -211,7 +211,7 @@ public class BasicStrings : Loadable, sleep.interfaces.Predicate
            {
               if (a.charAt(aptr) == '*')
               {
-                 boolean greedy = ((aptr + 1) < a.length() && a.charAt(aptr + 1) == '*');
+                 bool greedy = ((aptr + 1) < a.length() && a.charAt(aptr + 1) == '*');
 
                  while (a.charAt(aptr) == '*')
                  {
@@ -265,7 +265,7 @@ public class BasicStrings : Loadable, sleep.interfaces.Predicate
            }
            return (bptr == b.length());
            }
-           catch (Exception ex) { ex.printStackTrace(); }
+           catch (java.lang.Exception ex) { ex.printStackTrace(); }
      
 
            return false;
@@ -361,7 +361,7 @@ public class BasicStrings : Loadable, sleep.interfaces.Predicate
     {
         public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
         {
-           StringBuffer work    = new StringBuffer(BridgeUtilities.getString(l, ""));
+           java.lang.StringBuffer work    = new java.lang.StringBuffer(BridgeUtilities.getString(l, ""));
 
            while (!l.isEmpty())
            {
@@ -389,7 +389,7 @@ public class BasicStrings : Loadable, sleep.interfaces.Predicate
     {
         public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
         {
-           StringBuffer work    = new StringBuffer(BridgeUtilities.getString(l, ""));
+           java.lang.StringBuffer work    = new java.lang.StringBuffer(BridgeUtilities.getString(l, ""));
            String       nstr    = BridgeUtilities.getString(l, "");
            int          index   = BridgeUtilities.normalize(BridgeUtilities.getInt(l, 0), work.length());
            int          nchar   = BridgeUtilities.getInt(l, nstr.length());
@@ -521,7 +521,7 @@ public class BasicStrings : Loadable, sleep.interfaces.Predicate
         {
            func     = (SleepClosure)_func;
            script   = _script;
-           locals   = new Stack();
+           locals   = new java.util.Stack<Object>();
         }
 
         public int compare(Object a, Object b)
@@ -619,7 +619,7 @@ public class BasicStrings : Loadable, sleep.interfaces.Predicate
            String str = left.toString();
            int    num = right.intValue();
 
-           StringBuffer value = new StringBuffer();
+           java.lang.StringBuffer value = new java.lang.StringBuffer();
          
            for (int x = 0; x < num; x++)
            {

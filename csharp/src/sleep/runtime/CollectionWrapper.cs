@@ -121,5 +121,9 @@ public class CollectionWrapper : ScalarArray
       throw new java.lang.RuntimeException("array is read-only");
       // do nothing
    }
+
+   public Type getType() {
+      return GetType();
+   }
 }
 }

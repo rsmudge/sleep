@@ -52,10 +52,10 @@ public class SocketObject : IOObject
          
          if (paramsJ.laddr != null)
          {
-            socket.bind(new InetSocketAddress(paramsJ.laddr, paramsJ.lport));
+            socket.bind(new java.net.InetSocketAddress(paramsJ.laddr, paramsJ.lport));
          }
 
-         socket.connect(new InetSocketAddress(paramsJ.host, paramsJ.port), paramsJ.timeout);
+         socket.connect(new java.net.InetSocketAddress(paramsJ.host, paramsJ.port), paramsJ.timeout);
 
          socket.setSoLinger(true, paramsJ.linger);
 
@@ -73,17 +73,17 @@ public class SocketObject : IOObject
    {
       String key = port + "";
       
-      ServerSocket temp = null;
+      java.net.ServerSocket temp = null;
       if (servers != null && servers.containsKey(key))
       {
-         temp = (ServerSocket)servers.get(key);
+         temp = (java.net.ServerSocket)servers.get(key);
          servers.remove(key);
  
          try
          {
             temp.close();
          }
-         catch (Exception ex)
+         catch (java.lang.Exception ex)
          {
             ex.printStackTrace();
          }
@@ -98,7 +98,7 @@ public class SocketObject : IOObject
 
       if (servers == null)
       {
-         servers = java.util.Collections.synchronizedMap(new java.util.HashMap<Object,Object>
+         servers = java.util.Collections<Object>.synchronizedMap(new java.util.HashMap<Object,Object>
          ());
       }
 
@@ -106,11 +106,11 @@ public class SocketObject : IOObject
 
       if (servers.containsKey(key))
       {
-         server = (ServerSocket)servers.get(key);
+         server = (java.net.ServerSocket)servers.get(key);
       }
       else
       {
-         server = new ServerSocket(port, paramsJ.backlog, paramsJ.laddr != null ? InetAddress.getByName(paramsJ.laddr) : null);
+         server = new java.net.ServerSocket(port, paramsJ.backlog, paramsJ.laddr != null ? java.net.InetAddress.getByName(paramsJ.laddr) : null);
          servers.put(key, server);
       }
 
@@ -119,7 +119,7 @@ public class SocketObject : IOObject
  
    public void listen(SocketHandler paramsJ, ScriptEnvironment env)
    {
-      ServerSocket server = null;
+      java.net.ServerSocket server = null;
 
       try
       {
@@ -150,7 +150,7 @@ public class SocketObject : IOObject
       }
       catch (Exception ex) { }
 
-      super.close();
+      base.close();
    }
 
     public static readonly int LISTEN_FUNCTION  = 1;
@@ -177,7 +177,7 @@ public class SocketObject : IOObject
        {
           if (function != null)
           {
-             socket.setThread(new Thread(this));
+             socket.setThread(new java.lang.Thread(this));
              socket.getThread().start();
           }
           else
@@ -199,7 +199,7 @@ public class SocketObject : IOObject
 
           if (function != null)
           {
-             Stack  args  = new Stack();
+             java.util.Stack<Object>  args  = new java.util.Stack<Object>();
              args.push(SleepUtils.getScalar(socket));
              function.callClosure("&callback", script, args);
           }

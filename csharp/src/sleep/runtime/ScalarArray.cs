@@ -72,5 +72,7 @@ public interface ScalarArray : java.io.Serializable
 
    /** return a view into the array, ideally one that uses the same backing store */
    public ScalarArray sublist(int start, int end);
+
+   public Type getType();
 }
 }

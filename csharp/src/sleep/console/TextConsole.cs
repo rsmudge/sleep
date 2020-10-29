@@ -57,7 +57,7 @@ public class TextConsole : ConsoleProxy
          bool time  = false;
          int     start = 0;
 
-         while (start < args.length && (args[start].startsWith("--") || (args[start].length() >= 2 && args[start].charAt(0) == '-')))
+         while (start < args.Length && (args[start].startsWith("--") || (args[start].length() >= 2 && args[start].charAt(0) == '-')))
          {
             if (args[start].equals("-version") || args[start].equals("--version") || args[start].equals("-v"))
             {
@@ -112,7 +112,7 @@ public class TextConsole : ConsoleProxy
              }
              else
              {
-                System.err.println("Unknown argument: " + args[start]);
+                java.lang.SystemJ.err.println("Unknown argument: " + args[start]);
                 return;
              }
 
@@ -123,7 +123,7 @@ public class TextConsole : ConsoleProxy
          //
 
          Scalar array = SleepUtils.getArrayScalar();
-         for (int x = start + 1; x < args.length; x++)
+         for (int x = start + 1; x < args.Length; x++)
          {
             array.getArray().push(TaintUtils.taint(SleepUtils.getScalar(args[x])));
          }
@@ -134,11 +134,11 @@ public class TextConsole : ConsoleProxy
 
             if (eval)
             {
-                script = loader.loadScript(args[start - 1], args[start], new Hashtable());
+                script = loader.loadScript(args[start - 1], args[start], new java.util.Hashtable<Object,Object>());
             }
             else if (expr)
             {
-                script = loader.loadScript(args[start - 1], "println(" + args[start] + ");", new Hashtable());
+                script = loader.loadScript(args[start - 1], "println(" + args[start] + ");", new java.util.Hashtable<Object,Object>());
             }
             else if (args[start].equals("-"))
             {
@@ -152,9 +152,9 @@ public class TextConsole : ConsoleProxy
             script.getScriptVariables().putScalar("@ARGV", array);  // set @ARGV to be our array of command line arguments
             script.getScriptVariables().putScalar("$__SCRIPT__", SleepUtils.getScalar(script.getName()));
 
-            if (System.getProperty("sleep.debug") != null)
+            if (java.lang.SystemJ.getProperty("sleep.debug") != null)
             {
-               script.setDebugFlags(Integer.parseInt(System.getProperty("sleep.debug")));
+               script.setDebugFlags(java.lang.Integer.parseInt(java.lang.SystemJ.getProperty("sleep.debug")));
             }
           
             if (prof)
@@ -164,27 +164,27 @@ public class TextConsole : ConsoleProxy
 
             if (check)
             {
-               SystemJ.outJ.println(args[start] + " syntax OK");    
+               java.lang.SystemJ.outJ.println(args[start] + " syntax OK");    
             }
             else if (ast)
             {
-               SystemJ.outJ.println(script.getRunnableBlock());
+               java.lang.SystemJ.outJ.println(script.getRunnableBlock());
             } 
             else
             {
-               long beganAt = SystemJ.currentTimeMillis();
+               long beganAt = java.lang.SystemJ.currentTimeMillis();
 
                script.runScript();                                     // run the script...
 
                if (prof)
                {
-                  script.printProfileStatistics(SystemJ.outJ);
+                  script.printProfileStatistics(java.lang.SystemJ.outJ);
                }
 
                if (time)
                {
-                   long difference = SystemJ.currentTimeMillis() - beganAt;
-                   SystemJ.outJ.println("time: " + (difference / 1000.0) + "s");
+                   long difference = java.lang.SystemJ.currentTimeMillis() - beganAt;
+                   java.lang.SystemJ.outJ.println("time: " + (difference / 1000.0) + "s");
                }
             }
          }
@@ -213,12 +213,12 @@ public class TextConsole : ConsoleProxy
 
    public void consolePrint(String message)
    {
-      SystemJ.outJ.print(message);
+      java.lang.SystemJ.outJ.print(message);
    }
 
    public void consolePrintln(Object message)
    {
-      SystemJ.outJ.println(message.toString());
+      java.lang.SystemJ.outJ.println(message.toString());
    }
 
    public String consoleReadln()
@@ -238,7 +238,7 @@ public class TextConsole : ConsoleProxy
 
    public TextConsole()
    {
-      inJ = new java.io.BufferedReader(new java.io.InputStreamReader(SystemJ.inJ));
+      inJ = new java.io.BufferedReader(new java.io.InputStreamReader(java.lang.SystemJ.inJ));
    }
 }
 }

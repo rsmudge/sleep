@@ -60,10 +60,10 @@ public class ImportManager
 
        if (from != null)
        {
-          File returnValue = null;
+          java.io.File returnValue = null;
           returnValue = ParserConfig.findJarFile(from);
 
-          if (returnValue == null || !returnValue.exists()) { throw new RuntimeException("jar file to using  package from was not found!"); }
+          if (returnValue == null || !returnValue.exists()) { throw new java.lang.RuntimeException("jar file to using  package from was not found!"); }
 
           addFile(returnValue);
        }
@@ -77,17 +77,17 @@ public class ImportManager
        else if (pack == null)
        {
           imports.add(packagez);
-          Class found = resolveClass(null, packagez); /* try with no package to see if we have an anonymous class */
+          Type found = resolveClass(null, packagez); /* try with no package to see if we have an anonymous class */
           classes.put(packagez, found);
 
           if (found == null)
-             throw new RuntimeException("imported class was not found");
+             throw new java.lang.RuntimeException("imported class was not found");
        }
        else
        {
           imports.add(packagez);
          
-          Class found = findImportedClass(packagez);
+          Type found = findImportedClass(packagez);
           classes.put(clas, found);
 
           if (found == null)
@@ -104,7 +104,7 @@ public class ImportManager
 
        try
        {
-          return Class.forName(name.toString());
+          return Type.forName(name.toString());
        }
        catch (java.lang.Exception ex) { }
 
@@ -116,19 +116,19 @@ public class ImportManager
    {
         try
         {
-            URL url = f.toURL();
+            java.net.URL url = f.toURL();
 
-            URLClassLoader sysloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
-            Class sysclass = typeof(java.net.URLClassLoader);
+            java.net.URLClassLoader sysloader = (java.net.URLClassLoader) java.lang.ClassLoader.getSystemClassLoader();
+            Type sysclass = typeof(java.net.URLClassLoader);
 
-            Method method = sysclass.getDeclaredMethod( "addURL", new Class[] { typeof(URL) } );
+            java.lang.reflect.Method method = sysclass.getDeclaredMethod( "addURL", new java.lang.Type[] { typeof(java.net.URL) } );
             method.setAccessible( true );
             method.invoke( sysloader, new Object[] { url } );
         }    
-        catch(Throwable t)
+        catch(java.lang.Throwable t)
         {    
             t.printStackTrace();
-            throw new RuntimeException("Error, could not add "+f+" to system classloader - " + t.getMessage());
+            throw new java.lang.RuntimeException("Error, could not add "+f+" to system classloader - " + t.getMessage());
         }
    }
 
@@ -152,7 +152,7 @@ public class ImportManager
           {
              rv = resolveClass(null, name); /* try with no package to see if we have an anonymous class */
 
-             Iterator i = imports.iterator();
+             java.util.Iterator<Object> i = imports.iterator();
              while (i.hasNext() && rv == null)
              {
                 rv = resolveClass((String)i.next(), name);
@@ -169,7 +169,7 @@ public class ImportManager
           classes.put(name, rv);
        }
      
-       return (Class)classes.get(name);
+       return (Type)classes.get(name);
    }
 }
 

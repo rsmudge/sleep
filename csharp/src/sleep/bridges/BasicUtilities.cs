@@ -55,7 +55,7 @@ public class BasicUtilities : Function, Loadable, Predicate
 
     public void scriptLoaded (ScriptInstance i)
     {
-        Hashtable temp = i.getScriptEnvironment().getEnvironment();
+        java.util.Hashtable<Object,Object> temp = i.getScriptEnvironment().getEnvironment();
         //
         // functions
         //
@@ -213,7 +213,7 @@ public class BasicUtilities : Function, Loadable, Predicate
 
        if (predName.equals("isa"))
        {
-          Class  blah = BridgeUtilities.getClass(terms, null);
+          Type  blah = BridgeUtilities.getClass(terms, null);
           Object bleh = BridgeUtilities.getObject(terms);
           return blah != null && blah.isInstance(bleh);          
        }
@@ -235,7 +235,7 @@ public class BasicUtilities : Function, Loadable, Predicate
           }
           else
           {
-             Iterator iter = SleepUtils.getIterator(temp, anInstance);
+             java.util.Iterator<Object> iter = SleepUtils.getIterator(temp, anInstance);
              Scalar   left = BridgeUtilities.getScalar(terms);
 
              while (iter.hasNext())
@@ -290,9 +290,9 @@ public class BasicUtilities : Function, Loadable, Predicate
 
        public Scalar evaluate(String n, ScriptInstance si, java.util.Stack<Object> l)
        {
-          File   parent    = null;
+          java.io.File   parent    = null;
           String className = "";
-          Class  bridge    = null;
+          Type  bridge    = null;
 
           if (l.size() == 2)
           {
@@ -304,11 +304,11 @@ public class BasicUtilities : Function, Loadable, Predicate
              Scalar obj = (Scalar)l.pop();
              if (obj.objectValue() is Type && n.equals("&use"))
              {
-                bridge = (Class)obj.objectValue();
+                bridge = (Type)obj.objectValue();
              }
              else
              {
-                File a      = sleep.parser.ParserConfig.findJarFile(obj.toString());
+                java.io.File a      = sleep.parser.ParserConfig.findJarFile(obj.toString());
 
                 parent      = a.getParentFile();
                 className   = a.getName();
@@ -317,7 +317,7 @@ public class BasicUtilities : Function, Loadable, Predicate
 
           if (parent != null && !parent.exists())
           {
-             throw new IllegalArgumentException(n + ": could not locate source '" + parent + "'");
+             throw new java.lang.IllegalArgumentException(n + ": could not locate source '" + parent + "'");
           }
 
           try
@@ -328,12 +328,12 @@ public class BasicUtilities : Function, Loadable, Predicate
                 {
                    if (parent != null)
                    {
-                      URLClassLoader loader = new URLClassLoader(new URL[] { parent.toURL() });
-                      bridge = Class.forName(className, true, loader);
+                      java.net.URLClassLoader loader = new java.net.URLClassLoader(new java.net.URL[] { parent.toURL() });
+                      bridge = Type.forName(className, true, loader);
                    }
                    else
                    {
-                      bridge = Class.forName(className);
+                      bridge = Type.forName(className);
                    }
                 }
 
@@ -355,7 +355,7 @@ public class BasicUtilities : Function, Loadable, Predicate
              {
                 Block          script;
                 ScriptLoader   sloader = (ScriptLoader)si.getScriptEnvironment().getEnvironment().get("(isloaded)");
-                InputStream    istream;
+                java.io.InputStream    istream;
          
                 Scalar incz = si.getScriptVariables().getScalar("$__INCLUDE__");
                 if (incz == null)
@@ -366,9 +366,9 @@ public class BasicUtilities : Function, Loadable, Predicate
 
                 if (parent != null)
                 {
-                   File theFile = parent.isDirectory() ? new File(parent, className) : parent;
+                   java.io.File theFile = parent.isDirectory() ? new java.io.File(parent, className) : parent;
 
-                   URLClassLoader loader = new URLClassLoader(new URL[] { parent.toURL() });
+                   java.net.URLClassLoader loader = new java.net.URLClassLoader(new java.net.URL[] { parent.toURL() });
                    sloader.touch(className, theFile.lastModified());
                    si.associateFile(theFile); /* associate this included script with the current script instance */
 
@@ -377,11 +377,11 @@ public class BasicUtilities : Function, Loadable, Predicate
                 }
                 else
                 {
-                   File tempf = BridgeUtilities.toSleepFile(className, si);
+                   java.io.File tempf = BridgeUtilities.toSleepFile(className, si);
                    sloader.touch(className, tempf.lastModified());
                    si.associateFile(tempf); /* associate this included script with the current script instance */
 
-                   istream = new FileInputStream(tempf);
+                   istream = new java.io.FileInputStream(tempf);
                    incz.setValue( SleepUtils.getScalar(tempf) );
                 }
 
@@ -392,7 +392,7 @@ public class BasicUtilities : Function, Loadable, Predicate
                 }
                 else
                 {
-                   throw new IOException("unable to locate " + className + " from: " + parent);
+                   throw new java.io.IOException("unable to locate " + className + " from: " + parent);
                 }
              }
           }
@@ -400,7 +400,7 @@ public class BasicUtilities : Function, Loadable, Predicate
           {
              si.getScriptEnvironment().flagError(yex);             
           }
-          catch (Exception ex)
+          catch (java.lang.Exception ex)
           {
              si.getScriptEnvironment().flagError(ex);             
           }
@@ -433,7 +433,7 @@ public class BasicUtilities : Function, Loadable, Predicate
 
           if (n.equals("&casti"))
           {
-             Class  atype = ObjectUtilities.convertScalarDescriptionToClass(type);
+             Type  atype = ObjectUtilities.convertScalarDescriptionToClass(type);
 
              if (atype != null)
              {
@@ -442,7 +442,7 @@ public class BasicUtilities : Function, Loadable, Predicate
              }
              else
              {
-                throw new RuntimeException("&casti: '" + type + "' is an invalid primitive cast identifier");
+                throw new java.lang.RuntimeException("&casti: '" + type + "' is an invalid primitive cast identifier");
              }
           }
 
@@ -483,12 +483,12 @@ public class BasicUtilities : Function, Loadable, Predicate
 
           if (totaldim != flat.getArray().size())
           {
-             throw new RuntimeException("&cast: specified dimensions " + totaldim + " is not equal to total array elements " + flat.getArray().size());
+             throw new java.lang.RuntimeException("&cast: specified dimensions " + totaldim + " is not equal to total array elements " + flat.getArray().size());
           }
 
-          rv = Array.newInstance(atype, dimensions);
+          rv = java.util.Array.newInstance(atype, dimensions);
 
-          int[] current = new int[dimensions.length]; // defaults at 0, 0, 0
+          int[] current = new int[dimensions.Length]; // defaults at 0, 0, 0
 
           /* special case, we're casting an empty array */
           if (flat.getArray().size() == 0)
@@ -503,23 +503,23 @@ public class BasicUtilities : Function, Loadable, Predicate
              //
              // find our index
              //
-             for (int z = 0; z < (current.length - 1); z++)
+             for (int z = 0; z < (current.Length - 1); z++)
              {
-                tempa = Array.get(tempa, current[z]);
+                tempa = java.util.Array.get(tempa, current[z]);
              }
 
              //
              // set our value
              //
              Object tempo = ObjectUtilities.buildArgument(atype, flat.getArray().getAt(x), si);
-             Array.set(tempa, current[current.length - 1], tempo);
+             Array.set(tempa, current[current.Length - 1], tempo);
 
              //
              // increment our index step...
              //
-             current[current.length - 1] += 1;
+             current[current.Length - 1] += 1;
 
-             for (int y = current.length - 1; current[y] >= dimensions[y]; y--)
+             for (int y = current.Length - 1; current[y] >= dimensions[y]; y--)
              {
                 if (y == 0)
                 {
@@ -543,7 +543,7 @@ public class BasicUtilities : Function, Loadable, Predicate
              String temp = BridgeUtilities.getString(l, "");
 
              if (temp.length() == 0 || temp.charAt(0) != '&')
-                throw new IllegalArgumentException(n + ": requested function name must begin with '&'");
+                throw new java.lang.IllegalArgumentException(n + ": requested function name must begin with '&'");
 
              return SleepUtils.getScalar(si.getScriptEnvironment().getFunction(temp));
           }
@@ -565,11 +565,11 @@ public class BasicUtilities : Function, Loadable, Predicate
              }
              else if (temp.charAt(0) != '&')
              {
-                throw new IllegalArgumentException("&setf: invalid function name '" + temp + "'");
+                throw new java.lang.IllegalArgumentException("&setf: invalid function name '" + temp + "'");
              }
              else if (o != null)
              {
-                throw new IllegalArgumentException("&setf: can not set function " + temp + " to a " + o.getClass());
+                throw new java.lang.IllegalArgumentException("&setf: can not set function " + temp + " to a " + o.getClass());
              }
           }
 
@@ -667,10 +667,10 @@ public class BasicUtilities : Function, Loadable, Predicate
        public Scalar evaluate(String n, ScriptInstance si, java.util.Stack<Object> l)
        {
           SleepClosure temp  = BridgeUtilities.getFunction(l, si);           
-          Iterator     i     = BridgeUtilities.getIterator(l, si);
+          java.util.Iterator<Object>     i     = BridgeUtilities.getIterator(l, si);
 
           Scalar       rv     = SleepUtils.getArrayScalar();
-          java.util.Stack<Object>        locals = new Stack();
+          java.util.Stack<Object>        locals = new java.util.Stack<Object>();
 
           while (i.hasNext())
           {
@@ -699,7 +699,7 @@ public class BasicUtilities : Function, Loadable, Predicate
           if (doit.getArray() != null || SleepUtils.isFunctionScalar(doit))
           {
              Scalar      value = SleepUtils.getArrayScalar();
-             Iterator    i     = doit.getArray() == null ? SleepUtils.getFunctionFromScalar(doit, si).scalarIterator() : doit.getArray().scalarIterator();
+             java.util.Iterator<Object>    i     = doit.getArray() == null ? SleepUtils.getFunctionFromScalar(doit, si).scalarIterator() : doit.getArray().scalarIterator();
 
              while (i.hasNext())
              {
@@ -711,7 +711,7 @@ public class BasicUtilities : Function, Loadable, Predicate
           else if (doit.getHash() != null)
           {
               Scalar value = SleepUtils.getHashScalar();
-              Iterator i = doit.getHash().keys().scalarIterator();
+              java.util.Iterator<Object> i = doit.getHash().keys().scalarIterator();
               while (i.hasNext())
               {
                  Scalar key = (Scalar)i.next();
@@ -768,7 +768,7 @@ public class BasicUtilities : Function, Loadable, Predicate
        public Scalar evaluate(String n, ScriptInstance si, java.util.Stack<Object> l)
        {
           Scalar value = SleepUtils.getArrayScalar();
-          Iterator  i  = BridgeUtilities.getIterator(l, si);
+          java.util.Iterator<Object>  i  = BridgeUtilities.getIterator(l, si);
 
           while (i.hasNext())
           {
@@ -797,7 +797,7 @@ public class BasicUtilities : Function, Loadable, Predicate
               return SleepUtils.getEmptyScalar(); 
 
           String[] vars = splitter.split(temp); 
-          for (int x = 0; x < vars.length; x++)
+          for (int x = 0; x < vars.Length; x++)
           {
              if (level.scalarExists(vars[x]))
              {
@@ -817,7 +817,7 @@ public class BasicUtilities : Function, Loadable, Predicate
              }
              else
              {
-                throw new IllegalArgumentException(n + ": malformed variable name '" + vars[x] + "' from '" + temp + "'");
+                throw new java.lang.IllegalArgumentException(n + ": malformed variable name '" + vars[x] + "' from '" + temp + "'");
              }
           }
 
@@ -868,7 +868,7 @@ public class BasicUtilities : Function, Loadable, Predicate
 
           if (iterators == null || iterators.isEmpty())
           {
-             throw new RuntimeException("&remove: no active foreach loop to remove element from");
+             throw new java.lang.RuntimeException("&remove: no active foreach loop to remove element from");
           }
           else
           {
@@ -883,7 +883,7 @@ public class BasicUtilities : Function, Loadable, Predicate
           Variable level;
           String temp = BridgeUtilities.getString(l, "");       
           String[] vars = temp.split(" "); 
-          for (int x = 0; x < vars.length; x++)
+          for (int x = 0; x < vars.Length; x++)
           {
              level = i.getScriptVariables().getScalarLevel(vars[x], i);
              if (level != null)
@@ -894,7 +894,7 @@ public class BasicUtilities : Function, Loadable, Predicate
              }
              else
              {
-                throw new IllegalArgumentException(vars[x] + " must already exist in a scope prior to watching");
+                throw new java.lang.IllegalArgumentException(vars[x] + " must already exist in a scope prior to watching");
              }
           }
        }
@@ -920,7 +920,7 @@ public class BasicUtilities : Function, Loadable, Predicate
           }
           else
           {
-             Class        clz     = (Class)top.objectValue();
+             Type        clz     = (Type)top.objectValue();
              SleepClosure closure = (SleepClosure)BridgeUtilities.getObject(l);          
 
              return SleepUtils.getScalar(SleepUtils.newInstance(clz, closure, i));
@@ -941,11 +941,11 @@ public class BasicUtilities : Function, Loadable, Predicate
        }
        else if (n.equals("&invoke")) 
        {
-          Map paramsJ = BridgeUtilities.extractNamedParameters(l);
+          java.util.Map<Object,Object> paramsJ = BridgeUtilities.extractNamedParameters(l);
 
           SleepClosure c    = BridgeUtilities.getFunction(l, i);
-          java.util.Stack<Object>        args = new Stack();
-          Iterator iter     = BridgeUtilities.getIterator(l, i);
+          java.util.Stack<Object>        args = new java.util.Stack<Object>();
+          java.util.Iterator<Object> iter     = BridgeUtilities.getIterator(l, i);
           while (iter.hasNext()) { args.add(0, iter.next()); }
 
           String message    = BridgeUtilities.getString(l, null);
@@ -955,7 +955,7 @@ public class BasicUtilities : Function, Loadable, Predicate
           {
              Scalar   h = (Scalar)paramsJ.get("parameters");
 
-             Iterator it = h.getHash().keys().scalarIterator();
+             java.util.Iterator<Object> it = h.getHash().keys().scalarIterator();
              while (it.hasNext())
              {
                 Scalar key = (Scalar)it.next();
@@ -1035,7 +1035,7 @@ public class BasicUtilities : Function, Loadable, Predicate
              }
              else
              {
-                throw new RuntimeException("&popl: no more local frames exist"); 
+                throw new java.lang.RuntimeException("&popl: no more local frames exist"); 
              }
           }
 
@@ -1048,7 +1048,7 @@ public class BasicUtilities : Function, Loadable, Predicate
        }
        else if (n.equals("&concat"))
        {
-          Scalar value = SleepUtils.getArrayScalar();
+          Scalar value2 = SleepUtils.getArrayScalar();
 
           while (!l.isEmpty())
           {
@@ -1056,19 +1056,19 @@ public class BasicUtilities : Function, Loadable, Predicate
 
              if (temp.getArray() != null)
              {
-                Iterator iter = temp.getArray().scalarIterator();
+                java.util.Iterator<Object> iter = temp.getArray().scalarIterator();
                 while (iter.hasNext())
                 {
-                   value.getArray().push(SleepUtils.getScalar((Scalar)iter.next()));
+                   value2.getArray().push(SleepUtils.getScalar((Scalar)iter.next()));
                 }
              }
              else
              {
-                value.getArray().push(SleepUtils.getScalar(temp));
+                value2.getArray().push(SleepUtils.getScalar(temp));
              }
           }
 
-          return value;
+          return value2;
        }
 
        /** Start of many array functions */
@@ -1092,8 +1092,8 @@ public class BasicUtilities : Function, Loadable, Predicate
           ScalarArray b = BridgeUtilities.getArray(l);
           Scalar temp;    
 
-          HashSet s = new HashSet();
-          Iterator iter = b.scalarIterator();
+          java.util.HashSet<Object> s = new java.util.HashSet<Object>();
+          java.util.Iterator<Object> iter = b.scalarIterator();
           while (iter.hasNext())
           {
              temp = (Scalar)iter.next();
@@ -1128,8 +1128,8 @@ public class BasicUtilities : Function, Loadable, Predicate
           ScalarArray a = value.getArray();
           ScalarArray b = BridgeUtilities.getArray(l);
     
-          HashSet s = new HashSet();
-          Iterator iter = a.scalarIterator();
+          java.util.HashSet<Object> s = new java.util.HashSet<Object>();
+          java.util.Iterator<Object> iter = a.scalarIterator();
           Scalar temp;
 
           while (iter.hasNext())
@@ -1183,7 +1183,7 @@ public class BasicUtilities : Function, Loadable, Predicate
 
           int y = start;
 
-          Iterator iter = value.getArray().scalarIterator();
+          java.util.Iterator<Object> iter = value.getArray().scalarIterator();
           for (int x = 0; x < start && iter.hasNext(); x++) { iter.next(); }
 
           while (y < torem)
@@ -1199,10 +1199,10 @@ public class BasicUtilities : Function, Loadable, Predicate
 
           /* insert some elements */
 
-          ListIterator liter = (ListIterator)value.getArray().scalarIterator();
+          java.util.ListIterator<Object> liter = (java.util.ListIterator<Object>)value.getArray().scalarIterator();
           for (int x = 0; x < start && liter.hasNext(); x++) { liter.next(); }
           
-          Iterator j = insert.scalarIterator();
+          java.util.Iterator<Object> j = insert.scalarIterator();
           while (j.hasNext())
           {
              Scalar ins = (Scalar)j.next();
@@ -1227,7 +1227,7 @@ public class BasicUtilities : Function, Loadable, Predicate
        {
           if (value.getArray() != null)
           {
-             Iterator iter = value.getArray().scalarIterator();
+             java.util.Iterator<Object> iter = value.getArray().scalarIterator();
              while (iter.hasNext())
              {
                 iter.next();
@@ -1248,9 +1248,9 @@ public class BasicUtilities : Function, Loadable, Predicate
           SleepClosure f = BridgeUtilities.getFunction(l, i); 
           int start      = BridgeUtilities.normalize(BridgeUtilities.getInt(l, 0), value.getArray().size());
           int count      = 0;
-          java.util.Stack<Object> locals   = new Stack();
+          java.util.Stack<Object> locals   = new java.util.Stack<Object>();
 
-          Iterator iter = value.getArray().scalarIterator();
+          java.util.Iterator<Object> iter = value.getArray().scalarIterator();
           while (iter.hasNext())
           {
              Scalar temp = (Scalar)iter.next();
@@ -1278,9 +1278,9 @@ public class BasicUtilities : Function, Loadable, Predicate
        else if (n.equals("&reduce") && SleepUtils.isFunctionScalar(value))
        {
           SleepClosure f    = SleepUtils.getFunctionFromScalar(value, i); 
-          java.util.Stack<Object> locals      = new Stack();
+          java.util.Stack<Object> locals      = new java.util.Stack<Object>();
 
-          Iterator iter = BridgeUtilities.getIterator(l, i);
+          java.util.Iterator<Object> iter = BridgeUtilities.getIterator(l, i);
 
           Scalar a      = iter.hasNext() ? (Scalar)iter.next() : SleepUtils.getEmptyScalar();
           Scalar b      = iter.hasNext() ? (Scalar)iter.next() : SleepUtils.getEmptyScalar();
@@ -1341,7 +1341,7 @@ public class BasicUtilities : Function, Loadable, Predicate
        { 
           if (value.getHash() == null || !(value.getHash() is OrderedHashContainer))
           {
-             throw new IllegalArgumentException(n + ": expected an ordered hash, received: " + SleepUtils.describe(value));
+             throw new java.lang.IllegalArgumentException(n + ": expected an ordered hash, received: " + SleepUtils.describe(value));
           }
           
           SleepClosure function  = BridgeUtilities.getFunction(l, i);           
@@ -1359,8 +1359,8 @@ public class BasicUtilities : Function, Loadable, Predicate
        {
           if (value.getHash() != null)
           {
-             Iterator keys   = BridgeUtilities.getIterator(l, i);
-             Iterator values = l.isEmpty() ? keys : BridgeUtilities.getIterator(l, i);
+             java.util.Iterator<Object> keys   = BridgeUtilities.getIterator(l, i);
+             java.util.Iterator<Object> values = l.isEmpty() ? keys : BridgeUtilities.getIterator(l, i);
 
              while (keys.hasNext())
              {
@@ -1377,7 +1377,7 @@ public class BasicUtilities : Function, Loadable, Predicate
           }
           else if (value.getArray() != null)
           {
-             Iterator temp = BridgeUtilities.getIterator(l, i);
+             java.util.Iterator<Object> temp = BridgeUtilities.getIterator(l, i);
              while (temp.hasNext())
              {
                 Scalar next = (Scalar)temp.next();
@@ -1395,7 +1395,7 @@ public class BasicUtilities : Function, Loadable, Predicate
 
              if (l.isEmpty())
              {
-                Iterator iter = value.getHash().getData().values().iterator();
+                java.util.Iterator<Object> iter = value.getHash().getData().values().iterator();
                 while (iter.hasNext())
                 {
                    Scalar next = (Scalar)iter.next();
@@ -1408,7 +1408,7 @@ public class BasicUtilities : Function, Loadable, Predicate
              }
              else
              {
-                Iterator iter = BridgeUtilities.getIterator(l, i);
+                java.util.Iterator<Object> iter = BridgeUtilities.getIterator(l, i);
                 while (iter.hasNext())
                 {
                    Scalar key = (Scalar)iter.next();
@@ -1423,30 +1423,30 @@ public class BasicUtilities : Function, Loadable, Predicate
           i.getScriptEnvironment().flagReturn(null, ScriptEnvironment.FLOW_CONTROL_THROW); /* a null throw will exit the interpreter */
           if (!SleepUtils.isEmptyScalar(value))
           {
-             throw new RuntimeException(value.toString());
+             throw new java.lang.RuntimeException(value.toString());
           }
        }
        else if (n.equals("&setField"))
        {
           // setField(class/object, "field", "value")
 
-          Field  setMe  = null;
-          Class  aClass = null;
+          java.lang.reflect.Field  setMe  = null;
+          Type  aClass = null;
           Object inst   = null;
 
           if (value.objectValue() == null)
           {
-             throw new IllegalArgumentException("&setField: can not set field on a null object");
+             throw new java.lang.IllegalArgumentException("&setField: can not set field on a null object");
           }
           else if (value.objectValue() is Type)
           {
-             aClass = (Class)value.objectValue();
+             aClass = (Type)value.objectValue();
              inst   = null;
           }
           else
           {
              inst   = value.objectValue();
-             aClass = inst.getClass();
+             aClass = typeof(inst);
           }
 
           while (!l.isEmpty())
@@ -1462,7 +1462,7 @@ public class BasicUtilities : Function, Loadable, Predicate
                 {
                    setMe = aClass.getDeclaredField(name);
                 }
-                catch (NoSuchFieldException nsfe)
+                catch (java.lang.NoSuchFieldException nsfe)
                 {
                    setMe = aClass.getField(name);
                 }
@@ -1474,17 +1474,17 @@ public class BasicUtilities : Function, Loadable, Predicate
                 }
                 else
                 {
-                   throw new RuntimeException("unable to convert " + SleepUtils.describe(arg) + " to a " + setMe.getType());
+                   throw new java.lang.RuntimeException("unable to convert " + SleepUtils.describe(arg) + " to a " + setMe.getType());
                 }
              }
-             catch (NoSuchFieldException fex)
+             catch (java.lang.NoSuchFieldException fex)
              {
-                throw new RuntimeException("no field named " + name + " in " + aClass);
+                throw new java.lang.RuntimeException("no field named " + name + " in " + aClass);
              }
-             catch (RuntimeException rex) { throw (rex); }
-             catch (Exception ex)
+             catch (java.lang.RuntimeException rex) { throw (rex); }
+             catch (java.lang.Exception ex)
              {
-                throw new RuntimeException("cannot set " + name + " in " + aClass + ": " + ex.getMessage());
+                throw new java.lang.RuntimeException("cannot set " + name + " in " + aClass + ": " + ex.getMessage());
              }
           }
        }
@@ -1503,7 +1503,7 @@ public class BasicUtilities : Function, Loadable, Predicate
 
        if (start > end)
        {
-          throw new IllegalArgumentException("illegal subarray(" + SleepUtils.describe(value) + ", " + _start + " -> " + start + ", " + _end + " -> " + end + ")");
+          throw new java.lang.IllegalArgumentException("illegal subarray(" + SleepUtils.describe(value) + ", " + _start + " -> " + start + ", " + _end + " -> " + end + ")");
        }
   
        return SleepUtils.getArrayScalar(value.getArray().sublist(start, end));

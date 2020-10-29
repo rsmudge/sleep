@@ -129,7 +129,7 @@ public class ScriptLoader
        if (BLOCK_CACHE != null && BLOCK_CACHE.containsKey(name))
        {
           Object[] temp   = (Object[])BLOCK_CACHE.get(name);
-          long     loaded = ((Long)temp[1]).longValue();
+          long     loaded = ((java.lang.Long)temp[1]).longValue();
 
           if (lastModifiedTime > loaded)
           {
@@ -183,7 +183,7 @@ public class ScriptLoader
     public java.util.Map<Object,Object> setGlobalCache(bool setting)
     {
         if (setting && BLOCK_CACHE == null)
-            BLOCK_CACHE = Collections.synchronizedMap(new java.util.HashMap<Object,Object>());
+            BLOCK_CACHE = java.util.Collections<Object>.synchronizedMap(new java.util.HashMap<Object,Object>());
 
         if (!setting)
             BLOCK_CACHE = null;
@@ -440,7 +440,7 @@ public class ScriptLoader
 
             if (BLOCK_CACHE != null)
             {
-                BLOCK_CACHE.put(name, new Object[] { temp.getRunnableBlock(), new Long(SystemJ.currentTimeMillis()) });
+                BLOCK_CACHE.put(name, new Object[] { temp.getRunnableBlock(), new Long(java.lang.SystemJ.currentTimeMillis()) });
             }
 
             return temp.getRunnableBlock();
@@ -625,7 +625,7 @@ public class ScriptLoader
         if (charset != null) {
             try {
                 return new java.io.InputStreamReader(inJ, charset);
-            } catch (java.nio.charset.UnsupportedEncodingException e) {
+            } catch (java.io.UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
         }
@@ -650,7 +650,7 @@ public class ScriptLoader
             try {
                 while (inJ.hasRemaining()) {
                     if (!outJ.hasRemaining())
-                        return CoderResult.OVERFLOW;
+                        return java.nio.charset.CoderResult.OVERFLOW;
 
                     int index = (int) inJ.get();
                     if (index >= 0) {
@@ -661,7 +661,7 @@ public class ScriptLoader
                     }
                     mark++;
                 }
-                return CoderResult.UNDERFLOW;
+                return java.nio.charset.CoderResult.UNDERFLOW;
             }
             finally { inJ.position(mark); }
         }

@@ -98,11 +98,11 @@ public class OrderedHashContainer : HashContainer
 
    public ScalarArray keys()
    {
-      List keys = new LinkedList();
-      Iterator i = values.entrySet().iterator();
+      java.util.List<Object> keys = new java.util.LinkedList<Object>();
+      java.util.Iterator<Object> i = values.entrySet().iterator();
       while (i.hasNext())
       {
-         Map.Entry next = (Map.Entry)i.next();
+         java.util.MapNS.Entry<Object,Object> next = (java.util.MapNS.Entry<Object,Object>)i.next();
          if (!SleepUtils.isEmptyScalar((Scalar)next.getValue()))
          {
             keys.add(next.getKey());
@@ -120,10 +120,10 @@ public class OrderedHashContainer : HashContainer
    {
       if (shouldClean)
       {
-         Iterator i = values.entrySet().iterator();
+         java.util.Iterator<Object> i = values.entrySet().iterator();
          while (i.hasNext())
          {
-            Map.Entry next = (Map.Entry)i.next();
+            java.util.MapNS.Entry<Object,Object> next = (java.util.MapNS.Entry<Object,Object>)i.next();
             if (SleepUtils.isEmptyScalar((Scalar)next.getValue()))
             {
                i.remove();
@@ -143,7 +143,7 @@ public class OrderedHashContainer : HashContainer
       {
          cleanup();
 
-         Stack locals = new Stack();
+         java.util.Stack<Object> locals = new java.util.Stack<Object>();
          locals.push(key);
          locals.push(SleepUtils.getHashScalar(this));
 

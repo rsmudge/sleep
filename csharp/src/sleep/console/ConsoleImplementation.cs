@@ -105,7 +105,7 @@ public class ConsoleImplementation : RuntimeWarningWatcher, Loadable, ConsolePro
    public ConsoleImplementation(java.util.Hashtable<Object,Object> _sharedEnvironment, Variable _sharedVariables, ScriptLoader _loader)
    {
       if (_sharedEnvironment == null)
-         _sharedEnvironment = new Hashtable();
+         _sharedEnvironment = new java.util.Hashtable<Object,Object>();
 
       if (_sharedVariables == null)
          _sharedVariables = new DefaultVariable();
@@ -178,7 +178,7 @@ public class ConsoleImplementation : RuntimeWarningWatcher, Loadable, ConsolePro
                 {
                    eval(code.toString(), code.toString());
                    repeat = code.toString();
-                   code   = new StringBuffer();                                
+                   code   = new java.lang.StringBuffer();                                
                 }
              }
              else
@@ -228,7 +228,7 @@ public class ConsoleImplementation : RuntimeWarningWatcher, Loadable, ConsolePro
              }
              else if (command.equals("interact"))
              {
-                _interact();
+                interact();
              }
              else if (command.equals("list"))
              {
@@ -237,13 +237,13 @@ public class ConsoleImplementation : RuntimeWarningWatcher, Loadable, ConsolePro
              else if (command.equals("debug") && args != null) 
              {
                 String[] splits = args.split(" ");
-                if (splits.length == 2)
+                if (splits.Length == 2)
                 {
-                   debug(splits[0], Integer.parseInt(splits[1]));
+                   debug(splits[0], java.lang.Integer.parseInt(splits[1]));
                 }
-                else if (splits.length == 1)
+                else if (splits.Length == 1)
                 {
-                   debug(null, Integer.parseInt(splits[0]));
+                   debug(null, java.lang.Integer.parseInt(splits[0]));
                 }
                 else
                 {
@@ -385,9 +385,9 @@ public class ConsoleImplementation : RuntimeWarningWatcher, Loadable, ConsolePro
        {
           ScriptInstance script = loader.loadScript(file, sharedEnvironment);
 
-          if (System.getProperty("sleep.debug") != null)
+          if (java.lang.SystemJ.getProperty("sleep.debug") != null)
           {
-             script.setDebugFlags(Integer.parseInt(System.getProperty("sleep.debug")));
+             script.setDebugFlags(java.lang,Integer.parseInt(java.lang.SystemJ.getProperty("sleep.debug")));
           }
 
           script.runScript();
@@ -409,11 +409,11 @@ public class ConsoleImplementation : RuntimeWarningWatcher, Loadable, ConsolePro
           return name;
        }
 
-       Iterator i = loader.getScripts().iterator();
+       java.util.Iterator<Object> i = loader.getScripts().iterator();
        while (i.hasNext())
        {
           ScriptInstance script = (ScriptInstance)i.next();
-          File temp = new File(script.getName());
+          java.io.File temp = new java.io.File(script.getName());
  
           if (temp.getName().equals(name))
           {
@@ -438,7 +438,7 @@ public class ConsoleImplementation : RuntimeWarningWatcher, Loadable, ConsolePro
 
    private void list()
    {
-       Iterator i = loader.getScripts().iterator();
+       java.util.Iterator<Object> i = loader.getScripts().iterator();
        while (i.hasNext())
        {
           ScriptInstance temp = (ScriptInstance)i.next();
@@ -448,7 +448,7 @@ public class ConsoleImplementation : RuntimeWarningWatcher, Loadable, ConsolePro
 
    private void env(String type, String filter)
    {
-       Iterator i = sharedEnvironment.keySet().iterator();
+       java.util.Iterator<Object> i = sharedEnvironment.keySet().iterator();
        while (i.hasNext())
        {
           Object temp = i.next();
@@ -468,7 +468,7 @@ public class ConsoleImplementation : RuntimeWarningWatcher, Loadable, ConsolePro
 
    private String align(String text, int to)
    {
-       StringBuffer temp = new StringBuffer(text);
+       java.lang.StringBuffer temp = new java.lang.StringBuffer(text);
        while (temp.length() < to)
        {
           temp.append(" ");
@@ -497,7 +497,7 @@ public class ConsoleImplementation : RuntimeWarningWatcher, Loadable, ConsolePro
        }
        else
        {
-          Map temp = loader.getScriptsByKey();
+          java.util.Map<Object,Object> temp = loader.getScriptsByKey();
 
           if (temp.get(getFullScript(item)) != null)
           {
@@ -552,9 +552,9 @@ public class ConsoleImplementation : RuntimeWarningWatcher, Loadable, ConsolePro
 
           script = loader.loadScript("<interact mode>", parsed, sharedEnvironment);
 
-          if (System.getProperty("sleep.debug") != null)
+          if (java.lang.SystemJ.getProperty("sleep.debug") != null)
           {
-             script.setDebugFlags(Integer.parseInt(System.getProperty("sleep.debug")));
+             script.setDebugFlags(Integer.parseInt(java.lang.SystemJ.getProperty("sleep.debug")));
           }
 
           return script.runScript();

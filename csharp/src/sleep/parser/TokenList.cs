@@ -44,9 +44,9 @@ public class TokenList
 
    public String toString()
    {
-      StringBuffer rv = new StringBuffer();
+      java.lang.StringBuffer rv = new java.lang.StringBuffer();
 
-      Iterator i = terms.iterator();
+      java.util.Iterator<Object> i = terms.iterator();
       while (i.hasNext())
       {
          rv.append(i.next().toString());
@@ -78,8 +78,8 @@ public class TokenList
       if (sarray == null)
       {
          Token[] temp = getTokens();
-         sarray = new String[temp.length];
-         for (int x = 0; x < temp.length; x++)
+         sarray = new String[temp.Length];
+         for (int x = 0; x < temp.Length; x++)
          {
             sarray[x] = temp[x].toString();
          }

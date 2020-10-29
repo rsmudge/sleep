@@ -47,8 +47,8 @@ public class ScriptWarning
    protected String         source;
 
    public ScriptWarning(ScriptInstance _script, String _message, int _line)
-   {
-      this(_script, _message, _line, false);
+   :
+      this(_script, _message, _line, false){
    }
 
    public ScriptWarning(ScriptInstance _script, String _message, int _line, bool _trace)
@@ -106,7 +106,7 @@ public class ScriptWarning
    /** returns just the filename of the source script */
    public String getNameShort()
    {
-      return new File(getScriptName()).getName();
+      return new java.io.File(getScriptName()).getName();
    }
 }
 

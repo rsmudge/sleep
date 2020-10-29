@@ -98,7 +98,7 @@ public class YourCodeSucksException : java.lang.RuntimeException
     /** print a nicely formatted version of the script errors to the specified stream */
     public void printErrors(java.io.OutputStream outJ)
     {
-       PrintWriter pout = new PrintWriter(outJ);
+       java.io.PrintWriter pout = new java.io.PrintWriter(outJ);
        pout.print(formatErrors());
        pout.flush();
     }

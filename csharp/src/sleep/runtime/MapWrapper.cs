@@ -58,13 +58,13 @@ public class MapWrapper : ScalarHash
 
    public void remove(Scalar key)
    {
-      throw new RuntimeException("hash is read-only");
+      throw new java.lang.RuntimeException("hash is read-only");
    }
 
    public java.util.Map<Object,Object> getData()
    {
       java.util.Map<Object,object> temp = new java.util.HashMap<Object,Object>();
-      java.util.Iterator<Object> i = values.entrySet().iterator();
+      java.util.Iterator<biz.ritter.javapi.util.MapNS.Entry<object, object>> i = values.entrySet().iterator();
       while (i.hasNext())
       {
          java.util.MapNS.Entry<Object,Object> next = (java.util.MapNS.Entry<Object,Object>)i.next();
@@ -80,7 +80,7 @@ public class MapWrapper : ScalarHash
 
    public void rehash(int capacity, float load)
    {
-      throw new RuntimeException("hash is read-only");
+      throw new java.lang.RuntimeException("hash is read-only");
    }
 
    public String toString()

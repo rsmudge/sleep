@@ -92,7 +92,7 @@ public class CodeGenerator : ParserConstants
       factory = _factory != null ? _factory : new GeneratedSteps();
 
       CURRENT_BLOCK = new Block(parser.getName());
-      BACKUP_BLOCKS = new Stack();
+      BACKUP_BLOCKS = new java.util.Stack<Object>();
    }
 
    public CodeGenerator(Parser _parser)
@@ -115,14 +115,14 @@ public class CodeGenerator : ParserConstants
 
        Step atom;
        Check tempc, left, right;
-       Block backup, a, b;
-       Stack queue;  // locals is a stack created at parse time but used by the operators for keeping track of stuff.. yeah
+       Block backup_, a, b;
+       java.util.Stack<Object> queue;  // locals is a stack created at parse time but used by the operators for keeping track of stuff.. yeah
 
        switch (parsePred.getType())
        {
-         case PRED_EXPR:
+         case ParserConstants.PRED_EXPR:
            return parsePredicate(ParserUtilities.extract(tokens[0]));
-         case PRED_IDEA: // comparing the idea != 0 to say its true... -istrue predicate provided in BasicUtilities
+         case PParserConstants.RED_IDEA: // comparing the idea != 0 to say its true... -istrue predicate provided in BasicUtilities
            if (strings[0].charAt(0) == '!' && strings[0].length() > 1)
            {
               return parsePredicate(tokens[0].copy("!-istrue (" + strings[0].substring(1, strings[0].length()) + ")"));
@@ -131,7 +131,7 @@ public class CodeGenerator : ParserConstants
            {
               return parsePredicate(tokens[0].copy("-istrue (" + strings[0] + ")"));
            }
-         case PRED_BI:
+         case ParserConstants.PRED_BI:
            // <idea> <string> <idea>
            backup();
 
@@ -142,7 +142,7 @@ public class CodeGenerator : ParserConstants
            tempc.setInfo(tokens[1].getHint());
 
            return tempc;
-         case PRED_UNI:
+         case ParserConstants.PRED_UNI:
            backup();
 
            parseIdea(tokens[1]);
@@ -151,11 +151,11 @@ public class CodeGenerator : ParserConstants
            tempc.setInfo(tokens[0].getHint());
 
            return tempc;
-         case PRED_AND:
+         case ParserConstants.PRED_AND:
            left = parsePredicate(tokens[0]);
            right = parsePredicate(tokens[1]);
            return factory.CheckAnd(left, right);
-         case PRED_OR:
+         case ParserConstants.PRED_OR:
            left = parsePredicate(tokens[0]);
            right = parsePredicate(tokens[1]);
            return factory.CheckOr(left, right);
@@ -191,15 +191,15 @@ public class CodeGenerator : ParserConstants
        String[] strings = datum.getStrings(); // was "temp"
        Token[]  tokens  = datum.getTokens();
 
-       Class aClass = null;
+       Type aClass = null;
 
        switch (datum.getType())
        {
-         case OBJECT_NEW:
+         case ParserConstants.OBJECT_NEW:
            atom = factory.CreateFrame();
            add(atom, tokens[0]);
 
-           if (tokens.length > 1)
+           if (tokens.Length > 1)
            {
               parseParameters(tokens[1]);
            }
@@ -212,11 +212,11 @@ public class CodeGenerator : ParserConstants
            atom    = factory.ObjectNew(aClass);
            add(atom, tokens[0]);
            break;
-        case OBJECT_CL_CALL: 
+        case ParserConstants.OBJECT_CL_CALL: 
            atom = factory.CreateFrame();
            add(atom, tokens[0]);
 
-           if (tokens.length > 1)
+           if (tokens.Length > 1)
            {
               parseParameters(tokens[1]);
            }
@@ -226,11 +226,11 @@ public class CodeGenerator : ParserConstants
            atom    = factory.ObjectAccess(null);
            add(atom, tokens[0]);
            break;
-        case OBJECT_ACCESS:
+        case ParserConstants.OBJECT_ACCESS:
            atom = factory.CreateFrame();
            add(atom, tokens[0]);
 
-           if (tokens.length > 2)
+           if (tokens.Length > 2)
            {
               parseParameters(tokens[2]);
            }
@@ -240,11 +240,11 @@ public class CodeGenerator : ParserConstants
            atom    = factory.ObjectAccess(strings[1]);
            add(atom, tokens[0]);
            break;
-         case OBJECT_ACCESS_S:
+         case ParserConstants.OBJECT_ACCESS_S:
            atom = factory.CreateFrame();
            add(atom, tokens[0]);
 
-           if (tokens.length > 2)
+           if (tokens.Length > 2)
            {
               parseParameters(tokens[2]);
            }
@@ -263,7 +263,7 @@ public class CodeGenerator : ParserConstants
    public void parseBlock(Token data)
    {
       /** send the data string through the parser pipeline - errors earlier in the pipeline are assumed to not exist as they would have been found the first time we processed it as a block */
-      LinkedList allData = TokenParser.ParseBlocks(parser, LexicalAnalyzer.GroupBlockTokens(parser, new StringIterator(data.toString(), data.getHint())));
+      java.util.LinkedList<Object> allData = TokenParser.ParseBlocks(parser, LexicalAnalyzer.GroupBlockTokens(parser, new StringIterator(data.toString(), data.getHint())));
 
       if (parser.hasErrors())
       {
@@ -327,7 +327,7 @@ public class CodeGenerator : ParserConstants
 
        switch (datum.getType())
        {
-         case VALUE_SCALAR_REFERENCE:
+         case ParserConstants.VALUE_SCALAR_REFERENCE:
            atom = factory.CreateFrame();
            add(atom, tokens[0]);
 
@@ -341,7 +341,7 @@ public class CodeGenerator : ParserConstants
            atom = factory.Operate("=>");
            add(atom, tokens[0]);
            break;
-         case IDEA_HASH_PAIR:
+         case ParserConstants.IDEA_HASH_PAIR:
            //
            // parsing A => B
            //
@@ -358,7 +358,7 @@ public class CodeGenerator : ParserConstants
            while (iz.hasNext())
            {
               Statement t = (Statement)iz.next();
-              if (t.getType() == IDEA_HASH_PAIR)
+              if (t.getType() == ParserConstants.IDEA_HASH_PAIR)
               {
                  parser.reportError("key/value pair specified for '"+tokens[0]+"', did you forget a comma?", tokens[2]);
               }
@@ -377,7 +377,7 @@ public class CodeGenerator : ParserConstants
            atom = factory.Operate(strings[1]);
            add(atom, tokens[1]);
            break;
-         case IDEA_OPER:
+         case ParserConstants.IDEA_OPER:
            //
            // parsing A operator B
            //
@@ -400,10 +400,10 @@ public class CodeGenerator : ParserConstants
            atom = factory.Operate(strings[1]);
            add(atom, tokens[1]);
            break;
-         case IDEA_EXPR_I:
+         case ParserConstants.IDEA_EXPR_I:
            parseObject(ParserUtilities.extract(tokens[0]));
            break;
-         case IDEA_LITERAL: // implemented                   
+         case ParserConstants.IDEA_LITERAL: // implemented                   
            sb = new java.lang.StringBuffer(ParserUtilities.extract(strings[0]));
 
            for (int x = 0; x < sb.length(); x++)
@@ -423,30 +423,30 @@ public class CodeGenerator : ParserConstants
            atom    = factory.SValue(ascalar);
            add(atom, tokens[0]);
            break;
-         case IDEA_NUMBER:                         // implemented
+         case ParserConstants.IDEA_NUMBER:                         // implemented
            if (strings[0].endsWith("L"))
            {
-              ascalar = SleepUtils.getScalar(Long.decode(strings[0].substring(0, strings[0].length() - 1)).longValue());
+              ascalar = SleepUtils.getScalar(java.lang.Long.decode(strings[0].substring(0, strings[0].length() - 1)).longValue());
            }
            else
            {
-              ascalar = SleepUtils.getScalar(Integer.decode(strings[0]).intValue());
+              ascalar = SleepUtils.getScalar(java.lang.Integer.decode(strings[0]).intValue());
            }
 
            atom    = factory.SValue(ascalar);
            add(atom, tokens[0]);
            break;
-         case IDEA_DOUBLE:                         // implemented
-           ascalar = SleepUtils.getScalar(Double.parseDouble(strings[0]));
+         case ParserConstants.IDEA_DOUBLE:                         // implemented
+           ascalar = SleepUtils.getScalar(Double.Parse(strings[0]));
            atom    = factory.SValue(ascalar);
            add(atom, tokens[0]);
            break;
-         case IDEA_BOOLEAN:                         // implemented
+         case ParserConstants.IDEA_BOOLEAN:                         // implemented
            ascalar = SleepUtils.getScalar(Boolean.valueOf(strings[0]).booleanValue());
            atom    = factory.SValue(ascalar);
            add(atom, tokens[0]);
            break;
-         case IDEA_CLASS:
+         case ParserConstants.IDEA_CLASS:
            Type claz = parser.findImportedClass(strings[0].substring(1));
  
            if (claz == null)
@@ -460,7 +460,7 @@ public class CodeGenerator : ParserConstants
               add(atom, tokens[0]);
            }
            break;
-         case VALUE_SCALAR:                       //   implemented
+         case ParserConstants.VALUE_SCALAR:                       //   implemented
            if (strings[0].equals("$null"))
            {
               ascalar = SleepUtils.getEmptyScalar();
@@ -473,10 +473,10 @@ public class CodeGenerator : ParserConstants
               add(atom, tokens[0]);
            }
            break;
-         case VALUE_INDEXED:
+         case ParserConstants.VALUE_INDEXED:
            parseIdea(tokens[0]); // parse the thing we're going to index stuff off of..
 
-           for (int z = 1; z < tokens.length; z++)
+           for (int z = 1; z < tokens.Length; z++)
            {         
               backup();
 
@@ -488,20 +488,20 @@ public class CodeGenerator : ParserConstants
               add(atom, tokens[0]);
            }
            break;
-         case IDEA_EXPR:                         // implemented
+         case ParserConstants.IDEA_EXPR:                         // implemented
            parseIdea(ParserUtilities.extract(tokens[0]));
            break;
-         case EXPR_EVAL_STRING:
+         case ParserConstants.EXPR_EVAL_STRING:
            atom = factory.CreateFrame();
            add(atom, tokens[0]);
 
-           datum.setType(IDEA_STRING);
+           datum.setType(ParserConstants.IDEA_STRING);
            parse(datum);
 
            atom = factory.Call("__EXEC__");
            add(atom, tokens[0]);
            break;
-         case IDEA_STRING: // implemented -- parsed literals, one of my favorite features in sleep
+         case ParserConstants.IDEA_STRING: // implemented -- parsed literals, one of my favorite features in sleep
 
            /** create a frame, we assume the PLiteral machine will destroy it */
            atom = factory.CreateFrame();
@@ -541,7 +541,7 @@ public class CodeGenerator : ParserConstants
 
                         try
                         {
-                           int codepoint = Integer.parseInt(mutilate, 16);
+                           int codepoint = java.lang.Integer.parseInt(mutilate, 16);
                            d.append((char)codepoint);
                         }
                         catch (java.lang.NumberFormatException nex)
@@ -562,7 +562,7 @@ public class CodeGenerator : ParserConstants
 
                         try
                         {
-                           int codepoint = Integer.parseInt(mutilate, 16);
+                           int codepoint = java.lang.Integer.parseInt(mutilate, 16);
                            d.append((char)codepoint);
                         }
                         catch (java.lang.NumberFormatException nex)
@@ -668,18 +668,18 @@ public class CodeGenerator : ParserConstants
            atom = factory.PLiteral(ll);
            add(atom, tokens[0]);
            break;
-         case HACK_INC: // implemented
+         case ParserConstants.HACK_INC: // implemented
            mutilate = strings[0].substring(0, strings[0].length() - 2);
            parseBlock(new Token(mutilate + " = " + mutilate + " + 1;", tokens[0].getHint()));
            break;
-         case HACK_DEC: // implemented
+         case ParserConstants.HACK_DEC: // implemented
            //
            // [TRANSFORM]: Reconstructing "+temp[0]+" deccrement hack
            //
            mutilate = strings[0].substring(0, strings[0].length() - 2);
            parseBlock(new Token(mutilate + " = " + mutilate + " - 1;", tokens[0].getHint()));
            break;
-         case EXPR_BIND_PRED:
+         case ParserConstants.EXPR_BIND_PRED:
            //
            // [BIND PREDICATE FUNCTION]: "+temp[0]+" "+temp[1]);
            //
@@ -688,7 +688,7 @@ public class CodeGenerator : ParserConstants
            atom = factory.BindPredicate(strings[0], parsePredicate(ParserUtilities.extract(tokens[1])), restore());
            add(atom, tokens[0]);
            break; 
-         case EXPR_BIND_FILTER:
+         case ParserConstants.EXPR_BIND_FILTER:
            //
            // [BIND PREDICATE FUNCTION]: on | EVENT | expression | { code }
            //
@@ -700,7 +700,7 @@ public class CodeGenerator : ParserConstants
            atom = factory.BindFilter(strings[0], strings[1], b, strings[2]);
            add(atom, tokens[0]);
            break; 
-         case EXPR_BIND: // implemented
+         case ParserConstants.EXPR_BIND: // implemented
            //
            // [BIND FUNCTION]: "+temp[0]+" "+temp[1]);
            //
@@ -722,7 +722,7 @@ public class CodeGenerator : ParserConstants
            atom = factory.Bind(strings[0], nameBlock, restore());
            add(atom, tokens[0]);
            break; 
-         case EXPR_TRYCATCH: 
+         case ParserConstants.EXPR_TRYCATCH: 
            //
            // [TRYCATCH]: try | BLOCK | catch | VAR | BLOCK
            // 
@@ -755,10 +755,10 @@ public class CodeGenerator : ParserConstants
            atom = factory.Try(a, b, strings[3]);
            add(atom, tokens[0]);
            break;
-         case EXPR_BLOCK:  // implemented
+         case ParserConstants.EXPR_BLOCK:  // implemented
            parseBlock(ParserUtilities.extract(tokens[0]));
            break;
-         case IDEA_BLOCK:  // turns our block into a scalar :)
+         case ParserConstants.IDEA_BLOCK:  // turns our block into a scalar :)
            backup();
 
            parseBlock(ParserUtilities.extract(tokens[0]));
@@ -766,7 +766,7 @@ public class CodeGenerator : ParserConstants
            atom    = factory.CreateClosure(restore());
            add(atom, tokens[0]);
            break;
-         case IDEA_FUNC: // implemented 
+         case ParserConstants.IDEA_FUNC: // implemented 
            TokenList funcParms = LexicalAnalyzer.CreateTerms(parser, new StringIterator(strings[0], tokens[0].getHint()));
 
            strings = funcParms.getStrings(); 
@@ -777,13 +777,13 @@ public class CodeGenerator : ParserConstants
               strings[0] = '&' + strings[0];
            }
 
-           if ((strings[0].equals("&iff") || strings[0].equals("&?")) && tokens.length > 1)
+           if ((strings[0].equals("&iff") || strings[0].equals("&?")) && tokens.Length > 1)
            {
               TokenList terms = ParserUtilities.groupByParameterTerm(parser, ParserUtilities.extract(tokens[1]));
               Token[] termsAr = terms.getTokens();
 
               backup();
-              if (termsAr.length >= 2)
+              if (termsAr.Length >= 2)
               {
                  parseIdea(termsAr[1]);
               }
@@ -794,7 +794,7 @@ public class CodeGenerator : ParserConstants
               a = restore();
 
               backup();
-              if (termsAr.length == 3)
+              if (termsAr.Length == 3)
               {
                  parseIdea(termsAr[2]);
               }
@@ -807,7 +807,7 @@ public class CodeGenerator : ParserConstants
               atom = factory.Decide(parsePredicate(termsAr[0]), a, b);
               add(atom, tokens[0]); 
            }
-           else if (tokens.length > 1)
+           else if (tokens.Length > 1)
            {
               atom = factory.CreateFrame();
               add(atom, tokens[0]);
@@ -837,13 +837,13 @@ public class CodeGenerator : ParserConstants
               add(atom, tokens[0]);
            }
            break;
-         case EXPR_WHILE:                                        // done
+         case ParserConstants.EXPR_WHILE:                                        // done
            backup();
            parseBlock(tokens[2]);    
            atom = factory.Goto(parsePredicate(ParserUtilities.extract(tokens[1])), restore(), null);
            add(atom, tokens[1]);
            break;
-         case EXPR_WHILE_SPECIAL:                                        // done
+         case ParserConstants.EXPR_WHILE_SPECIAL:                                        // done
            /* 0 = while
               1 = $var
               2 = (expression) 
@@ -887,24 +887,24 @@ public class CodeGenerator : ParserConstants
            add(atom, tokens[1]);
 
            break;
-         case EXPR_ASSIGNMENT_T:                                  // implemented
-         case EXPR_ASSIGNMENT_T_OP:
+         case ParserConstants.EXPR_ASSIGNMENT_T:                                  // implemented
+         case ParserConstants.EXPR_ASSIGNMENT_T_OP:
            atom = factory.CreateFrame();
            add(atom, tokens[0]);
 
            TokenList terms2 = ParserUtilities.groupByParameterTerm(parser, ParserUtilities.extract(tokens[0]));
            Token[] termsAr2 = terms2.getTokens();
 
-           for (int x = 0; x < termsAr2.length; x++)
+           for (int x = 0; x < termsAr2.Length; x++)
            {
               parseIdea(termsAr2[x]);
            }
 
            parseIdea(tokens[2]);
 
-           if (datum.getType() == EXPR_ASSIGNMENT_T_OP)
+           if (datum.getType() == ParserConstants.EXPR_ASSIGNMENT_T_OP)
            {
-              atom = factory.AssignTupleAndOperate(strings[1].substring(0, strings[1].length() - 1));
+              atom = factory.AssignTupleAndOperate(strings[1].substring(0, strings[1].Length - 1));
            }
            else
            {
@@ -912,8 +912,8 @@ public class CodeGenerator : ParserConstants
            }
            add(atom, tokens[0]);
            break;
-         case EXPR_ASSIGNMENT:                                  // implemented
-         case EXPR_ASSIGNMENT_OP:                                  // implemented
+         case ParserConstants.EXPR_ASSIGNMENT:                                  // implemented
+         case ParserConstants.EXPR_ASSIGNMENT_OP:                                  // implemented
            atom = factory.CreateFrame();
            add(atom, tokens[2]);
 
@@ -922,9 +922,9 @@ public class CodeGenerator : ParserConstants
            backup();
            parseIdea(tokens[0]);
 
-           if (datum.getType() == EXPR_ASSIGNMENT_OP)
+           if (datum.getType() == ParserConstants.EXPR_ASSIGNMENT_OP)
            {
-              atom = factory.AssignAndOperate(restore(), strings[1].substring(0, strings[1].length() - 1));
+              atom = factory.AssignAndOperate(restore(), strings[1].substring(0, strings[1].Length - 1));
            }
            else
            {
@@ -932,7 +932,7 @@ public class CodeGenerator : ParserConstants
            }
            add(atom, tokens[2]);
            break;
-         case EXPR_IF_ELSE:                                // done
+         case ParserConstants.EXPR_IF_ELSE:                                // done
            //
            // if <cond> <block> else -do this again-
            //
@@ -943,11 +943,11 @@ public class CodeGenerator : ParserConstants
            a = restore();
 
            backup();
-           if (tokens.length >= 4)
+           if (tokens.Length >= 4)
            {
               if (strings[4].equals("if"))
               {
-                 parseBlock(ParserUtilities.join(ParserUtilities.get(tokens, 4, tokens.length)));
+                 parseBlock(ParserUtilities.join(ParserUtilities.get(tokens, 4, tokens.Length)));
               }
               else
               {
@@ -959,7 +959,7 @@ public class CodeGenerator : ParserConstants
            atom = factory.Decide(parsePredicate(ParserUtilities.extract(tokens[1])), a, b);
            add(atom, tokens[1]); 
            break;
-         case EXPR_FOREACH_SPECIAL:
+         case ParserConstants.EXPR_FOREACH_SPECIAL:
            // |foreach   0
            // |$key      1
            // |=>        2
@@ -969,7 +969,7 @@ public class CodeGenerator : ParserConstants
  
            /**** purposeful fall thru... ****/
 
-         case EXPR_FOREACH:
+         case ParserConstants.EXPR_FOREACH:
            // |foreach
            // |$var
            // |(@temp)
@@ -981,7 +981,7 @@ public class CodeGenerator : ParserConstants
            atom = factory.CreateFrame();
            add(atom, tokens[0]);
 
-           if (datum.getType() == EXPR_FOREACH)
+           if (datum.getType() == ParserConstants.EXPR_FOREACH)
            {
               parseIdea(ParserUtilities.extract(tokens[2])); // parse the "source" of the foreach
               atom = factory.IteratorCreate(null, strings[1]);
@@ -998,7 +998,7 @@ public class CodeGenerator : ParserConstants
            // 
            backup();
 
-           if (datum.getType() == EXPR_FOREACH)
+           if (datum.getType() == ParserConstants.EXPR_FOREACH)
            {
               parseBlock(ParserUtilities.extract(tokens[3])); // parse the actual block of code to be executed.
            }
@@ -1032,7 +1032,7 @@ public class CodeGenerator : ParserConstants
            atom = factory.IteratorDestroy();
            add(atom, tokens[1]);
            break; 
-         case EXPR_FOR:
+         case ParserConstants.EXPR_FOR:
            // |for
            // |($x = 0; $x < 100; $x++)
            // |{ &printf("hi"); }
@@ -1100,7 +1100,7 @@ public class CodeGenerator : ParserConstants
          case OBJECT_IMPORT:
            try
            {
-              if (strings.length == 1)
+              if (strings.Length == 1)
               {
                  parser.importPackage(strings[0], null);
               }
@@ -1114,7 +1114,7 @@ public class CodeGenerator : ParserConstants
            }
            catch (java.lang.Exception ex)
            {
-              if (tokens.length == 2)
+              if (tokens.Length == 2)
               {
                  parser.reportError(ex.getMessage(), ParserUtilities.makeToken("using  " + strings[0] + " from: " + strings[1], tokens[1]));
               }
@@ -1124,14 +1124,14 @@ public class CodeGenerator : ParserConstants
               }
            }
            break;           
-         case EXPR_ASSERT:
-           if (tokens.length == 1)
+         case ParserConstants.EXPR_ASSERT:
+           if (tokens.Length == 1)
            {
               parser.reportError("Assertion can't be empty!", tokens[0]);
               return;
            }
 
-           if (Boolean.valueOf(System.getProperty("sleep.assert", "true")) == Boolean.FALSE)
+           if (bool.Parse(java.lang.SystemJ.getProperty("sleep.assert", "true")).Equals(Boolean.FalseString.ToLower()))
            {
               return;
            }
@@ -1142,7 +1142,7 @@ public class CodeGenerator : ParserConstants
               atom = factory.CreateFrame();
               add(atom, tokens[0]);
 
-              if (assert_terms.length == 1)
+              if (assert_terms.Length == 1)
               {
                  ascalar = SleepUtils.getScalar("assertion failed");
                  atom    = factory.SValue(ascalar);
@@ -1160,7 +1160,7 @@ public class CodeGenerator : ParserConstants
            atom = factory.Decide(parsePredicate(assert_terms[0]), null, b);
            add(atom, tokens[1]);
            break;
-         case EXPR_RETURN:                     // implemented
+         case ParserConstants.EXPR_RETURN:                     // implemented
            atom = factory.CreateFrame();
            add(atom, tokens[0]);
 
@@ -1172,7 +1172,7 @@ public class CodeGenerator : ParserConstants
            {
               parseIdea(tokens[0].copy("2"));  // 2 in jIRC speak means halt the event processing...
            }
-           else if (tokens.length >= 2)
+           else if (tokens.Length >= 2)
            {
               parseIdea(tokens[1]);
            }
@@ -1231,6 +1231,7 @@ public class CodeGenerator : ParserConstants
            }
            break;
          default:
+           break;
       }     
    }
 
@@ -1239,7 +1240,7 @@ public class CodeGenerator : ParserConstants
       TokenList terms   = ParserUtilities.groupByParameterTerm(parser, token);
       Token[]   termsAr = terms.getTokens();
 
-      for (int x = termsAr.length - 1; x >= 0; x--)
+      for (int x = termsAr.Length - 1; x >= 0; x--)
       {
          parseIdea(termsAr[x]);
       }

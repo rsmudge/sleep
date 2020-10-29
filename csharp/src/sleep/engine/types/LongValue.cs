@@ -69,7 +69,7 @@ public class LongValue : ScalarType
 
    public Object objectValue()
    {
-      return new Long(value);
+      return new java.lang.Long(value);
    }
 
   public Type getType () {

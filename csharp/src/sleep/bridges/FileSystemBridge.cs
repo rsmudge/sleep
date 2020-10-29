@@ -82,13 +82,13 @@ public class FileSystemBridge : Loadable, Function, sleep.interfaces.Predicate
         {
            try
            {
-              File a = BridgeUtilities.getFile(l, i);
+              java.io.File a = BridgeUtilities.getFile(l, i);
               if (a.createNewFile())
               {
                  return SleepUtils.getScalar(1);
               }
            }
-           catch (Exception ex) { i.getScriptEnvironment().flagError(ex); }
+           catch (java.lang.Exception ex) { i.getScriptEnvironment().flagError(ex); }
         }
         else if (n.equals("&cwd") || n.equals("&getCurrentDirectory"))
         {
@@ -100,7 +100,7 @@ public class FileSystemBridge : Loadable, Function, sleep.interfaces.Predicate
         }
         else if (n.equals("&deleteFile"))
         {
-           File a = BridgeUtilities.getFile(l, i);
+           java.io.File a = BridgeUtilities.getFile(l, i);
            if (a.delete())
            {
               return SleepUtils.getScalar(1);
@@ -108,7 +108,7 @@ public class FileSystemBridge : Loadable, Function, sleep.interfaces.Predicate
         }
         else if (n.equals("&mkdir"))
         {
-           File a = BridgeUtilities.getFile(l, i);
+           java.io.File a = BridgeUtilities.getFile(l, i);
            if (a.mkdirs())
            {
               return SleepUtils.getScalar(1);
@@ -116,8 +116,8 @@ public class FileSystemBridge : Loadable, Function, sleep.interfaces.Predicate
         }
         else if (n.equals("&rename"))
         {
-           File a = BridgeUtilities.getFile(l, i);
-           File b = BridgeUtilities.getFile(l, i);
+           java.io.File a = BridgeUtilities.getFile(l, i);
+           java.io.File b = BridgeUtilities.getFile(l, i);
            if (a.renameTo(b))
            {
               return SleepUtils.getScalar(1);
@@ -125,7 +125,7 @@ public class FileSystemBridge : Loadable, Function, sleep.interfaces.Predicate
         }
         else if (n.equals("&setLastModified"))
         {
-           File a = BridgeUtilities.getFile(l, i);
+           java.io.File a = BridgeUtilities.getFile(l, i);
            long b = BridgeUtilities.getLong(l);
 
            if (a.setLastModified(b))
@@ -135,7 +135,7 @@ public class FileSystemBridge : Loadable, Function, sleep.interfaces.Predicate
         }
         else if (n.equals("&setReadOnly"))
         {
-           File a = BridgeUtilities.getFile(l, i);
+           java.io.File a = BridgeUtilities.getFile(l, i);
 
            if (a.setReadOnly())
            {
@@ -151,7 +151,7 @@ public class FileSystemBridge : Loadable, Function, sleep.interfaces.Predicate
     {
        public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
        {
-           File a = BridgeUtilities.getFile(l, i);
+           java.io.File a = BridgeUtilities.getFile(l, i);
            return SleepUtils.getScalar(a.getName());
        }
     }
@@ -160,11 +160,11 @@ public class FileSystemBridge : Loadable, Function, sleep.interfaces.Predicate
     {
        public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
        {
-           File start = BridgeUtilities.getFile(l, i);
+           java.io.File start = BridgeUtilities.getFile(l, i);
 
            while (!l.isEmpty())
            {
-              start = new File(start, l.pop().toString());
+              start = new java.io.File(start, l.pop().toString());
            }
 
            return SleepUtils.getScalar(start.getAbsolutePath());
@@ -175,7 +175,7 @@ public class FileSystemBridge : Loadable, Function, sleep.interfaces.Predicate
     {
        public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
        {
-           File a = BridgeUtilities.getFile(l, i);
+           java.io.File a = BridgeUtilities.getFile(l, i);
            return SleepUtils.getScalar(a.getParent());
        }
     }
@@ -184,7 +184,7 @@ public class FileSystemBridge : Loadable, Function, sleep.interfaces.Predicate
     {
        public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
        {
-           File a = BridgeUtilities.getFile(l, i);
+           java.io.File a = BridgeUtilities.getFile(l, i);
            return SleepUtils.getScalar(a.lastModified());
        }
     }
@@ -193,7 +193,7 @@ public class FileSystemBridge : Loadable, Function, sleep.interfaces.Predicate
     {
        public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
        {
-           File a = BridgeUtilities.getFile(l, i);
+           java.io.File a = BridgeUtilities.getFile(l, i);
            return SleepUtils.getScalar(a.length());
        }
     }
@@ -202,23 +202,23 @@ public class FileSystemBridge : Loadable, Function, sleep.interfaces.Predicate
     {
        public Scalar evaluate(String n, ScriptInstance i, java.util.Stack<Object> l)
        {
-           File[] files;
+           java.io.File[] files;
  
            if (l.isEmpty() && n.equals("&listRoots"))
            {
-              files = File.listRoots();
+              files = java.io.File.listRoots();
            }
            else 
            {
-              File a = BridgeUtilities.getFile(l, i);
+              java.io.File a = BridgeUtilities.getFile(l, i);
               files = a.listFiles();
            }
 
-           LinkedList temp = new LinkedList();
+           java.util.LinkedList<Object> temp = new java.util.LinkedList<Object>();
 
            if (files != null)
            {
-              for (int x = 0; x < files.length; x++)
+              for (int x = 0; x < files.Length; x++)
               {
                  temp.add(files[x].getAbsolutePath());
               }
@@ -230,7 +230,7 @@ public class FileSystemBridge : Loadable, Function, sleep.interfaces.Predicate
 
     public bool decide(String n, ScriptInstance i, java.util.Stack<Object> l)
     {
-       File a = BridgeUtilities.getFile(l, i);
+       java.io.File a = BridgeUtilities.getFile(l, i);
 
        if (n.equals("-canread")) { return a.canRead(); }
        else if (n.equals("-canwrite")) { return a.canWrite(); }

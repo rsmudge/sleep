@@ -66,7 +66,7 @@ public class BridgeUtilities
    {
       byte[] data = new byte[textz.length()];
 
-      for (int y = 0; y < data.length; y++)
+      for (int y = 0; y < data.Length; y++)
       {
          data[y] = (byte)textz.charAt(y);
       }
@@ -188,7 +188,7 @@ public class BridgeUtilities
       if (temp.getArray().getType() == typeof(sleep.runtime.CollectionWrapper))
       {
          ScalarArray array = SleepUtils.getArrayScalar().getArray();
-         Iterator i = temp.getArray().scalarIterator();
+         java.util.Iterator<Object> i = temp.getArray().scalarIterator();
          while(i.hasNext())
          {
             array.push((Scalar)i.next());
@@ -218,7 +218,7 @@ public class BridgeUtilities
 
       if (func == null)
       {
-         throw new IllegalArgumentException("expected &closure--received: " + SleepUtils.describe(temp));
+         throw new java.lang.IllegalArgumentException("expected &closure--received: " + SleepUtils.describe(temp));
       }
 
       return func;
@@ -247,7 +247,7 @@ public class BridgeUtilities
       return temp;
    }
 
-   private static readonly bool doReplace = File.separatorChar != '/';
+   private static readonly bool doReplace = java.io.File.separatorChar != '/';
 
    /** adjusts the file argument to accomodate for the current working directory */
    public static java.io.File toSleepFile(String text, ScriptInstance i)
@@ -258,14 +258,14 @@ public class BridgeUtilities
       }
       else if (doReplace)
       {
-         text = text.replace('/', File.separatorChar); 
+         text = text.replace('/', java.io.File.separatorChar); 
       }
 
-      File f = new File(text);
+      java.io.File f = new java.io.File(text);
 
       if (!f.isAbsolute() && text.length() > 0)
       {
-         return new File(i.cwd(), text);
+         return new java.io.File(i.cwd(), text);
       }
       else
       {
@@ -304,7 +304,7 @@ public class BridgeUtilities
          }
       }
 
-      throw new IllegalArgumentException("attempted to pass a malformed key value pair: " + temps);
+      throw new java.lang.IllegalArgumentException("attempted to pass a malformed key value pair: " + temps);
    }
 
    /** Flattens the specified scalar array.  The <var>toValue</var> field can be null. */
@@ -352,7 +352,7 @@ public class BridgeUtilities
 
             if (!sleep.parser.Checkers.isVariable(kvp.getKey().toString()))
             {
-               throw new IllegalArgumentException("unreachable named parameter: " + kvp.getKey());
+               throw new java.lang.IllegalArgumentException("unreachable named parameter: " + kvp.getKey());
             }
             else
             {
@@ -385,7 +385,7 @@ public class BridgeUtilities
    {
       if (value.getArray() == null)
       {
-         throw new IllegalArgumentException(n + ": expected array. received " + SleepUtils.describe(value));
+         throw new java.lang.IllegalArgumentException(n + ": expected array. received " + SleepUtils.describe(value));
       }
 
       return true;

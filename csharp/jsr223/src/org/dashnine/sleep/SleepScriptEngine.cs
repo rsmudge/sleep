@@ -78,7 +78,7 @@ public class SleepScriptEngine : javax.script.AbstractScriptEngine
     private Object evalScript(ScriptInstance script, javax.script.ScriptContext context)
     {
         /* install global bindings */
-        Bindings global = context.getBindings(javax.script.ScriptContext.GLOBAL_SCOPE);
+        javax.script.Bindings global = context.getBindings(javax.script.ScriptContext.GLOBAL_SCOPE);
 
         if (global != null)
         {
@@ -91,7 +91,7 @@ public class SleepScriptEngine : javax.script.AbstractScriptEngine
         }
 
         /* install local bindings */
-        Bindings local = context.getBindings(ScriptContext.ENGINE_SCOPE);
+        javax.script.Bindings local = context.getBindings(javax.script.ScriptContext.ENGINE_SCOPE);
         java.util.Map<Object,Object> locals = new java.util.HashMap<Object,Object>();
 
         if (local != null)
@@ -104,14 +104,14 @@ public class SleepScriptEngine : javax.script.AbstractScriptEngine
            }
         }
 
-        if (locals.get("$" + ScriptEngine.FILENAME) != null)
+        if (locals.get("$" + javax.script.ScriptEngine.FILENAME) != null)
         {
-           script.getScriptVariables().putScalar("$__SCRIPT__", (Scalar)locals.get("$" + ScriptEngine.FILENAME));
+           script.getScriptVariables().putScalar("$__SCRIPT__", (Scalar)locals.get("$" + javax.script.ScriptEngine.FILENAME));
         }        
 
-        if (locals.get("$" + ScriptEngine.ARGV) != null)
+        if (locals.get("$" + javax.script.ScriptEngine.ARGV) != null)
         {
-           script.getScriptVariables().putScalar("@ARGV", (Scalar)locals.get("$" + ScriptEngine.ARGV));
+           script.getScriptVariables().putScalar("@ARGV", (Scalar)locals.get("$" + javax.script.ScriptEngine.ARGV));
         }
 
         return SleepUtils.runCode(script.getRunnableScript(), "eval", script, SleepUtils.getArgumentStack(locals)).objectValue();
@@ -128,7 +128,7 @@ public class SleepScriptEngine : javax.script.AbstractScriptEngine
 
         public void processScriptWarning(ScriptWarning warning)    
         {
-           SystemJ.outJ.println(warning.toString());
+           java.lang.SystemJ.outJ.println(warning.toString());
         }
     }
 
@@ -142,11 +142,11 @@ public class SleepScriptEngine : javax.script.AbstractScriptEngine
         }
         catch (YourCodeSucksException ex)
         {
-           throw new ScriptException(ex.formatErrors());
+           throw new javax.script.ScriptException(ex.formatErrors());
         }
     }
 
-    public javax.script. ScriptEngineFactory getFactory()
+    public javax.script.ScriptEngineFactory getFactory()
     {
 	lock (this)
         {
@@ -164,7 +164,7 @@ public class SleepScriptEngine : javax.script.AbstractScriptEngine
     }
 
     // package-private methods
-    void setFactory(javax.script.ScriptEngineFactory factory)
+    internal void setFactory(javax.script.ScriptEngineFactory factory)
     {
         this.factory = factory;
     }

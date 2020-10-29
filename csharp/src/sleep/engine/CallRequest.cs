@@ -95,7 +95,7 @@ public abstract class CallRequest
       ScriptEnvironment e = getScriptEnvironment();
       int mark = getScriptEnvironment().markFrame();
 
-      if (isDebug() && getLineNumber() != Integer.MIN_VALUE)
+      if (isDebug() && getLineNumber() != java.lang.Integer.MIN_VALUE)
       {
          if (e.getScriptInstance().isProfileOnly())
          {
@@ -110,7 +110,7 @@ public abstract class CallRequest
              catch (java.lang.RuntimeException rex)
              {
                 if (rex.getCause() == null || ! (  
-                   (rex.getCause() is typeof(java.lang.reflect.InvocationTargetException))))
+                   (rex.getCause() is java.lang.reflect.InvocationTargetException)))
                    //(java.lang.reflect.InvocationTargetException.class).isInstance(rex.getCause())  ))
                 {
                    /* swallow invocation target exceptions please */
@@ -209,7 +209,7 @@ public abstract class CallRequest
          Scalar callme = temp;
 
          e.pushSource(((SleepClosure)callme.objectValue()).getAndRemoveMetadata("sourceFile", "<unknown>") + "");
-         int lno = ( (Integer)(  ((SleepClosure)callme.objectValue()).getAndRemoveMetadata("sourceLine", new Integer(-1))  ) ).intValue();
+         int lno = ( (java.lang.Integer)(  ((SleepClosure)callme.objectValue()).getAndRemoveMetadata("sourceLine", new Integer(-1))  ) ).intValue();
 
          if (e.markFrame() >= 0)
          {
@@ -260,7 +260,7 @@ public abstract class CallRequest
 
       public override String formatCall(String args)
       {
-         StringBuffer buffer = new StringBuffer("[" + SleepUtils.describe(scalar));
+         java.lang.StringBuffer buffer = new java.lang.StringBuffer("[" + SleepUtils.describe(scalar));
 
          if (name != null && name.length() > 0)
          {
@@ -374,7 +374,7 @@ public abstract class CallRequest
                localLevel.putScalar("@_", oldargs);
                if (targs > 0)
                {
-                  Iterator i = oldargs.getArray().scalarIterator();
+                  java.util.Iterator<Object> i = oldargs.getArray().scalarIterator();
                   int      count = 1;
                   while (i.hasNext() && count <= targs)
                   {

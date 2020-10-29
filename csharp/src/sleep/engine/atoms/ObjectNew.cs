@@ -74,7 +74,7 @@ public class ObjectNew : Step
       public override String formatCall(String args)
       {
          if (args != null && args.length() > 0) { args = ": " + args; }
-         StringBuffer trace = new StringBuffer("[new " + name.getName() + args + "]");
+         java.lang.StringBuffer trace = new java.lang.StringBuffer("[new " + name.getName() + args + "]");
 
          return trace.toString();
       }
@@ -87,23 +87,23 @@ public class ObjectNew : Step
          {
             return ObjectUtilities.BuildScalar(false, theConstructor.newInstance(parameters));
          }
-         catch (InvocationTargetException ite)
+         catch (java.lang.reflect.InvocationTargetException ite)
          {
             if (ite.getCause() != null)
                getScriptEnvironment().flagError(ite.getCause());
 
-            throw new RuntimeException(ite);
+            throw new java.lang.RuntimeException(ite);
          }
-         catch (IllegalArgumentException aex)
+         catch (java.lang.IllegalArgumentException aex)
          {
             aex.printStackTrace();
             getScriptEnvironment().getScriptInstance().fireWarning(ObjectUtilities.buildArgumentErrorMessage(name, name.getName(), theConstructor.getParameterTypes(), parameters), getLineNumber());
          }
-         catch (InstantiationException iex)
+         catch (java.lang.InstantiationException iex)
          {
             getScriptEnvironment().getScriptInstance().fireWarning("unable to instantiate abstract class " + name.getName(), getLineNumber());
          }
-         catch (IllegalAccessException iax)
+         catch (java.lang.IllegalAccessException iax)
          {
             getScriptEnvironment().getScriptInstance().fireWarning("cannot access constructor in " + name.getName() + ": " + iax.getMessage(), getLineNumber());
          }

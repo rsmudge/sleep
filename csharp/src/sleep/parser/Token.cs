@@ -76,7 +76,7 @@ public class Token
    {
       if (marker > -1)
       {
-         StringBuffer temp = new StringBuffer();
+         java.lang.StringBuffer temp = new java.lang.StringBuffer();
          for (int x = 0; x < (marker - 1); x++)
          {
             temp.append(" ");

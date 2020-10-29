@@ -74,7 +74,7 @@ public class ParserConfig
        should search for jar files that scripts attempt to using  */
    public static String getSleepClasspath()
    {
-      return SystemJ.getProperty("sleep.classpath", ".");
+      return java.lang.SystemJ.getProperty("sleep.classpath", ".");
    }
 
    /** Set the Sleep classpath.  A semi-colon separated list of paths where sleep should search for
@@ -97,7 +97,7 @@ public class ParserConfig
 
        for (int x = 0; x < paths.Length; x++)
        {
-          File temp = new File(paths[x], name);
+          java.io.File temp = new java.io.File(paths[x], name);
           if (temp.exists())
           {
              return temp;

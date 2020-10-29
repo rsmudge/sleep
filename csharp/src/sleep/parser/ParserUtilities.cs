@@ -47,7 +47,7 @@ public class ParserUtilities
    public static Token[] get(Token[] t, int a, int b)
    {
       Token[] rv = new Token[b - a];
-      for (int x = 0; x < rv.length; x++)
+      for (int x = 0; x < rv.Length; x++)
       {
          rv[x] = t[a + x];
       }
@@ -61,9 +61,9 @@ public class ParserUtilities
 
    public static Token join(Token [] temp, String with)
    {
-      StringBuffer rv = new StringBuffer();
+      java.lang.StringBuffer rv = new java.lang.StringBuffer();
 
-      for (int x = 0; x < temp.length; x++)
+      for (int x = 0; x < temp.Length; x++)
       {
 	 if ((x > 0 && temp[x].getHint() == temp[x-1].getTopHint()) || x == 0)
          {
@@ -128,11 +128,11 @@ public class ParserUtilities
           return rv;
        }
 
-       StringBuffer current = new StringBuffer();
+       java.lang.StringBuffer current = new java.lang.StringBuffer();
 
        int hint = -1;
 
-       Iterator i = n.getList().iterator();
+       java.util.Iterator<Object> i = n.getList().iterator();
        while (i.hasNext())
        {
           Token temp = (Token)i.next();
@@ -141,7 +141,7 @@ public class ParserUtilities
           if (temp.toString().equals("EOT"))
           {
              rv.add(new Token(current.toString(), hint));
-             current = new StringBuffer();
+             current = new java.lang.StringBuffer();
              hint    = -1; /* reset hint to prevent line # skew */
           }
           else

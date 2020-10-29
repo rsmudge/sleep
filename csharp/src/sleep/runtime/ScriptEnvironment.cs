@@ -74,7 +74,7 @@ public class ScriptEnvironment : java.io.Serializable
     {
        self        = null;
        environment = null;
-       environmentStack = new Stack();
+       environmentStack = new java.util.Stack<Object>();
     }
 
     /** Instantiate a new script environment with the specified environment (can be shared), and the specified ScriptInstance */
@@ -82,7 +82,7 @@ public class ScriptEnvironment : java.io.Serializable
     {
        self        = myscript;
        environment = env;
-       environmentStack = new Stack();
+       environmentStack = new java.util.Stack<Object>();
     }
 
     /** returns a reference to the script associated with this environment */
@@ -203,7 +203,7 @@ public class ScriptEnvironment : java.io.Serializable
 
     public String toString()
     {
-       StringBuffer temp = new StringBuffer();
+       java.lang.StringBuffer temp = new java.lang.StringBuffer();
        temp.append("ScriptInstance -- " + getScriptInstance());
        temp.append("Misc Environment:\n");
        temp.append(getEnvironment().toString()); 
@@ -287,7 +287,7 @@ public class ScriptEnvironment : java.io.Serializable
        if (isResponsible(b))
        {
           temp.handler = popExceptionContext();
-          Iterator i = context.iterator();
+          java.util.Iterator<Object> i = context.iterator();
           while (i.hasNext())
           {  /* semi inefficient but there should be so few handlers per context this shouldn't be much of an issue */
              Context c = (Context)i.next();
@@ -308,9 +308,9 @@ public class ScriptEnvironment : java.io.Serializable
        Scalar rv = SleepUtils.getEmptyScalar();
 
        java.util.Stack<Object> cstack = context;
-       context      = new Stack();
+       context      = new java.util.Stack<Object>();
 
-       Iterator i = cstack.iterator();
+       java.util.Iterator<Object> i = cstack.iterator();
        while (i.hasNext())
        {
           Context temp = (Context)i.next();
@@ -339,8 +339,8 @@ public class ScriptEnvironment : java.io.Serializable
     {
        java.util.Stack<Object> cstack = context;
 
-       context  = (Stack)(contextStack.pop());
-       metadata = (HashMap)(metaStack.pop());
+       context  = (java.util.Stack<Object>)(contextStack.pop());
+       metadata = (java.util.HashMap<Object,Object>)(metaStack.pop());
 
        return cstack;
     }
@@ -547,7 +547,7 @@ public class ScriptEnvironment : java.io.Serializable
     }
 
     /** how many stacks does this damned class include? */
-    protected java.util.Stack<Object> sources = new Stack(); 
+    protected java.util.Stack<Object> sources = new java.util.Stack<Object>(); 
 
     /** push source information onto the source stack */
     public void pushSource(String s) 
@@ -593,7 +593,7 @@ public class ScriptEnvironment : java.io.Serializable
 
     public java.util.Stack<Object> getCurrentFrame()
     {
-       return (Stack)frames.get(findex);    
+       return (java.util.Stack<Object>)frames.get(findex);    
     }
 
     /** kills the current frame and if there is a parent frame pushes the specified value on to it */

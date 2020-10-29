@@ -58,12 +58,12 @@ public class FileObject : IOObject
          else if (descriptor.charAt(0) == '>')
          {
             file = BridgeUtilities.toSleepFile(descriptor.substring(1, descriptor.length()).trim(), env.getScriptInstance());
-            openWrite(new FileOutputStream(file, false));
+            openWrite(new java.io.FileOutputStream(file, false));
          }
          else
          {
             file = BridgeUtilities.toSleepFile(descriptor, env.getScriptInstance());
-            openRead(new FileInputStream(file));
+            openRead(new java.io.FileInputStream(file));
          }
       }
       catch (Exception ex)

@@ -127,7 +127,7 @@ public class SleepUtils
        {
           env.getScriptVariables().pushLocalLevel();
 
-          CallRequest request = new CallRequest.InlineCallRequest(env, Integer.MIN_VALUE, "eval", code);
+          CallRequest request = new CallRequest.InlineCallRequest(env, java.lang.Integer.MIN_VALUE, "eval", code);
           Scalar value = runCode(request, env.getScriptInstance(), null);
 
           env.getScriptVariables().popLocalLevel();
@@ -136,7 +136,7 @@ public class SleepUtils
        }
        else
        {
-          CallRequest request = new CallRequest.InlineCallRequest(env, Integer.MIN_VALUE, "eval", code);
+          CallRequest request = new CallRequest.InlineCallRequest(env, java.lang.Integer.MIN_VALUE, "eval", code);
           return runCode(request, env.getScriptInstance(), null);
        }
    }
@@ -155,7 +155,7 @@ public class SleepUtils
           script = closure.getOwner();
        }
 
-       CallRequest request = new CallRequest.ClosureCallRequest(script.getScriptEnvironment(), Integer.MIN_VALUE, SleepUtils.getScalar(closure), message);
+       CallRequest request = new CallRequest.ClosureCallRequest(script.getScriptEnvironment(), java.lang.Integer.MIN_VALUE, SleepUtils.getScalar(closure), message);
        return runCode(request, script, locals);
    }
 
@@ -168,7 +168,7 @@ public class SleepUtils
     */
    public static Scalar runCode(Function func, String name, ScriptInstance script, java.util.Stack<Object> locals)
    {
-       CallRequest request = new CallRequest.FunctionCallRequest(script.getScriptEnvironment(), Integer.MIN_VALUE, name, func);
+       CallRequest request = new CallRequest.FunctionCallRequest(script.getScriptEnvironment(), java.lang.Integer.MIN_VALUE, name, func);
        return runCode(request, script, locals);
    }
  
@@ -182,7 +182,7 @@ public class SleepUtils
     */
    public static Scalar runCode(ScriptInstance script, Block code, java.util.HashMap<Object,Object> vars)
    {
-       CallRequest request = new CallRequest.InlineCallRequest(script.getScriptEnvironment(), Integer.MIN_VALUE, "eval", code);
+       CallRequest request = new CallRequest.InlineCallRequest(script.getScriptEnvironment(), java.lang.Integer.MIN_VALUE, "eval", code);
        return runCode(request, script, getArgumentStack(vars));
    }
 
@@ -262,11 +262,11 @@ public class SleepUtils
        the Java object equivalents of the data stored in the scalar hash. */
    public static java.util.Map<Object,Object> getMapFromHash(ScalarHash map)
    {
-      java.util.HashMap dict = new java.util.HashMap();
+      java.util.HashMap<Object,Object> dict = new java.util.HashMap<Object,Object>();
 
       if (map != null)
       {
-         java.util.Iterator i = map.keys().scalarIterator();
+         java.util.Iterator<Object> i = map.keys().scalarIterator();
          while (i.hasNext())
          {
             Scalar key  = (Scalar)i.next();
@@ -298,10 +298,10 @@ public class SleepUtils
        /* turn our hashmap into some acceptable local variables */
        if (pairs != null)
        {
-          Iterator i = pairs.entrySet().iterator();
+          java.util.Iterator<java.util.MapNS.Entry<Object,Object>> i = pairs.entrySet().iterator();
           while (i.hasNext())
           {
-             java.util.Map.Entry value = (java.util.Map.Entry)i.next();
+             java.util.MapNS.Entry<Object,Object> value = (java.util.MapNS.Entry<Object,Object>)i.next();
              locals.push(SleepUtils.getScalar(new KeyValuePair(SleepUtils.getScalar(value.getKey().toString()), (Scalar)value.getValue())));
           }
        }
@@ -322,10 +322,10 @@ public class SleepUtils
       }   
       else if (ProxyIterator.isIterator(temp))
       {
-         return new ProxyIterator((Iterator)temp.objectValue(), true);
+         return new ProxyIterator((java.util.Iterator<Object>)temp.objectValue(), true);
       }
 
-      throw new IllegalArgumentException("expected iterator (@array or &closure)--received: " + SleepUtils.describe(temp));
+      throw new java.lang.IllegalArgumentException("expected iterator (@array or &closure)--received: " + SleepUtils.describe(temp));
    }
 
    /** Generate a java.util.List from a scalar array.  Values will be the Java object 
@@ -339,11 +339,11 @@ public class SleepUtils
        equivalents of the data stored in the scalar array. */
    public static java.util.List<Object> getListFromArray(ScalarArray array)
    {
-      LinkedList list = new LinkedList();
+      java.util.LinkedList<Object> list = new java.util.LinkedList<Object>();
        
       if (array != null)
       {
-         Iterator i = array.scalarIterator();
+         java.util.Iterator<Object> i = array.scalarIterator();
          while (i.hasNext())
          {
             Scalar temp = (Scalar)i.next();
@@ -445,9 +445,9 @@ public class SleepUtils
        their scalar type. */
    public static String describe(java.util.Stack<Object> arguments)
    {
-      StringBuffer values = new StringBuffer();
+      java.lang.StringBuffer values = new java.lang.StringBuffer();
 
-      Iterator i = arguments.iterator();
+      java.util.Iterator<Object> i = arguments.iterator();
       while (i.hasNext())
       {
          Scalar tempz = (Scalar)i.next();
@@ -472,9 +472,9 @@ public class SleepUtils
          {
             seen.add(scalar.getArray());
 
-            StringBuffer buffer = new StringBuffer("@(");
+            java.lang.StringBuffer buffer = new java.lang.StringBuffer("@(");
 
-            Iterator i = scalar.getArray().scalarIterator();
+            java.util.Iterator<Object> i = scalar.getArray().scalarIterator();
             while (i.hasNext())
             {
                Scalar next = (Scalar)i.next();
@@ -500,12 +500,12 @@ public class SleepUtils
          {
             seen.add(scalar.getHash());
 
-            StringBuffer buffer = new StringBuffer("%(");
+            java.lang.StringBuffer buffer = new java.lang.StringBuffer("%(");
 
-            Iterator i = scalar.getHash().getData().entrySet().iterator();
+            java.util.Iterator<biz.ritter.javapi.util.MapNS.Entry<Object, Object>> i = scalar.getHash().getData().entrySet().iterator();
             while (i.hasNext())
             {
-               Map.Entry next = (Map.Entry)i.next();
+               java.util.MapNS.Entry<Object,Object> next = (java.util.MapNS.Entry<Object,Object>)i.next();
                Scalar value   = (Scalar)next.getValue();
 
                if (!SleepUtils.isEmptyScalar((Scalar)next.getValue()))
@@ -549,14 +549,14 @@ public class SleepUtils
          {
             if (java.lang.reflect.Proxy.isProxyClass(scalar.objectValue().getClass()))
             {
-               StringBuffer buffer = new StringBuffer();
+               java.lang.StringBuffer buffer = new java.lang.StringBuffer();
                buffer.append("[");
                buffer.append(java.lang.reflect.Proxy.getInvocationHandler(scalar.objectValue()).toString());
                buffer.append(" as ");
 
-               Class[] interfaces = scalar.objectValue().getClass().getInterfaces();
+               Type[] interfaces = scalar.objectValue().getClass().getInterfaces();
 
-               for (int x = 0; x < interfaces.length; x++)
+               for (int x = 0; x < interfaces.Length; x++)
                {
                   if (x > 0)
                   {
@@ -587,7 +587,7 @@ public class SleepUtils
        objects in brackets, $null is displayed as $null, etc. */
    public static String describe(Scalar scalar)
    {
-      return describeEntries(new LinkedList(), scalar);
+      return describeEntries(new java.util.LinkedList<Object>(), scalar);
    }
 
    /** returns an empty hashmap scalar */
@@ -677,14 +677,14 @@ public class SleepUtils
    /** constructs a string scalar with value x interpreted as an array of unsigned bytes */
    public static Scalar getScalar(byte[] x)
    {
-      return getScalar(x, x.length);
+      return getScalar(x, x.Length);
    }
 
    /** constructs a string scalar with value x interpreted as an array of unsigned bytes */
    public static Scalar getScalar(byte[] x, int length)
    {
       Scalar temp = new Scalar();
-      StringBuffer buff = new StringBuffer(length);
+      java.lang.StringBuffer buff = new java.lang.StringBuffer(length);
       for (int y = 0; y < length; y++)
       {
          char append = (char)(x[y] & 0xFF);

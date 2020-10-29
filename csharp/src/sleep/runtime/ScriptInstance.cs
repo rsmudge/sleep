@@ -100,10 +100,10 @@ public class ScriptInstance : java.io.Serializable, java.lang.Runnable
     protected int debug = DEBUG_SHOW_ERRORS;
 
     /** track the time this script was loaded */
-    protected long loadTime = System.currentTimeMillis();
+    protected long loadTime = java.lang.SystemJ.currentTimeMillis();
 
     /** list of source files associated with this script (to account for &include) */
-    protected java.util.List<Object> sourceFiles = new LinkedList<Object>();
+    protected java.util.List<Object> sourceFiles = new java.util.LinkedList<Object>();
 
     /** associates the specified source file with this script */
     public void associateFile(java.io.File f)
@@ -120,7 +120,7 @@ public class ScriptInstance : java.io.Serializable, java.lang.Runnable
        java.util.Iterator<Object> i = sourceFiles.iterator();
        while (i.hasNext())
        {
-          java.io.File temp = (Fjava.io.ile)i.next();
+          java.io.File temp = (java.io.File)i.next();
           if (temp.lastModified() > loadTime)
           {
              return true;
@@ -146,8 +146,8 @@ public class ScriptInstance : java.io.Serializable, java.lang.Runnable
         By specifying the same shared Hashtable container for all scripts, such scripts can be made to
         environment information */
     public ScriptInstance(java.util.Hashtable<Object,Object> environmentToShare)
-    {
-        this((Variable)null, environmentToShare);
+    :
+        this((Variable)null, environmentToShare){
     }
 
     /** Constructs a script instance, if either of the parameters are null a default implementation will be used.
@@ -157,7 +157,7 @@ public class ScriptInstance : java.io.Serializable, java.lang.Runnable
     {
         if (environmentToShare == null)
         {
-           environmentToShare = new java.util.Hashtable();
+           environmentToShare = new java.util.Hashtable<Object,Object>();
         }
 
         if (varContainerToUse == null)
@@ -182,8 +182,8 @@ public class ScriptInstance : java.io.Serializable, java.lang.Runnable
 
     /** Constructs a new script instance */
     public ScriptInstance()
-    {
-        this((Variable)null, (Hashtable)null);
+    :
+        this((Variable)null, (java.util.Hashtable<Object,Object>)null){
     }
 
     /** Returns this scripts runtime environment */
@@ -232,18 +232,18 @@ public class ScriptInstance : java.io.Serializable, java.lang.Runnable
 
         public String toString()
         {
-           return "   " + (new File(sourcefile).getName()) + ":" + lineNumber + " " + description;
+           return "   " + (new java.io.File(sourcefile).getName()) + ":" + lineNumber + " " + description;
         }
     }
  
     /** Records a stack frame into this environments stack trace tracker thingie. */
     public void recordStackFrame(String description, String source, int lineNumber)
     {
-       List strace = (List)getScriptEnvironment().getEnvironment().get("%strace%");
+       java.util.List<Object> strace = (java.util.List<Object>)getScriptEnvironment().getEnvironment().get("%strace%");
 
        if (strace == null) 
        {
-          strace = new LinkedList();
+          strace = new java.util.LinkedList<Object>();
           getScriptEnvironment().getEnvironment().put("%strace%", strace);
        }
 
@@ -333,7 +333,7 @@ public class ScriptInstance : java.io.Serializable, java.lang.Runnable
     /** return the total number of ticks this script has spent processing */
     public long total()
     {
-        Long total = (Long)getMetadata().get("%total%");
+        java.lang.Long total = (java.lang.Long)getMetadata().get("%total%");
         return total == null ? 0L : total.longValue();
     }
 
@@ -341,13 +341,13 @@ public class ScriptInstance : java.io.Serializable, java.lang.Runnable
         when DEBUG_TRACE_CALLS or DEBUG_TRACE_PROFILE_ONLY is enabled */
     public void collect(String function, int lineNo, long ticks)
     {
-       Map    statistics = (Map)getMetadata().get("%statistics%");
-       Long   total      = (Long)getMetadata().get("%total%");
+       java.util.Map<Object,Object>    statistics = (java.util.Map<Object,Object>)getMetadata().get("%statistics%");
+       java.lang.Long   total      = (java.lang.Long)getMetadata().get("%total%");
 
        if (statistics == null) 
        {
-          statistics = new HashMap();
-          total      = new Long(0L);
+          statistics = new java.util.HashMap<Object,Object>();
+          total      = new java.lang.Long(0L);
 
           getMetadata().put("%statistics%", statistics);
           getMetadata().put("%total%", total);
@@ -368,7 +368,7 @@ public class ScriptInstance : java.io.Serializable, java.lang.Runnable
        stats.calls ++;
 
        /** update global statistic */
-       getMetadata().put("%total%", new Long(total.longValue() + ticks));
+       getMetadata().put("%total%", new java.lang.Long(total.longValue() + ticks));
     }
 
     /** a quick way to check if we are profiling and not tracing the script steps */
@@ -387,7 +387,7 @@ public class ScriptInstance : java.io.Serializable, java.lang.Runnable
         if (statistics != null)
         {
            java.util.List<Object> values = new java.util.LinkedList<Object>(statistics.values());
-           Collections.sort(values);
+           java.util.Collections<Object>.sort(values);
 
            return values;
         }
@@ -405,7 +405,7 @@ public class ScriptInstance : java.io.Serializable, java.lang.Runnable
 
        if (container == null)
        {
-          meta = Collections.synchronizedMap(new java.util.HashMap<Object,Object>()); /* we do this because this metadata may be shared between multiple threads */
+          meta = java.util.Collections<Object>.synchronizedMap(new java.util.HashMap<Object,Object>()); /* we do this because this metadata may be shared between multiple threads */
           getScriptVariables().getGlobalVariables().putScalar("__meta__", SleepUtils.getScalar((Object)meta));
        }
        else
@@ -421,7 +421,7 @@ public class ScriptInstance : java.io.Serializable, java.lang.Runnable
     {
         java.io.PrintWriter pout = new java.io.PrintWriter(outJ, true);
 
-        Iterator i = getProfilerStatistics().iterator();
+        java.util.Iterator<Object> i = getProfilerStatistics().iterator();
         while (i.hasNext())
         {
            String temp = i.next().toString();
@@ -434,14 +434,14 @@ public class ScriptInstance : java.io.Serializable, java.lang.Runnable
         before you run any scripts. */
     public void makeSafe()
     {
-        Hashtable oldEnv = environment.getEnvironment();
-        Hashtable newEnv = new Hashtable(  (oldEnv.size() * 2) - 1  );
+        java.util.Hashtable<Object,Object> oldEnv = environment.getEnvironment();
+        java.util.Hashtable<Object,Object> newEnv = new java.util.Hashtable<Object,Object>(  (oldEnv.size() * 2) - 1  );
 
         /* reset the environment please */
-        Iterator i = oldEnv.entrySet().iterator();
+        java.util.Iterator<java.util.MapNS.Entry<Object,Object>> i = oldEnv.entrySet().iterator();
         while (i.hasNext())
         {
-            Map.Entry temp = (Map.Entry)i.next();
+            java.util.MapNS.Entry<Object,Object> temp = (java.util.MapNS.Entry<Object,Object>)i.next();
             if (temp.getKey().toString().charAt(0) == '&' && temp.getValue() is SleepClosure)
             {
                SleepClosure closure = new SleepClosure(this, ((SleepClosure)temp.getValue()).getRunnableCode());
@@ -563,7 +563,7 @@ public class ScriptInstance : java.io.Serializable, java.lang.Runnable
        {
           ScriptWarning temp = new ScriptWarning(this, message, line, isTrace);
 
-          Iterator i = watchers.iterator();
+          java.util.Iterator<Object> i = watchers.iterator();
           while (i.hasNext())
           {
              ((RuntimeWarningWatcher)i.next()).processScriptWarning(temp);

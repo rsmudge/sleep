@@ -50,7 +50,7 @@ public class Try : Step
 
    public String toString(String prefix)
    {
-      StringBuffer buffer = new StringBuffer();
+      java.lang.StringBuffer buffer = new java.lang.StringBuffer();
       buffer.append(prefix);
       buffer.append("[Try]\n");
       buffer.append(owner.toString(prefix + "   "));

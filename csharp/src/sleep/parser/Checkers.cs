@@ -43,31 +43,31 @@ public class Checkers
 
    public static void addKeyword(String keyword)
    {
-      keywords.put(keyword, Boolean.TRUE);
+      keywords.put(keyword, java.lang.Boolean.TRUE);
    }
 
    static Checkers()
    {
       keywords = new java.util.Hashtable<Object,Object>();
 
-      keywords.put("if",       Boolean.TRUE);
-      keywords.put("for",      Boolean.TRUE);
-      keywords.put("while",    Boolean.TRUE);
-      keywords.put("foreach",  Boolean.TRUE);
-      keywords.put("&&",       Boolean.TRUE);
-      keywords.put("||",       Boolean.TRUE);
-      keywords.put("EOT",      Boolean.TRUE);
-      keywords.put("EOL",      Boolean.TRUE);
-      keywords.put("return",   Boolean.TRUE);
-      keywords.put("halt",     Boolean.TRUE);
-      keywords.put("done",     Boolean.TRUE);
-      keywords.put("break",    Boolean.TRUE);
-      keywords.put("continue", Boolean.TRUE);
-      keywords.put("yield",    Boolean.TRUE);
-      keywords.put("throw",    Boolean.TRUE);
-      keywords.put("try",      Boolean.TRUE);
-      keywords.put("catch",    Boolean.TRUE);
-      keywords.put("assert",   Boolean.TRUE);
+      keywords.put("if",       java.lang.Boolean.TRUE);
+      keywords.put("for",      java.lang.Boolean.TRUE);
+      keywords.put("while",    java.lang.Boolean.TRUE);
+      keywords.put("foreach",  java.lang.Boolean.TRUE);
+      keywords.put("&&",       java.lang.Boolean.TRUE);
+      keywords.put("||",       java.lang.Boolean.TRUE);
+      keywords.put("EOT",      java.lang.Boolean.TRUE);
+      keywords.put("EOL",      java.lang.Boolean.TRUE);
+      keywords.put("return",   java.lang.Boolean.TRUE);
+      keywords.put("halt",     java.lang.Boolean.TRUE);
+      keywords.put("done",     java.lang.Boolean.TRUE);
+      keywords.put("break",    java.lang.Boolean.TRUE);
+      keywords.put("continue", java.lang.Boolean.TRUE);
+      keywords.put("yield",    java.lang.Boolean.TRUE);
+      keywords.put("throw",    java.lang.Boolean.TRUE);
+      keywords.put("try",      java.lang.Boolean.TRUE);
+      keywords.put("catch",    java.lang.Boolean.TRUE);
+      keywords.put("assert",   java.lang.Boolean.TRUE);
    }
 
    public static bool isIfStatement(String a, String b, String c)
@@ -117,11 +117,11 @@ public class Checkers
 
    public static bool isClassPiece(String a)
    {
-       if (a.length() >= 1 && !isVariable(a) && Character.isJavaIdentifierStart(a.charAt(0)))
+       if (a.length() >= 1 && !isVariable(a) && java.lang.Character.isJavaIdentifierStart(a.charAt(0)))
        {
           for (int x = 1; x < a.length(); x++)
           {
-             if (!Character.isJavaIdentifierPart(a.charAt(x)) && a.charAt(x) != '.')
+             if (!java.lang.Character.isJavaIdentifierPart(a.charAt(x)) && a.charAt(x) != '.')
              {
                 return false;
              }
@@ -203,7 +203,7 @@ public class Checkers
 
    public static bool isFunction(String a)
    {
-      return ((Character.isJavaIdentifierStart(a.charAt(0)) || a.charAt(0) == '&') && a.charAt(0) != '$' && keywords.get(a) == null);
+      return ((java.lang.Character.isJavaIdentifierStart(a.charAt(0)) || a.charAt(0) == '&') && a.charAt(0) != '$' && keywords.get(a) == null);
    }
 
    public static bool isDataLiteral(String a)
@@ -312,11 +312,11 @@ public class Checkers
          if (temp.endsWith("L"))
          {
             temp = temp.substring(0, temp.length() - 1);
-            Long.decode(temp);
+            java.lang.Long.decode(temp);
          }
          else
          {
-            Integer.decode(temp);
+            java.lang.Integer.decode(temp);
          }
       }
       catch (java.lang.Exception hex) 

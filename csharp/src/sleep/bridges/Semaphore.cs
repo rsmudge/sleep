@@ -57,7 +57,7 @@ public class Semaphore
 
             count--;
          }
-         catch (InterruptedException ex)
+         catch (java.lang.InterruptedException ex)
          { 
             ex.printStackTrace();
             notifyAll();

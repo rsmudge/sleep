@@ -44,7 +44,7 @@ public class CommentRule : Rule
 
    public String wrap(String value)
    {
-      StringBuffer rv = new StringBuffer(value.length() + 2);
+      java.lang.StringBuffer rv = new java.lang.StringBuffer(value.length() + 2);
       rv.append('#');
       rv.append(value);
       rv.append('\n');

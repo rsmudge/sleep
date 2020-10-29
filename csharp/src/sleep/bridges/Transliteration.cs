@@ -155,6 +155,7 @@ public class Transliteration
                    break;
                  default:
                    a.append(temp.item);
+                   break;
               }
            }
            else
@@ -170,7 +171,7 @@ public class Transliteration
  
     private static String getRange(char a, char b)
     {
-        StringBuffer temp = new StringBuffer();
+        java.lang.StringBuffer temp = new java.lang.StringBuffer();
 
         if (a < b)
         {
@@ -227,10 +228,10 @@ public class Transliteration
          pattern = expandRanges(pattern);
          changes = expandRanges(changes);
 
-         StringCharacterIterator a = new StringCharacterIterator(pattern);
-         StringCharacterIterator b = new StringCharacterIterator(changes);
+         java.text.StringCharacterIterator a = new java.text.StringCharacterIterator(pattern);
+         java.text.StringCharacterIterator b = new java.text.StringCharacterIterator(changes);
 
-         while (a.current() != StringCharacterIterator.DONE)  // StringCharacterIterator.DONE?!? What kind of high school intern 
+         while (a.current() != java.text.StringCharacterIterator.DONE)  // StringCharacterIterator.DONE?!? What kind of high school intern 
          {                                                    // wrote this class...  hello... hasNext() !
              if (temp == null)
              {
@@ -248,7 +249,7 @@ public class Transliteration
                  temp.item        = a.next();
                  temp.replacement = b.current();
 
-                 if (a.current() == StringCharacterIterator.DONE)
+                 if (a.current() == java.text.StringCharacterIterator.DONE)
                  {
                     throw new java.util.regex.PatternSyntaxException("attempting to escape end of pattern string", pattern, a.getEndIndex() - 1);
                  }
@@ -273,7 +274,7 @@ public class Transliteration
              a.next();
              b.next();
 
-             if (b.current() == StringCharacterIterator.DONE && ((options & OPTION_DELETE) != OPTION_DELETE))
+             if (b.current() == java.text.StringCharacterIterator.DONE && ((options & OPTION_DELETE) != OPTION_DELETE))
              {
                 b.last();
              }
@@ -319,22 +320,22 @@ public class Transliteration
                    rv = true;
                    break;
                  case 'd':
-                   rv = Character.isDigit(current);
+                   rv = java.lang.Character.isDigit(current);
                    break;
                  case 'D':
-                   rv = !Character.isDigit(current);
+                   rv = !java.lang.Character.isDigit(current);
                    break;
                  case 's':
-                   rv = Character.isWhitespace(current);
+                   rv = java.lang.Character.isWhitespace(current);
                    break;
                  case 'S':
-                   rv = !Character.isWhitespace(current);
+                   rv = !java.lang.Character.isWhitespace(current);
                    break;
                  case 'w':
-                   rv = Character.isLetter(current);
+                   rv = java.lang.Character.isLetter(current);
                    break;
                  case 'W':
-                   rv = !Character.isLetter(current);
+                   rv = ! java.lang.Character.isLetter(current);
                    break;
             }
         }
@@ -369,7 +370,7 @@ public class Transliteration
             {
                 if (isMatch(current, temp))
                 {
-                    if (temp.replacement != StringCharacterIterator.DONE)
+                    if (temp.replacement != java.text.StringCharacterIterator.DONE)
                     {
                        rv.append(temp.replacement);
                     }
