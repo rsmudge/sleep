@@ -1,3 +1,6 @@
+# non productive
+Attention: cette version n'est pas destinée à une utilisation productive. 
+
 # Sleep 2.1 - README   
 
 "You got the language, all you need now is the O'Reilly book".  That is
@@ -154,6 +157,7 @@ forum:
 # Legal  _Garbage_  Notices 
 
 Copyright 2002-2020 Raphael Mudge
+Port 2020 Sebastian Ritter
 
 Redistribution and use in source and binary forms, with or without modification, are 
 permitted provided that the following conditions are met:
