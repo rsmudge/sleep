@@ -1,15 +1,11 @@
- ------- -------------------- ---------   ---------------  ------- ---------
-The Sleep Console
--  ------------- -------- -   ---------------- --       -    -     -     - - -
+# The Sleep Console
 
 The Sleep console is just a quick and dirty interface for interacting with
 the sleep library.  Sleep includes API's for integrating the console with 
 your application.   Personally I just use the console for debugging the 
 language.  
 
- ------- -------------------- ---------   ---------------  ------- ---------
-To Launch the Sleep Console
--  ------------- -------- -   ---------------- --       -    -     -     - - -
+## To Launch the Sleep Console
 
 [raffi@beardsley ~/sleep/bin]$ java -jar sleep.jar
 
@@ -22,9 +18,7 @@ console as a command line application.  If you want an example of
 integrating the console into your application read the source code for the 
 sleep.console.TextConsole.
 
- ------- -------------------- ---------   ---------------  ------- ---------
-Console Commands
--  ------------- -------- -   ---------------- --       -    -     -     - - -
+## Console Commands
 
 debug [script] <level>
    Sets the default debug level or sets the debug level for the specified 

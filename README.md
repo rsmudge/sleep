@@ -1,6 +1,7 @@
-\ ------- -------------------- ---------   ---------------  ------- ---------
-Sleep 2.1 - README   
--  ------------- -------- -   ---------------- --       -    -     -     - - -
+# non productive
+Attention: cette version n'est pas destinée à une utilisation productive. 
+
+# Sleep 2.1 - README   
 
 "You got the language, all you need now is the O'Reilly book".  That is
 what my friend Luke said to me upon closing out a weekend of possessed
@@ -31,16 +32,14 @@ Sleep is compatible with Java 1.4.2+
 
 Sleep Project Homepage: http://sleep.dashnine.org/
 
- ------- -------------------- ---------   ---------------  ------- ---------
-Documentation
--  ------------- -------- -   ---------------- --       -    -     -     - - -
+# Documentation
 
 An open source project just wouldn't be a good open source project without
 a documentation deficiency.  Sleep is no different. 
 
 Contained in the docs/ directory:
 
-sleepmanual.url
+##sleepmanual.url
    The Sleep 2.1 Manual includes a tutorial on Sleep, a chapter on how to
    embed and extend Sleep from Java, and a reference of all built-in 
    functionality.  
@@ -53,62 +52,60 @@ sleepmanual.url
    Optionally you can purchase the Manual at:
    http://www.amazon.com/dp/143822723X/
 
-common.htm
+##common.html
    Common embedding techniques cheat sheet.  A very short example oriented 
    document on common techniques for embedding sleep in your application.
    Includes information such as how to catch and process a syntax error,
    load a script, call a function etc.  To truly get in depth though you
    need to read sleepguide.pdf.  
 
-console.txt
+##console.md
    A quick reference on the sleep console.  The sleep console is a simple
    console for interacting with the sleep library.
 
-parser.htm
+##parser.html
    A little overview on how the sleep parser works for the curious.
 
 You also have the option of generating the JavaDoc API's for the sleep 
 language.  I recommend either generating these or downloading them from 
 the sleep website.  Javadoc is your friend when working with this project.
      
- ------- -------------------- ---------   ---------------  ------- ---------
-Build Instructions
--  ------------- -------- -   ---------------- --       -    -     -     - - -
+# Build Instructions
 
 You will need Apache Ant to compile this source code. I use version 1.7.0. 
 Ant is easy to install and is available at http://ant.apache.org 
 
 To compile sleep:
 
-[raffi@beardsley ~/sleep]$ ant clean
-[raffi@beardsley ~/sleep]$ ant all
+    [raffi@beardsley ~/sleep]$ ant clean
+    [raffi@beardsley ~/sleep]$ ant all
 
 If you made any changes or just want to make sure nothing is broken you can
 run a series of regression tests on sleep.
 
-[raffi@beardsley ~/sleep]$ java -jar sleep.jar runtests.sl
+    [raffi@beardsley ~/sleep]$ java -jar sleep.jar runtests.sl
 
 If the runtests.so script won't run then you're really in trouble.
 
 To Build JavaDoc for Sleep (dumped to the docs/api/ directory):
 
-[raffi@beardsley ~/sleep]$ ant docs
+    [raffi@beardsley ~/sleep]$ ant docs
 
 To build full JavaDoc for Sleep (all classes):
 
-[raffi@beardsley ~/sleep]$ ant docs-full
+    [raffi@beardsley ~/sleep]$ ant docs-full
 
 To launch the sleep console (see docs/console.txt for more information):
 
-[raffi@beardsley ~/sleep/bin]$ java -jar sleep.jar
+    [raffi@beardsley ~/sleep/bin]$ java -jar sleep.jar
 
 For Sleep interpreter usage information:
 
-[raffi@beardsley ~/sleep/bin]$ java -jar sleep.jar --help
+    [raffi@beardsley ~/sleep/bin]$ java -jar sleep.jar --help
 
 To launch a sleep script from the command line:
 
-[raffi@beardsley ~/sleep/bin]$ java -jar sleep.jar filename.sl
+    [raffi@beardsley ~/sleep/bin]$ java -jar sleep.jar filename.sl
 
 When sleep scripts are run directly on the command line, arguments are
 placed into the @ARGV variable.  Also the executed script name is
@@ -116,11 +113,9 @@ stored in the $__SCRIPT__ variable.
 
 To launch a sleep script from the command line (without -jar):
 
-[raffi@beardsley ~/sleep/bin]$ java -classpath sleep.jar sleep.console.TextConsole filename.sl
+    [raffi@beardsley ~/sleep/bin]$ java -classpath sleep.jar sleep.console.TextConsole filename.sl
 
- ------- -------------------- ---------   ---------------  ------- ---------
-Feedback
--  ------------- -------- -   ---------------- --       -    -     -     - - -
+# Feedback
 
 Feedback is always welcome.  Suggestions/comments/questions can directed to
 me via email: rsmudge@gmail.com
@@ -128,48 +123,41 @@ me via email: rsmudge@gmail.com
 I do respond to most feedback.  For example, this message posted to a public
 forum:
 
-   Subject: re: better name would be STOP
-
-   Dear User,
-   Thank you for your suggestion on a new name for sleep.  I feel many 
-   users recognize the name sleep and changing names at this point might
-   do more harm than good.  Thank you for your suggestion and glad to hear
-   that you are enjoying the language.
-
+    Subject: re: better name would be STOP
+    Dear User,
+    Thank you for your suggestion on a new name for sleep.  I feel many 
+    users recognize the name sleep and changing names at this point might
+    do more harm than good.  Thank you for your suggestion and glad to hear
+    that you are enjoying the language.
                     -- Raffi
 
-   Subject: better name would be STOP
-   From:    NothingPersonal (62.132.1.121) 
-   Date:    September 27, 2004 at 10:08:34
-
-   Please. Just STOP. stop stop stop. don't inflict yet another half-baked, 
-   il-concieved abortion of a scripting language onto unsuspecting 
-   developers. Yes, you had fun writing it, but the only niche it fills is 
-   the one in your head that renders you incapable of mastering any of the 
-   other numerous scripting options already available to you.
-
-   I know I'm supposed to be nice to you because hey who are you really 
-   bothering, and selection of the fittest will surely see sleep sleep it's 
-   way to a quiet and peaceful death. But while on it's way to it's 
-   inevitable demise, sleep is bound to take with it some hapless developers, 
-   who will in turn inflict it on numerous doomed projects, and all that 
-   spells misery for all concerned.
-
-   While I'm at it, I also have to point out that the very last thing I want 
-   to read when browsing a language reference is pathetic, self-important 
-   humour.
-
-   I'm urging you to do the honourable thing. stop sleeping, and wake the 
-   f*** up. Take down your cargo-cult website (it even has a wiki! it's 
-   _bound_ to be a success!) and spend (alot) more time researching your 
-   foundations before embarking on such follies again.
+    Subject: better name would be STOP
+    From:    NothingPersonal (62.132.1.121) 
+    Date:    September 27, 2004 at 10:08:34
+    Please. Just STOP. stop stop stop. don't inflict yet another half-baked, 
+    il-concieved abortion of a scripting language onto unsuspecting 
+    developers. Yes, you had fun writing it, but the only niche it fills is 
+    the one in your head that renders you incapable of mastering any of the 
+    other numerous scripting options already available to you.
+    I know I'm supposed to be nice to you because hey who are you really 
+    bothering, and selection of the fittest will surely see sleep sleep it's 
+    way to a quiet and peaceful death. But while on it's way to it's 
+    inevitable demise, sleep is bound to take with it some hapless developers, 
+    who will in turn inflict it on numerous doomed projects, and all that 
+    spells misery for all concerned.
+    While I'm at it, I also have to point out that the very last thing I want 
+    to read when browsing a language reference is pathetic, self-important 
+    humour.
+    I'm urging you to do the honourable thing. stop sleeping, and wake the 
+    f*** up. Take down your cargo-cult website (it even has a wiki! it's 
+    _bound_ to be a success!) and spend (alot) more time researching your 
+    foundations before embarking on such follies again.
 
 
- ------- -------------------- ---------   ---------------  ------- ---------
-Legal <s>Garbage</s> Notices 
--  ------------- -------- -   ---------------- --       -    -     -     - - -
+# Legal  _Garbage_  Notices 
 
 Copyright 2002-2020 Raphael Mudge
+Port 2020 Sebastian Ritter
 
 Redistribution and use in source and binary forms, with or without modification, are 
 permitted provided that the following conditions are met:

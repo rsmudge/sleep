@@ -1,3 +1,4 @@
+<html><body>
 <font color="#000099" size="+1"><b>Common Embedding Techniques Cheat Sheet</b></font>
 <br>
 
@@ -55,7 +56,7 @@ try
 }
 catch (YourCodeSucksException ex)
 {
-   Iterator i = ex.getErrors().iterator();
+   java.util.Iterator&lt;Object&gt; i = ex.getErrors().iterator();
    while (i.hasNext())
    {
       SyntaxError error = (SyntaxError)i.next();
@@ -80,3 +81,4 @@ Scalar value  = script.getScriptVariables().getScalar("$var");
 script.callFunction("&functionName", new Stack());
 </pre>
 
+</body></html>

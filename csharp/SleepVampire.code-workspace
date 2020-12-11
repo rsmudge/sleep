@@ -1,0 +1,23 @@
+{
+	"folders": [
+		{
+			"name": "Vampire",
+			"path": "../../../PythonWorkspace/Vampire"
+		},
+		{
+			"path": "../../NetSpider"
+		},
+		{
+			"path": "../../RustVampire"
+		},
+		{
+			"path": "../../VampireHNO3"
+		},
+		{
+			"path": "../../VampireVirus"
+		},
+		{
+			"path": ".."
+		}
+	]
+}
